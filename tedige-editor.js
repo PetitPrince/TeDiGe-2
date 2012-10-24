@@ -1,4 +1,756 @@
-﻿$(document).ready(function(){
+﻿
+function drawPaletteDecoCell(kind,blockSize,sprite){
+
+		var Canvas = $('#editor-palette-deco-'+kind);
+		var ctx = Canvas[0].getContext('2d');
+
+		var spriteOffsetStart, spriteOffsetEnd;
+		switch(kind){
+			case 'n1':	spriteOffsetStart = decoration.n1.s; spriteOffsetEnd = decoration.n1.e; break;
+			case 'n2':	spriteOffsetStart = decoration.n2.s; spriteOffsetEnd = decoration.n2.e; break;
+			case 'n3':	spriteOffsetStart = decoration.n3.s; spriteOffsetEnd = decoration.n3.e; break;
+			case 'n4':	spriteOffsetStart = decoration.n4.s; spriteOffsetEnd = decoration.n4.e; break;
+			case 'n5':	spriteOffsetStart = decoration.n5.s; spriteOffsetEnd = decoration.n5.e; break;
+			case 'n6':	spriteOffsetStart = decoration.n6.s; spriteOffsetEnd = decoration.n6.e; break;
+			case 'n7':	spriteOffsetStart = decoration.n7.s; spriteOffsetEnd = decoration.n7.e; break;
+			case 'n8':	spriteOffsetStart = decoration.n8.s; spriteOffsetEnd = decoration.n8.e; break;
+			case 'n9':	spriteOffsetStart = decoration.n9.s; spriteOffsetEnd = decoration.n9.e; break;
+			case 'n0':	spriteOffsetStart = decoration.n0.s; spriteOffsetEnd = decoration.n0.e; break;
+			case 'smallcw':	spriteOffsetStart = decoration.smallcw.s; spriteOffsetEnd = decoration.smallcw.e; break;
+			case 'smallccw':	spriteOffsetStart = decoration.smallccw.s; spriteOffsetEnd = decoration.smallccw.e; break;
+			case 'smalloktick':	spriteOffsetStart = decoration.smalloktick.s; spriteOffsetEnd = decoration.smalloktick.e; break;
+			case 'smallokcircle':	spriteOffsetStart = decoration.smallokcircle.s; spriteOffsetEnd = decoration.smallokcircle.e; break;
+			case 'smallnocross':	spriteOffsetStart = decoration.smallnocross.s; spriteOffsetEnd = decoration.smallnocross.e; break;
+			case 'smallquestion':	spriteOffsetStart = decoration.smallquestion.s; spriteOffsetEnd = decoration.smallquestion.e; break;
+			case 'smallexclamation':	spriteOffsetStart = decoration.smallexclamation.s; spriteOffsetEnd = decoration.smallexclamation.e; break;
+			case 'nwarrow':	spriteOffsetStart = decoration.nwarrow.s; spriteOffsetEnd = decoration.nwarrow.e; break;
+			case 'narrow':	spriteOffsetStart = decoration.narrow.s; spriteOffsetEnd = decoration.narrow.e; break;
+			case 'nearrow':	spriteOffsetStart = decoration.nearrow.s; spriteOffsetEnd = decoration.nearrow.e; break;
+			case 'earrow':	spriteOffsetStart = decoration.earrow.s; spriteOffsetEnd = decoration.earrow.e; break;
+			case 'searrow':	spriteOffsetStart = decoration.searrow.s; spriteOffsetEnd = decoration.searrow.e; break;
+			case 'sarrow':	spriteOffsetStart = decoration.sarrow.s; spriteOffsetEnd = decoration.sarrow.e; break;
+			case 'swarrow':	spriteOffsetStart = decoration.swarrow.s; spriteOffsetEnd = decoration.swarrow.e; break;
+			case 'warrow':	spriteOffsetStart = decoration.warrow.s; spriteOffsetEnd = decoration.warrow.e; break;
+			case 'bigcw':	spriteOffsetStart = decoration.bigcw.s; spriteOffsetEnd = decoration.bigcw.e; break;
+			case 'bigccw':	spriteOffsetStart = decoration.bigccw.s; spriteOffsetEnd = decoration.bigccw.e; break;
+			case 'bigquestion':	spriteOffsetStart = decoration.bigquestion.s; spriteOffsetEnd = decoration.bigquestion.e; break;
+			case 'bigexclamation':	spriteOffsetStart = decoration.bigexclamation.s; spriteOffsetEnd = decoration.bigexclamation.e; break;
+			case 'bigoktick':	spriteOffsetStart = decoration.bigoktick.s; spriteOffsetEnd = decoration.bigoktick.e; break;
+			case 'bigokcircle':	spriteOffsetStart = decoration.bigokcircle.s; spriteOffsetEnd = decoration.bigokcircle.e; break;
+			case 'bignocross':	spriteOffsetStart = decoration.bignocross.s; spriteOffsetEnd = decoration.bignocross.e; break;
+			case 'overlayyellow':	spriteOffsetStart = decoration.overlayyellow.s; spriteOffsetEnd = decoration.overlayyellow.e; break;
+			case 'overlayblue':	spriteOffsetStart = decoration.overlayblue.s; spriteOffsetEnd = decoration.overlayblue.e; break;
+			case 'overlaygreen':	spriteOffsetStart = decoration.overlaygreen.s; spriteOffsetEnd = decoration.overlaygreen.e; break;
+			case 'overlaypink':	spriteOffsetStart = decoration.overlaypink.s; spriteOffsetEnd = decoration.overlaypink.e; break;
+			case 'overlayorange':	spriteOffsetStart = decoration.overlayorange.s; spriteOffsetEnd = decoration.overlayorange.e; break;
+			case 'clear1':	spriteOffsetStart = decoration.clear1.s; spriteOffsetEnd = decoration.clear1.e; break;
+			case 'clear2':	spriteOffsetStart = decoration.clear2.s; spriteOffsetEnd = decoration.clear2.e; break;
+			case 'clear3':	spriteOffsetStart = decoration.clear3.s; spriteOffsetEnd = decoration.clear3.e; break;
+			case 'clear4':	spriteOffsetStart = decoration.clear4.s; spriteOffsetEnd = decoration.clear4.e; break;
+			case 'clear5':	spriteOffsetStart = decoration.clear5.s; spriteOffsetEnd = decoration.clear5.e; break;
+			case 'clear6':	spriteOffsetStart = decoration.clear6.s; spriteOffsetEnd = decoration.clear6.e; break;
+			case 'clear7':	spriteOffsetStart = decoration.clear7.s; spriteOffsetEnd = decoration.clear7.e; break;
+			}
+
+		var ox = spriteOffsetStart[0]*(blockSize);
+		var oy = spriteOffsetStart[1]*(blockSize);
+		var w = (spriteOffsetEnd[0]-spriteOffsetStart[0])*(blockSize);
+
+		var h = (spriteOffsetEnd[1]-spriteOffsetStart[1])*(blockSize);
+		var nx = 0;
+		var ny = 0;
+
+			ctx.drawImage(sprite, // original image
+						  ox,oy, //coordinate on the original image
+						  w,h, // size of the rectangle to will be cut
+						  nx,ny, // destination coordinate
+						  w,h); // destination size
+
+}
+
+function drawPaletteCell(type,orientation,RS,blockSize,sprite){
+		var Canvas = $('#editor-palette-'+type+orientation);
+		var ctx = Canvas[0].getContext('2d');
+		var matrix = getMatrix(type, orientation, RS);
+		Canvas.attr('width',Canvas.width());
+
+		var color,spriteOffset;
+		switch(RS){
+			case 'ARS':
+				switch(type){
+					case 'I':
+						color = ARS.I.color;
+						spriteOffset = ARS.I.offset;
+						break;
+					case 'T':
+						color = ARS.T.color;
+						spriteOffset = ARS.T.offset;
+						break;
+					case 'L':
+						color = ARS.L.color;
+						spriteOffset = ARS.L.offset;
+						break;
+					case 'J':
+						color = ARS.J.color;
+						spriteOffset = ARS.J.offset;
+						break;
+					case 'S':
+						color = ARS.S.color;
+						spriteOffset = ARS.S.offset;
+						break;
+					case 'Z':
+						color = ARS.Z.color;
+						spriteOffset = ARS.Z.offset;
+						break;
+					case 'O':
+						color = ARS.O.color;
+						spriteOffset = ARS.O.offset;
+						break;
+					case 'G':
+						color = ARS.G.color;
+						spriteOffset = ARS.G.offset;
+						break;
+				}
+			break;
+			case 'SRS':
+				switch(type){
+					case 'I':
+						color = SRS.I.color;
+						spriteOffset = SRS.I.offset;
+						break;
+					case 'T':
+						color = SRS.T.color;
+						spriteOffset = SRS.T.offset;
+						break;
+					case 'L':
+						color = SRS.L.color;
+						spriteOffset = SRS.L.offset;
+						break;
+					case 'J':
+						color = SRS.J.color;
+						spriteOffset = SRS.J.offset;
+						break;
+					case 'S':
+						color = SRS.S.color;
+						spriteOffset = SRS.S.offset;
+						break;
+					case 'Z':
+						color = SRS.Z.color;
+						spriteOffset = SRS.Z.offset;
+						break;
+					case 'O':
+						color = SRS.O.color;
+						spriteOffset = SRS.O.offset;
+						break;
+					case 'G':
+						color = SRS.G.color;
+						spriteOffset = SRS.G.offset;
+						break;
+				}
+			break;
+			}
+
+		for (var i = 0; i < 4; i++) {
+			for (var j = 0; j < 4; j++) {
+				if (matrix[i][j]) {
+					ctx.beginPath();
+					ctx.rect(parseInt(j*blockSize,10),parseInt(i*blockSize,10),blockSize,blockSize);
+					ctx.fillStyle = color;
+					ctx.fill();
+					ctx.closePath();
+					if (sprite) {
+						ctx.drawImage(sprite, // original image
+									  spriteOffset[0]*blockSize,spriteOffset[1]*blockSize, //coordinate on the original image
+									  blockSize,blockSize, // size of the rectangle to will be cut
+									  parseInt(j*blockSize,10),parseInt(i*blockSize,10), // destination coordinate
+									  blockSize,blockSize); // destination size
+					}
+
+				}
+			}
+		}
+
+	}//end drawpalettecell
+
+
+function drawPalette(RS, blockSize,sprite){
+	var type = ['I','T','S','Z','L','J','O'];
+	var orientation = ['i','cw','ccw','u'];
+
+	for (var i = 0; i < type.length; i++) {
+		for (var j = 0; j < orientation.length; j++) {
+			drawPaletteCell(type[i],orientation[j],RS,blockSize,sprite);
+		}
+	}
+}
+
+function drawPaletteDeco(blockSize,sprite){
+	var type = ['n1','n2','n3','n4','n5','n6','n7','n8','n9','n0','smallccw','smallcw','smalloktick','smallokcircle','smallnocross','smallquestion','smallexclamation','nwarrow','narrow','nearrow','earrow','searrow','sarrow','swarrow','warrow','bigcw','bigccw','smallquestion','bigquestion','bigexclamation','bigoktick','bigokcircle','bignocross','overlayyellow','overlayblue','overlaygreen','overlaypink','overlaypink','clear1','clear2','clear3','clear4','clear5','clear6','clear7'];
+
+	for (var i = 0; i < type.length; i++) {
+			drawPaletteDecoCell(type[i],blockSize,sprite);
+	}
+}
+
+	/* ------------------------------------------- */
+	/* -- Frame:: Frames-wide properties change -- */
+	/* ------------------------------------------- */
+	
+	/* Method: change_border TODO: MOVE TO TEDIGE-EDITOR.JS
+		Changes the border of the diagram.*/
+	Diagram.prototype.modify_border = function(kind){
+		for(var i=0, istop = this.frames.length ; i<istop ;i++)
+		{
+			this.frames[i].border = kind;
+		}
+		this.frames[this.current_frame].modify_border(kind);
+	};
+
+	/* Method: modify_RS
+		Change the rotation system for the whole diagram
+		*/
+	Diagram.prototype.modify_RS = function(system){
+		for(var i=0, istop = this.frames.length ; i<istop ;i++)
+		{
+			this.frames[i].RS = system;
+		}
+		this.frames[this.current_frame].modify_RS(system);
+	};
+	/* Method: modify_whiteborder
+		Change the rotation system for the whole diagram
+		*/
+	Diagram.prototype.modify_whiteborder = function(value){
+		for(var i=0, istop = this.frames.length ; i<istop ;i++)
+		{
+			this.frames[i].whiteborder = value;
+		}
+		this.frames[this.current_frame].modify_whiteborder(value);
+	};
+	/* Method: modify_duration
+		Change the duration of each frame of a diagram
+		*/
+	Diagram.prototype.modify_duration = function(new_duration){
+		for(var i=0, istop = this.frames.length ; i<istop ;i++)
+		{
+			this.frames[i].duration = new_duration;
+		}
+	};
+
+	Diagram.prototype.flate_encode = function (str) {
+	return $.base64.encode(RawDeflate.deflate(unescape(encodeURIComponent(str))));
+	};
+
+	Diagram.prototype.flate_decode = function(str) {
+	return decodeURIComponent(escape(RawDeflate.inflate($.base64.decode(str))));
+	};
+
+	Diagram.prototype.getGIF = function(){
+	 var encoder = new GIFEncoder();
+	 encoder.setRepeat(0); // sets an infinite loop
+	 encoder.setDelay(500); // frame rate in ms... maybe I should try to patch this and get a variable rate ?
+	 encoder.start();
+	 encoder.setQuality(50);
+	 for(var i=0, istop = this.frames.length ; i<istop ;i++)
+		{
+		this.goto_frame(i);
+		this.painter.exportImage();
+		encoder.addFrame(this.painter.ContextExport);
+		}
+	 encoder.finish();
+	 var binary_gif = encoder.stream().getData();
+	document.getElementById('export-gif').src = 'data:image/gif;base64,'+$.base64.encode(encoder.stream().getData());
+	};
+
+	
+	/* --------------------------- */
+	/* -- Modifications (basic) -- */
+	/* --------------------------- */
+	
+	/* Method: modify
+		Modify the inactive layer.
+		Parameters:
+			x - horizontal coordinate
+			y - vertical coordinate
+			type - type of the block*/
+	Frame.prototype.modify = function(x,y,type){
+		if (type == 'E')
+		{
+			this.playfield[x][y][0] = '';
+		}
+		else
+		{
+			this.playfield[x][y][0] = type;
+		}
+			this.painter.drawBrowserBlock(x,y,type,this.RS,this.id,'inactive'); // I hope putting this here won't have any nasty side-effect
+	};
+
+	/*Method: removeBlock
+		Empties a block at the given coordinate.
+		Parameters:
+			x - horizontal coordinate
+			y - vertical coordinate
+	*/
+	Frame.prototype.removeBlock = function(x,y){
+		this.playfield[x][y][0] = '';
+		this.painter.eraseBlock(x,y);
+		this.painter.drawBrowserBlock(x,y,'E',this.RS,this.id); // I hope putting this here won't have any nasty side-effect
+		if (this.whiteborder)
+		{
+			this.painter.drawLocalWhiteBorder(this.playfield,x,y,'inactive');
+		}
+
+	};
+
+	/*Method: removeBlock
+		Empties a block at the given coordinate.
+		Parameters:
+			x - horizontal coordinate
+			y - vertical coordinate
+	*/
+	Frame.prototype.removeDeco = function(x,y){
+		this.painter.drawDeco(x,y,this.playfield[x][y][1],'eraser');
+		this.playfield[x][y][1] = '';
+	};
+
+
+	/*Method: modify_decoration
+		Modify the decoration layer.
+		Parameters:
+			x - horizontal coordinate
+			y - vertical coordinate
+			type - type of the block*/
+	Frame.prototype.modify_decoration = function(x,y,type){
+		this.playfield[x][y][1] = type;
+	};
+
+	/*Method: modify_next
+		Modify the next pieces.
+
+		Parameters:
+			position - the piece to be modified. '0' is hold, '1' is next1, '2' is next2, ...
+			type - the piece type
+		*/
+	Frame.prototype.modify_nexthold = function(position,type){
+		this.nexthold[position] = type;
+	};
+
+	/*Method: modify_next DEPRECATED
+		Modify the next pieces.
+
+		Parameters:
+			position - the piece to be modified. '1' is next1, '2' is next2, ...
+			type - the piece type
+		*/
+	Frame.prototype.modify_next = function(position,type){
+		this.nexthold[position] = type;
+		this.painter.drawNext(this.nexthold);
+	};
+
+	/*Method: modify_hold
+		Modify the holded piece.
+
+		Parameters:
+			type - the piece type
+	*/
+	Frame.prototype.modify_hold = function(type){
+		this.nexthold[0] = type;
+		this.painter.drawNext(this.nexthold);
+	};
+
+	/*Method: modify_hold
+		Modify the holded piece.
+
+		Parameters:
+			type - the piece type
+	*/
+	Frame.prototype.modify_AP_opacity = function(level){
+		this.activePieceOpacity = level;
+		this.painter.changeActiveOpacity(level);
+		if (level == 'Flash' || level == 'flash')
+		{
+		  this.addPiece(this.activePiecePositionX,this.activePiecePositionY,this.activePieceType,this.activePieceOrientation,'Flash',false);
+		}
+
+	};
+
+	/* Method: clear
+		Erase and delete one layer.
+
+		Parameter:
+			mode - define which layer will be cleared. Either 'inactive','active' or 'all'*/
+	Frame.prototype.clear = function(mode){
+		switch(mode)
+		{
+			case 'inactive':
+				this.painter.eraseLayer('inactive');
+				for(var i = 0, istop = this.width; i < istop; i++) {
+					for(var j = 0, jstop = this.height; j < jstop; j++) {
+							this.playfield[i][j][0] = '';
+						}
+				}
+				break;
+			case 'active':
+				this.painter.eraseLayer('active');
+				this.activePieceType = '';
+				this.activePieceOrientation = '';
+				this.activePiecePositionX = '';
+				this.activePiecePositionY = '';
+				break;
+			case 'all':
+				this.painter.eraseLayer('inactive');
+				for(var i = 0, istop = this.width; i < istop; i++) {
+					for(var j = 0, jstop = this.height; j < jstop; j++) {
+							this.playfield[i][j][0] = '';
+						}
+				}
+				this.painter.eraseLayer('active');
+				this.activePieceType = '';
+				this.activePieceOrientation = '';
+				this.activePiecePositionX = '';
+				this.activePiecePositionY = '';
+				this.comment = '';
+			break;
+		}
+	};
+
+	/* Method: modify_RS
+		Changes the rotation system and call a redraw. */
+	Frame.prototype.modify_RS = function(system){
+		this.RS = system;
+		this.draw();
+	};
+	/* Method: modify_RS
+		Changes the duration of a frame. */
+	Frame.prototype.modify_duration = function(new_duration){
+		this.duration = new_duration;
+	};
+
+	Frame.prototype.modify_border = function(new_border){
+		this.border = new_border;
+		this.painter.drawBorder(this.border);
+	};
+
+	Frame.prototype.modify_whiteborder = function(new_border){
+		this.whiteborder = new_border;
+		if (this.whiteborder)
+		{
+			this.painter.drawWhiteBorder(this.playfield);
+		}
+		else
+		{
+			this.painter.eraseLayer('whiteborder');
+
+		}
+
+	};
+
+	/*Method: modify_control
+		Change the control appearance
+		Parameters:
+			direction - ul, u, ur, l, r, dl, d, dl
+			state - rest, pressed, holded
+	*/
+	Frame.prototype.modify_control = function(direction,state){
+		this.joystick_state = state;
+		this.joystick_direction = direction;
+		this.painter.drawJoystick(this.joystick_direction,this.joystick_state);
+	};
+
+	/*Method: modify_button
+		Change the chosen button appearance
+		Parameters:
+			button - a,b,c,d,e,f
+			state - rest, pressed, holded*/
+	Frame.prototype.modify_button = function(button,state){
+		var index = '';
+		switch(button)
+		{
+			case 'A': index = 0; break;
+			case 'B': index = 1; break;
+			case 'C': index = 2; break;
+			case 'D': index = 3; break;
+			//case 'E': index = 4; break;
+			//case 'F': index = 5; break;
+		}
+		this.button_state[index] = state;
+		this.painter.drawButton(button,state);
+	};
+
+	/* ----------------------------- */
+	/* -- Modifications (advanced)-- */
+	/* ----------------------------- */
+
+	/*Method: recursive_fill
+		Fill the playfield with a piece type, similar to a 'paint bucket' tool. Thanks DigitalDevil for the original code !
+
+		Parameter
+			x - x coordinate
+			y - y coordinate
+			replaced
+			replacer
+	*/
+	Frame.prototype.recursive_fill = function(x,y, replaced, replacer) {
+		/**
+		*  Fills the playfield like a paint bucket. Thanks Digital !
+			todo: bug on click on an already filled ?
+		*/
+
+		x = parseFloat(x);
+		y = parseFloat(y);
+
+		if (this.playfield[x][y][0] != replaced)
+			{return;}
+
+		this.modify(x, y, replacer);
+		this.painter.drawBlock(x,y,replacer,this.RS,'inactive');
+		if (this.whiteborder)
+			{this.painter.drawLocalWhiteBorder(this.playfield,x,y);}
+
+		if (y-1 >= 0)
+			{this.recursive_fill(x, y-1, replaced, replacer);}
+
+		if (y+1 < this.height)
+			{this.recursive_fill(x, y+1, replaced, replacer);}
+
+		if (x+1 < this.width)
+			{this.recursive_fill(x+1, y, replaced, replacer);}
+
+		if (x-1 >= 0)
+			{this.recursive_fill(x-1, y, replaced, replacer);}
+	};
+
+	/* Method: addPiece
+		'Macro' method that modifies several times a given layer according to the tetramino shape given in parameter.
+
+		Parameters:
+		x - horizontal coordinate
+		y - vertical coordinate
+		type - type of the tetramino
+		orientation - orientation of the tetramino; either 'i', 'cw', 'ccw' or 'u'
+		mode - define which layer will be modified
+		drop - is the method is in drop mode ?*/
+	Frame.prototype.addPiece = function(x,y,type,orientation,mode,drop){
+		var matrix = getMatrix(type, orientation, this.RS);
+		var still_droping = true;
+		var counter = 0;
+		while(drop
+				& still_droping ){
+			counter = 0;
+			for(var i = 0; i < 4; i++) {
+				for(var j = 0; j < 4; j++) {
+					if (matrix[i][j] &&
+						this.is_in(parseInt(x-1+j,10),parseInt(y+i,10)) &&
+						!(this.playfield[parseInt(x-1+j,10)][parseInt(y+i,10)][0])
+						)
+					{
+						counter++;
+					}
+				}
+			}
+			if (counter != 4) {
+				still_droping = false;
+			}
+			else
+			{
+				y++;
+			}
+		}
+
+		if (mode == 'inactive' || mode == 'garbage') {
+			this.painter.CanvasPreview.attr('width',this.painter.CanvasPreview.width()); //erase the preview layer
+		}
+		if (mode == 'active') {
+			this.activePieceType = type;
+			this.activePieceOrientation = orientation;
+			this.activePiecePositionX = x;
+			this.activePiecePositionY = y;
+			this.painter.CanvasActive.attr('width',this.painter.CanvasPreview.width()); //erase the active layer
+			this.painter.drawBrowserBlock(parseInt(x,10),parseInt(y,10),type,this.RS,this.id,'resetactive'); // TODO: potential bug ? (used erroneously parseInt(x+i) and parseInt(y+j) before...)
+		}
+
+		if (mode == 'decoration-preview')
+		{
+			this.painter.drawDeco(x,y,type,'preview');
+		}
+		else if (mode =='decoration'){
+			this.modify_decoration(x,y,type);
+			this.painter.drawDeco(x,y,type,'decoration');
+			this.painter.highlight(x,y);
+		}
+		else
+		{
+			for(var i = 0; i < 4; i++) {
+				for(var j = 0; j < 4; j++) {
+
+					//if (matrix[i][j] && this.is_in(parseInt(x-1+j,10),parseInt(y-1+i,10))) {
+					if (matrix[i][j] && this.piece_is_in(x,y,type,orientation)) {
+						switch(mode)
+						{
+							case 'inactive':
+								this.modify(parseInt(x-1+j,10),parseInt(y-1+i,10),type);
+								this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,'inactive');
+								if (this.whiteborder)
+								{
+									this.painter.drawLocalWhiteBorder(this.playfield,x-1+j,y-1+i);
+								}
+
+								this.painter.highlight(x-1+j,y-1+i);
+							break;
+							case 'garbage':
+								this.modify(parseInt(x-1+j,10),parseInt(y-1+i,10),'G');
+								this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),'G',this.RS,'inactive');
+								if (this.whiteborder)
+								{
+									this.painter.drawLocalWhiteBorder(this.playfield,x-1+j,y-1+i);
+								}
+
+								this.painter.highlight(x-1+j,y-1+i);
+							break;
+							case 'preview':
+								this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,'preview');
+							break;
+							case 'active':
+								this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,'active');
+								this.painter.highlight(x-1+j,y-1+i);
+								this.painter.drawBrowserBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,this.id,'active'); // erase this line to disable the browser thing
+							break;
+							case 'erase':
+								this.removeBlock(parseInt(x-1+j,10),parseInt(y-1+i,10));
+								this.painter.highlight(x-1+j,y-1+i);
+								this.painter.drawBrowserBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),'E',this.RS,this.id,'inactive'); // erase this line to disable the browser thing
+							break;
+							case 'preview-eraser':
+								this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),'G',this.RS,'preview');
+							break;
+							case 'Flash':
+								this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,'flash');
+								this.painter.highlight(x-1+j,y-1+i);
+								this.painter.drawBrowserBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,this.id,'active'); // erase this line to disable the browser thing
+							break;
+						}
+					}
+				}
+			}
+		}
+
+	}; //end drawpiece
+
+	/* ------------------------ */
+	/* -- Active piece stuff -- */
+	/* ------------------------ */
+
+	/* Method paintActivePiece
+		'Paint' the active piece into the inactive layer*/
+	Frame.prototype.paintActivePiece = function(){
+		this.addPiece(this.activePiecePositionX,this.activePiecePositionY,this.activePieceType,this.activePieceOrientation,'inactive',false);
+	};
+
+	/* Method lockActivePiece
+		Set the active piece variable to zero, paint the active piece*/
+	Frame.prototype.lockActivePiece = function(){
+		this.paintActivePiece();
+		this.activePieceType = '';
+		this.activePieceOrientation = '';
+		this.activePiecePositionX = '';
+		this.activePiecePositionY = '';
+		this.activePieceOpacity = 1.0;
+		this.painter.eraseLayer('active');
+
+	};
+	/* Method dropActivePiece
+		Call addPiece at the same coordinate than the current one, only with the drop flag on, effectively dropping the active piece*/
+	Frame.prototype.dropActivePiece = function(){
+		this.addPiece(this.activePiecePositionX,this.activePiecePositionY,this.activePieceType,this.activePieceOrientation,'active',true);
+	};
+	/* Method dropActivePiece
+		Move the active piece in the given direction by calling addPiece again
+
+		Parameter:
+
+			direction - 'left', 'right', 'up', 'down'
+		*/
+	Frame.prototype.moveActivePiece = function(direction){
+	var posX = this.activePiecePositionX;
+	var posY = this.activePiecePositionY;
+
+		switch(direction)
+		{
+			case 'left':
+				posX--;
+			break;
+			case 'right':
+				posX++;
+			break;
+			case 'up':
+				posY--;
+			break;
+			case 'down':
+				posY++;
+			break;
+		}
+		if (this.piece_is_in(posX,posY,this.activePieceType,this.activePieceOrientation))
+		{
+		  this.addPiece(posX,posY,this.activePieceType,this.activePieceOrientation,'active',false);
+		}
+	};
+	/* Method dropActivePiece
+		Rotate the active piece in the given direction by calling addPiece again
+
+		Parameter:
+
+			direction - 'cw', 'ccw'
+		*/
+	Frame.prototype.rotateActivePiece = function(direction){
+	var ori = this.activePieceOrientation;
+
+		switch(direction)
+		{
+			case 'cw':
+				switch(ori)
+				{
+					case 'i':
+						ori = 'cw';
+					break;
+					case 'cw':
+						ori = 'u';
+					break;
+					case 'u':
+						ori = 'ccw';
+					break;
+					case 'ccw':
+						ori = 'i';
+					break;
+				}
+			break;
+			case 'ccw':
+				switch(ori)
+				{
+					case 'i':
+						ori = 'ccw';
+					break;
+					case 'ccw':
+						ori = 'u';
+					break;
+					case 'u':
+						ori = 'cw';
+					break;
+					case 'cw':
+						ori = 'i';
+					break;
+				}
+			break;
+
+		}
+		if (this.piece_is_in(this.activePiecePositionX,this.activePiecePositionY,this.activePieceType,ori))
+		{
+		  this.addPiece(this.activePiecePositionX,this.activePiecePositionY,this.activePieceType,ori,'active',false);
+		}
+	};
+
+
+
+	
+$(document).ready(function(){
 	/* ------------------------------------------------------------------------- */
 	/* ------------------------------------------------------------------------- */
 	/* --------------------------- GLOBAL STUFF -------------------------------- */
@@ -905,7 +1657,7 @@
 		}
 		else{
 			aDiag.playing = true;
-			$('#pf-cmd_playpause').attr('value','||');
+			$('#pf-cmd_playpause').attr('value','∥');
 		}
 		var counter = 0;
 		function render(){
@@ -1047,6 +1799,8 @@
 		$mainutilities.removeClass().addClass('border-tetramino');
 		hideallpanelexcept('tetraminopanel');
 		$tetraminopanel.delay(200).fadeIn(200);
+		setTimeout(function(){drawPalette(aDiag.frames[aDiag.current_frame].RS,8,aPainter.sprite)},200); // TODO: isn't there a better way to do that ?
+
 	});
 
 	$tabproperties.click(function(){
@@ -1480,164 +2234,4 @@
 
 
 }); // end jquery.ready
-
-function drawPaletteDecoCell(kind,blockSize,sprite){
-
-		var Canvas = $('#editor-palette-deco-'+kind);
-		var ctx = Canvas[0].getContext('2d');
-
-		var spriteOffsetStart, spriteOffsetEnd;
-		switch(kind){
-			case 'n1':	spriteOffsetStart = decoration.n1.s; spriteOffsetEnd = decoration.n1.e; break;
-			case 'n2':	spriteOffsetStart = decoration.n2.s; spriteOffsetEnd = decoration.n2.e; break;
-			case 'n3':	spriteOffsetStart = decoration.n3.s; spriteOffsetEnd = decoration.n3.e; break;
-			case 'n4':	spriteOffsetStart = decoration.n4.s; spriteOffsetEnd = decoration.n4.e; break;
-			case 'n5':	spriteOffsetStart = decoration.n5.s; spriteOffsetEnd = decoration.n5.e; break;
-			case 'n6':	spriteOffsetStart = decoration.n6.s; spriteOffsetEnd = decoration.n6.e; break;
-			case 'n7':	spriteOffsetStart = decoration.n7.s; spriteOffsetEnd = decoration.n7.e; break;
-			case 'n8':	spriteOffsetStart = decoration.n8.s; spriteOffsetEnd = decoration.n8.e; break;
-			case 'n9':	spriteOffsetStart = decoration.n9.s; spriteOffsetEnd = decoration.n9.e; break;
-			case 'n0':	spriteOffsetStart = decoration.n0.s; spriteOffsetEnd = decoration.n0.e; break;
-			case 'smallcw':	spriteOffsetStart = decoration.smallcw.s; spriteOffsetEnd = decoration.smallcw.e; break;
-			case 'smallccw':	spriteOffsetStart = decoration.smallccw.s; spriteOffsetEnd = decoration.smallccw.e; break;
-			case 'smalloktick':	spriteOffsetStart = decoration.smalloktick.s; spriteOffsetEnd = decoration.smalloktick.e; break;
-			case 'smallokcircle':	spriteOffsetStart = decoration.smallokcircle.s; spriteOffsetEnd = decoration.smallokcircle.e; break;
-			case 'smallnocross':	spriteOffsetStart = decoration.smallnocross.s; spriteOffsetEnd = decoration.smallnocross.e; break;
-			case 'smallquestion':	spriteOffsetStart = decoration.smallquestion.s; spriteOffsetEnd = decoration.smallquestion.e; break;
-			case 'smallexclamation':	spriteOffsetStart = decoration.smallexclamation.s; spriteOffsetEnd = decoration.smallexclamation.e; break;
-			case 'nwarrow':	spriteOffsetStart = decoration.nwarrow.s; spriteOffsetEnd = decoration.nwarrow.e; break;
-			case 'narrow':	spriteOffsetStart = decoration.narrow.s; spriteOffsetEnd = decoration.narrow.e; break;
-			case 'nearrow':	spriteOffsetStart = decoration.nearrow.s; spriteOffsetEnd = decoration.nearrow.e; break;
-			case 'earrow':	spriteOffsetStart = decoration.earrow.s; spriteOffsetEnd = decoration.earrow.e; break;
-			case 'searrow':	spriteOffsetStart = decoration.searrow.s; spriteOffsetEnd = decoration.searrow.e; break;
-			case 'sarrow':	spriteOffsetStart = decoration.sarrow.s; spriteOffsetEnd = decoration.sarrow.e; break;
-			case 'swarrow':	spriteOffsetStart = decoration.swarrow.s; spriteOffsetEnd = decoration.swarrow.e; break;
-			case 'warrow':	spriteOffsetStart = decoration.warrow.s; spriteOffsetEnd = decoration.warrow.e; break;
-			case 'bigcw':	spriteOffsetStart = decoration.bigcw.s; spriteOffsetEnd = decoration.bigcw.e; break;
-			case 'bigccw':	spriteOffsetStart = decoration.bigccw.s; spriteOffsetEnd = decoration.bigccw.e; break;
-			case 'bigquestion':	spriteOffsetStart = decoration.bigquestion.s; spriteOffsetEnd = decoration.bigquestion.e; break;
-			case 'bigexclamation':	spriteOffsetStart = decoration.bigexclamation.s; spriteOffsetEnd = decoration.bigexclamation.e; break;
-			case 'bigoktick':	spriteOffsetStart = decoration.bigoktick.s; spriteOffsetEnd = decoration.bigoktick.e; break;
-			case 'bigokcircle':	spriteOffsetStart = decoration.bigokcircle.s; spriteOffsetEnd = decoration.bigokcircle.e; break;
-			case 'bignocross':	spriteOffsetStart = decoration.bignocross.s; spriteOffsetEnd = decoration.bignocross.e; break;
-			case 'overlayyellow':	spriteOffsetStart = decoration.overlayyellow.s; spriteOffsetEnd = decoration.overlayyellow.e; break;
-			case 'overlayblue':	spriteOffsetStart = decoration.overlayblue.s; spriteOffsetEnd = decoration.overlayblue.e; break;
-			case 'overlaygreen':	spriteOffsetStart = decoration.overlaygreen.s; spriteOffsetEnd = decoration.overlaygreen.e; break;
-			case 'overlaypink':	spriteOffsetStart = decoration.overlaypink.s; spriteOffsetEnd = decoration.overlaypink.e; break;
-			case 'overlayorange':	spriteOffsetStart = decoration.overlayorange.s; spriteOffsetEnd = decoration.overlayorange.e; break;
-			case 'clear1':	spriteOffsetStart = decoration.clear1.s; spriteOffsetEnd = decoration.clear1.e; break;
-			case 'clear2':	spriteOffsetStart = decoration.clear2.s; spriteOffsetEnd = decoration.clear2.e; break;
-			case 'clear3':	spriteOffsetStart = decoration.clear3.s; spriteOffsetEnd = decoration.clear3.e; break;
-			case 'clear4':	spriteOffsetStart = decoration.clear4.s; spriteOffsetEnd = decoration.clear4.e; break;
-			case 'clear5':	spriteOffsetStart = decoration.clear5.s; spriteOffsetEnd = decoration.clear5.e; break;
-			case 'clear6':	spriteOffsetStart = decoration.clear6.s; spriteOffsetEnd = decoration.clear6.e; break;
-			case 'clear7':	spriteOffsetStart = decoration.clear7.s; spriteOffsetEnd = decoration.clear7.e; break;
-			}
-
-		var ox = spriteOffsetStart[0]*(blockSize);
-		var oy = spriteOffsetStart[1]*(blockSize);
-		var w = (spriteOffsetEnd[0]-spriteOffsetStart[0])*(blockSize);
-
-		var h = (spriteOffsetEnd[1]-spriteOffsetStart[1])*(blockSize);
-		var nx = 0;
-		var ny = 0;
-
-			ctx.drawImage(sprite, // original image
-						  ox,oy, //coordinate on the original image
-						  w,h, // size of the rectangle to will be cut
-						  nx,ny, // destination coordinate
-						  w,h); // destination size
-
-}
-
-	function drawPaletteCell(type,orientation,RS,blockSize,sprite){
-		var Canvas = $('#editor-palette-'+type+orientation);
-		var ctx = Canvas[0].getContext('2d');
-		var matrix = getMatrix(type, orientation, RS);
-		Canvas.attr('width',Canvas.width());
-
-		var color,spriteOffset;
-		switch(RS){ // TODO: add srs
-			case 'ARS':
-				switch(type){
-					case 'I':
-						color = ARS.I.color;
-						spriteOffset = ARS.I.offset;
-						break;
-					case 'T':
-						color = ARS.T.color;
-						spriteOffset = ARS.T.offset;
-						break;
-					case 'L':
-						color = ARS.L.color;
-						spriteOffset = ARS.L.offset;
-						break;
-					case 'J':
-						color = ARS.J.color;
-						spriteOffset = ARS.J.offset;
-						break;
-					case 'S':
-						color = ARS.S.color;
-						spriteOffset = ARS.S.offset;
-						break;
-					case 'Z':
-						color = ARS.Z.color;
-						spriteOffset = ARS.Z.offset;
-						break;
-					case 'O':
-						color = ARS.O.color;
-						spriteOffset = ARS.O.offset;
-						break;
-					case 'G':
-						color = ARS.G.color;
-						spriteOffset = ARS.G.offset;
-						break;
-				}
-			break;
-		}
-
-		for (var i = 0; i < 4; i++) {
-			for (var j = 0; j < 4; j++) {
-				if (matrix[i][j]) {
-					ctx.beginPath();
-					ctx.rect(parseInt(j*blockSize,10),parseInt(i*blockSize,10),blockSize,blockSize);
-					ctx.fillStyle = color;
-					ctx.fill();
-					ctx.closePath();
-					if (sprite) {
-						ctx.drawImage(sprite, // original image
-									  spriteOffset[0]*blockSize,spriteOffset[1]*blockSize, //coordinate on the original image
-									  blockSize,blockSize, // size of the rectangle to will be cut
-									  parseInt(j*blockSize,10),parseInt(i*blockSize,10), // destination coordinate
-									  blockSize,blockSize); // destination size
-					}
-
-				}
-			}
-		}
-
-	}//end drawpalettecell
-
-
-function drawPalette(RS, blockSize,sprite){
-	var type = ['I','T','S','Z','L','J','O'];
-	var orientation = ['i','cw','ccw','u'];
-
-	for (var i = 0; i < type.length; i++) {
-		for (var j = 0; j < orientation.length; j++) {
-			drawPaletteCell(type[i],orientation[j],RS,blockSize,sprite);
-		}
-	}
-}
-
-function drawPaletteDeco(blockSize,sprite){
-	var type = ['n1','n2','n3','n4','n5','n6','n7','n8','n9','n0','smallccw','smallcw','smalloktick','smallokcircle','smallnocross','smallquestion','smallexclamation','nwarrow','narrow','nearrow','earrow','searrow','sarrow','swarrow','warrow','bigcw','bigccw','smallquestion','bigquestion','bigexclamation','bigoktick','bigokcircle','bignocross','overlayyellow','overlayblue','overlaygreen','overlaypink','overlaypink','clear1','clear2','clear3','clear4','clear5','clear6','clear7'];
-
-	for (var i = 0; i < type.length; i++) {
-			drawPaletteDecoCell(type[i],blockSize,sprite);
-	}
-}
-
-
-
 
