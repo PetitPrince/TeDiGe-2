@@ -1,0 +1,78 @@
+.tedige-playfield-wrapper {
+     border-radius: 0.5em  0.5em 0.5em 0.5em;
+     border: 0.25em solid #808080;
+     height: 360px;
+     padding: 0 10px 5px 10px;
+     width: 200px;
+     background-color: #333;
+	 color: white;
+	 display:inline-block;
+}
+
+.canvas-container {
+     height: 177px;
+     position: relative;
+     width: 97px;
+}
+.nexthold-container {
+     height: 32px;
+     position:relative;
+     width: 97px;
+     margin-bottom: 2px;
+}
+.nexthold-container canvas{
+     position: absolute;
+     left: 0;
+     top: 0;
+}
+.canvas-container canvas {
+     position: absolute;
+     left: 0;
+     top: 0;
+}
+
+.canvas-control{
+height: 35px;
+}
+
+.left-pane{
+float:left;
+width: 100px;
+}
+
+.right-pane{
+padding-top:35px;
+float:right;
+width:100px;
+}
+
+#order-control, #newdel{
+     margin-top:5px;
+     text-align:center;
+}
+#frame-index{
+}
+
+#order-control input[type="button"] {
+     width: 2em;
+}
+.progressbar{
+width: 100px; height: 24px
+}
+.progressbar p{
+position: absolute;
+ margin:2px 0 0 0;
+ width: 100px;
+ text-align: center
+}
+.cmd_first, .cmd_last{
+width:2.5em
+}
+textarea.comment{
+	color:white;
+	width:200px; 
+	height: 4em; 
+	margin-top:3px; 
+	background-color: gray;"
+
+}

@@ -1,0 +1,537 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>TeDiGe-2 editor</title>
+	<script src="jquery.js"></script>
+	<script src="tedige-utils.js"></script>
+	<script src="tedige-core.js"></script>
+	<script src="tedige-editor.js"></script>
+
+	<link rel="stylesheet" href="editor.css">
+	<style type="text/css">
+	/* Waiting for a proper placeholder support in every browser....*/
+	#console textarea::-webkit-input-placeholder {
+	color: #999;
+	}
+	#console textarea:-moz-placeholder{
+		color: #999;
+	}
+
+	#console textarea:-ms-input-placeholder {
+		color: #999;
+
+	}
+	</style>
+</head>
+
+<body>
+
+<!-- <div id="highlight" style="background-color: pink; width: 100px; height: 100px;">Blah</div> -->
+
+	<div id="overall-wrapper">
+	 <div id="playfield-wrapper">
+		<div class="left-pane">
+			<div class="nexthold-container">
+				<canvas id="pf-nexthold-background"	width="97" height="32" style="z-index:0;"></canvas>
+				<canvas id="pf-nexthold"	width="97" height="32" style="z-index:1;"></canvas>
+			</div>
+			<div class="pf-container border-gray">
+				<canvas id="pf-border"		width="97" height="177" style="z-index:0;background-color: black"></canvas>
+				<canvas id="pf-background"	width="97" height="177" style="z-index:1;//background-color: black"></canvas>
+				<canvas id="pf-inactive"	width="97" height="177" style="z-index:2; border:none; opacity: 0.65"></canvas>
+				<canvas id="pf-whiteborder" width="97" height="177" style="z-index:3"></canvas>
+				<canvas id="pf-active"		width="97" height="177" style="z-index:4"></canvas>
+				<canvas id="pf-deco"		width="97" height="177" style="z-index:5"></canvas>
+				<canvas id="pf-decoPin"		width="97" height="177" style="z-index:6"></canvas>
+				<canvas id="pf-preview"		width="97" height="177" style="z-index:7"></canvas>
+			</div>
+			<div class="control-div">
+			<canvas id="pf-control" width="97" height="35" style=""></canvas>
+			</div>
+		</div>
+
+		<div class="right-pane">
+			<div id="progressbar" style="width: 100px; height: 24px">
+				<p style="position: absolute; margin:2px 0 0 0; width: 100px; text-align: center">
+					<input id="pf-current-frame" type="text" style="width: 2.5em; text-align:center; opacity: 0.85"  value="1"/> / <span id="pf-total-frame">1</span>
+				</p>
+				<canvas id="pf-progressbar" width="97" height="24" style="border: 1px solid white;" />
+			</div>
+
+			<div id="order-control"> 
+				<input class="cmd_prev" id="pf-cmd_prev"	value="◄"	type="button" />
+				<input class="cmd_next" id="pf-cmd_next"	value="►"	type="button" /><br />
+				<input class="cmd_first" id="pf-cmd_first" value="|◄" type="button"	style="width:2.5em"/>
+				<input class="cmd_last" id="pf-cmd_last" value="►|" type="button"	style="width:2.5em"/><br />
+				<input class="cmd_playpause"id="pf-cmd_playpause" value ="▷" type="button" style="width:2.5em" /><br > <input type="checkbox" id="pf-loop"> loop
+			</div>
+		
+		</div>
+		<div id="under">
+			<textarea id="pf-comment" style="width:200px; height: 60px; margin-top:3px; background-color: gray;"></textarea>
+		</div>
+	</div>
+	 <div id="main-utilities" class="border-tetramino">
+		<ul id="main-tab">
+			<li id="tab-deco">			<input type="radio" name="editor-tab" id="deco" value="deco" /><label for="deco">Decoration</label></li>
+			<li id="tab-tetramino">		<input type="radio" name="editor-tab" id="Tetramino" value="Tetramino" /><label for="active">Tetramino</label></li>
+			<li id="tab-properties">	<input type="radio" name="editor-tab" id="properties" value="properties" /><label for="properties">Properties</label></li>
+			<li id="tab-apcontrol">	<input type="radio" name="editor-tab" id="apcontrol" value="properties" /><label for="apcontrol">AP control</label></li>
+		</ul>
+
+		<div id="panel-decorations"	style="display:none">
+			<h2>Decorations</h2>
+			<table>
+				<tr class="small-deco">
+					<td id="n1-cell">
+						<label for ="n1">	<input id="n1" type="radio" name="select-deco" value="n1">
+						<canvas id="editor-palette-deco-n1" width="8" height="8"></canvas><span>cw</span></label>
+					</td>
+					<td id="n2-cell">
+						<label for ="n2">	<input id="n2" type="radio" name="select-deco" value="n2">
+						<canvas id="editor-palette-deco-n2" width="8" height="8"></canvas><span>n2</span></label>
+					</td>
+					<td id="n3-cell">
+						<label for ="n3">	<input id="n3" type="radio" name="select-deco" value="n3">
+						<canvas id="editor-palette-deco-n3" width="8" height="8"></canvas><span>n3</span></label>
+					</td>
+					<td id="n4-cell">
+						<label for ="n4">	<input id="n4" type="radio" name="select-deco" value="n4">
+						<canvas id="editor-palette-deco-n4" width="8" height="8"></canvas><span>n4</span></label>
+					</td>
+					<td id="n5-cell">
+						<label for ="n5">	<input id="n5" type="radio" name="select-deco" value="n5">
+						<canvas id="editor-palette-deco-n5" width="8" height="8"></canvas><span>n5</span></label>
+					</td>
+					<td id="n6-cell">
+						<label for ="n6">	<input id="n6" type="radio" name="select-deco" value="n6">
+						<canvas id="editor-palette-deco-n6" width="8" height="8"></canvas><span>n6</span></label>
+					</td>
+					<td id="n7-cell">
+						<label for ="n7">	<input id="n7" type="radio" name="select-deco" value="n7">
+						<canvas id="editor-palette-deco-n7" width="8" height="8"></canvas><span>n7</span></label>
+						</td>
+					<td id="n8-cell">
+						<label for ="n8">	<input id="n8" type="radio" name="select-deco" value="n8">
+						<canvas id="editor-palette-deco-n8" width="8" height="8"></canvas><span>n8</span></label>
+					</td>
+					<td id="n9-cell">
+						<label for ="n9">	<input id="n9" type="radio" name="select-deco" value="n9">
+						<canvas id="editor-palette-deco-n9" width="8" height="8"></canvas><span>n9</span></label>
+					</td>
+					<td id="n0-cell">
+						<label for ="n0">	<input id="n0" type="radio" name="select-deco" value="n0">
+						<canvas id="editor-palette-deco-n0" width="8" height="8"></canvas><span>n0</span></label>
+					</td>
+				</tr>
+				<tr class="small-deco">
+					<td id="nwarrow-cell">
+						<label for ="nwarrow">	<input id="nwarrow" type="radio" name="select-deco" value="nwarrow">
+						<canvas id="editor-palette-deco-nwarrow" width="8" height="8"></canvas><span>nwarrow</span></label>
+					</td>
+					<td id="narrow-cell">
+						<label for ="narrow">	<input id="narrow" type="radio" name="select-deco" value="narrow">
+						<canvas id="editor-palette-deco-narrow" width="8" height="8"></canvas><span>narrow</span></label>
+					</td>
+					<td id="nearrow-cell">
+						<label for ="nearrow">	<input id="nearrow" type="radio" name="select-deco" value="nearrow">
+						<canvas id="editor-palette-deco-nearrow" width="8" height="8"></canvas><span>nearrow</span></label>
+					</td>
+				</tr>
+				<tr class="small-deco">
+					<td id="warrow-cell">
+						<label for ="warrow">	<input id="warrow" type="radio" name="select-deco" value="warrow">
+						<canvas id="editor-palette-deco-warrow" width="8" height="8"></canvas><span>warrow</span></label>
+					</td>
+					<td id="carrow-cell">
+						<label for ="carrow">	<input id="carrow" type="radio" name="select-deco" value="carrow">
+						<canvas id="editor-palette-deco-carrow" width="8" height="8"></canvas><span>carrow</span></label>
+					</td>
+					<td id="earrow-cell">
+						<label for ="earrow">	<input id="earrow" type="radio" name="select-deco" value="earrow">
+						<canvas id="editor-palette-deco-earrow" width="8" height="8"></canvas><span>earrow</span></label>
+					</td>
+				</tr>
+				<tr class="small-deco">
+					<td id="swarrow-cell">
+						<label for ="swarrow">	<input id="swarrow" type="radio" name="select-deco" value="swarrow">
+						<canvas id="editor-palette-deco-swarrow" width="8" height="8"></canvas><span>swarrow</span></label>
+					</td>
+					<td id="sarrow-cell">
+						<label for ="sarrow">	<input id="sarrow" type="radio" name="select-deco" value="sarrow">
+						<canvas id="editor-palette-deco-sarrow" width="8" height="8"></canvas><span>sarrow</span></label>
+					</td>
+					<td id="searrow-cell">
+						<label for ="searrow">	<input id="searrow" type="radio" name="select-deco" value="searrow">
+						<canvas id="editor-palette-deco-searrow" width="8" height="8"></canvas><span>searrow</span></label>
+					</td>
+				</tr>
+				<tr class="small-deco">
+					<td id="smallccw-cell">
+						<label for ="smallccw">	<input id="smallccw" type="radio" name="select-deco" value="smallccw">
+						<canvas id="editor-palette-deco-smallccw" width="8" height="8"></canvas><span>smallccw</span></label>
+					</td>
+					<td id="smallcw-cell">
+						<label for ="smallcw">	<input id="smallcw" type="radio" name="select-deco" value="smallcw">
+						<canvas id="editor-palette-deco-smallcw" width="8" height="8"></canvas><span>smallcw</span></label>
+					</td>
+					<td id="smalloktick-cell">
+						<label for ="smalloktick">	<input id="smalloktick" type="radio" name="select-deco" value="smalloktick">
+						<canvas id="editor-palette-deco-smalloktick" width="8" height="8"></canvas><span>smalloktick</span></label>
+					</td>
+					<td id="smallokcircle-cell">
+						<label for ="smallokcircle">	<input id="smallokcircle" type="radio" name="select-deco" value="smallokcircle">
+						<canvas id="editor-palette-deco-smallokcircle" width="8" height="8"></canvas><span>smallokcircle</span></label>
+					</td>
+					<td id="smallnocross-cell">
+						<label for ="smallnocross">	<input id="smallnocross" type="radio" name="select-deco" value="smallnocross">
+						<canvas id="editor-palette-deco-smallnocross" width="8" height="8"></canvas><span>smallnocross</span></label>
+					</td>
+					<td id="smallquestion-cell">
+						<label for ="smallquestion">	<input id="smallquestion" type="radio" name="select-deco" value="smallquestion">
+						<canvas id="editor-palette-deco-smallquestion" width="8" height="8"></canvas><span>smallquestion</span></label>
+					</td>
+					<td id="smallexclamation-cell">
+						<label for ="smallexclamation">	<input id="smallexclamation" type="radio" name="select-deco" value="smallexclamation">
+						<canvas id="editor-palette-deco-smallexclamation" width="8" height="8"></canvas><span>smallexclamation</span></label>
+					</td>
+				</tr>
+				<tr class="big-deco">
+					<td id="bigquestion-cell" colspan="2" rowspan="2">
+						<label for ="bigquestion">	<input id="bigquestion" type="radio" name="select-deco" value="bigquestion">
+						<canvas id="editor-palette-deco-bigquestion" width="16" height="16"></canvas><span>bigquestion</span></label>
+					</td>
+					<td id="bigexclamation-cell" colspan="2" rowspan="2">
+						<label for ="bigexclamation">	<input id="bigexclamation" type="radio" name="select-deco" value="bigexclamation">
+						<canvas id="editor-palette-deco-bigexclamation" width="16" height="16"></canvas><span>bigexclamation</span></label>
+					</td>
+					<td id="bigoktick-cell" colspan="2" rowspan="2">
+						<label for ="bigoktick">	<input id="bigoktick" type="radio" name="select-deco" value="bigoktick">
+						<canvas id="editor-palette-deco-bigoktick" width="16" height="16"></canvas><span>bigoktick</span></label>
+					</td>
+					<td id="bigokcircle-cell" colspan="2" rowspan="2">
+						<label for ="bigokcircle">	<input id="bigokcircle" type="radio" name="select-deco" value="bigokcircle">
+						<canvas id="editor-palette-deco-bigokcircle" width="16" height="16"></canvas><span>bigokcircle</span></label>
+					</td>
+					<td id="bignocross-cell" colspan="2" rowspan="2">
+						<label for ="bignocross">	<input id="bignocross" type="radio" name="select-deco" value="bignocross">
+						<canvas id="editor-palette-deco-bignocross" width="16" height="16"></canvas><span>bignocross</span></label>
+					</td>								
+					<td id="bigcw-cell" colspan="2" rowspan="2">
+						<label for ="bigcw">	<input id="bigcw" type="radio" name="select-deco" value="bigcw">
+						<canvas id="editor-palette-deco-bigcw" width="16" height="16"></canvas><span>bigcw</span></label>
+					</td>
+					<td id="bigccw-cell" colspan="2" rowspan="2">
+						<label for ="bigccw">	<input id="bigccw" type="radio" name="select-deco" value="bigccw">
+						<canvas id="editor-palette-deco-bigccw" width="16" height="16"></canvas><span>bigccw</span></label>
+					</td>				
+				</tr>
+				<tr></tr>
+				<tr class="small-deco">
+					<td id="overlayyellow-cell">
+						<label for ="overlayyellow">	<input id="overlayyellow" type="radio" name="select-deco" value="overlayyellow">
+						<canvas id="editor-palette-deco-overlayyellow" width="8" height="8"></canvas><span>overlayyellow</span></label>
+					</td>
+					<td id="overlayblue-cell">
+						<label for ="overlayblue">	<input id="overlayblue" type="radio" name="select-deco" value="overlayblue">
+						<canvas id="editor-palette-deco-overlayblue" width="8" height="8"></canvas><span>overlayblue</span></label>
+					</td>
+					<td id="overlaygreen-cell">
+						<label for ="overlaygreen">	<input id="overlaygreen" type="radio" name="select-deco" value="overlaygreen">
+						<canvas id="editor-palette-deco-overlaygreen" width="8" height="8"></canvas><span>overlaygreen</span></label>
+					</td>
+					<td id="overlaypink-cell">
+						<label for ="overlaypink">	<input id="overlaypink" type="radio" name="select-deco" value="overlaypink">
+						<canvas id="editor-palette-deco-overlaypink" width="8" height="8"></canvas><span>overlaypink</span></label>
+					</td>
+					<td id="overlayorange-cell">
+						<label for ="overlayorange">	<input id="overlayorange" type="radio" name="select-deco" value="overlayorange">
+						<canvas id="editor-palette-deco-overlayorange" width="8" height="8"></canvas><span>overlayorange</span></label>
+					</td>
+				</tr>	
+				<tr class="long-deco">
+					<td id="clear1-cell" colspan="7">
+						<label for ="clear1">	<input id="clear1" type="radio" name="select-deco" value="clear1">
+						<canvas id="editor-palette-deco-clear1" width="80" height="8"></canvas><span>clear1</span></label>
+					</td>
+				</tr>	
+				<tr class="long-deco">
+					<td id="clear2-cell" colspan="7">
+						<label for ="clear2">	<input id="clear2" type="radio" name="select-deco" value="clear2">
+						<canvas id="editor-palette-deco-clear2" width="80" height="8"></canvas><span>clear2</span></label>
+					</td>
+				</tr>	
+				<tr class="long-deco">
+					<td id="clear3-cell" colspan="7">
+						<label for ="clear3">	<input id="clear3" type="radio" name="select-deco" value="clear3">
+						<canvas id="editor-palette-deco-clear3" width="80" height="8"></canvas><span>clear3</span></label>
+					</td>
+				</tr>	
+				<tr class="long-deco">
+					<td id="clear4-cell" colspan="7">
+						<label for ="clear4">	<input id="clear4" type="radio" name="select-deco" value="clear4">
+						<canvas id="editor-palette-deco-clear4" width="80" height="8"></canvas><span>clear4</span></label>
+					</td>
+				</tr>	
+				<tr class="long-deco">
+					<td id="clear5-cell" colspan="7">
+						<label for ="clear5">	<input id="clear5" type="radio" name="select-deco" value="clear5">
+						<canvas id="editor-palette-deco-clear5" width="80" height="8"></canvas><span>clear5</span></label>
+					</td>
+				</tr>	
+				<tr class="long-deco">
+					<td id="clear6-cell" colspan="7">
+						<label for ="clear6">	<input id="clear6" type="radio" name="select-deco" value="clear6">
+						<canvas id="editor-palette-deco-clear6" width="80" height="8"></canvas><span>clear6</span></label>
+					</td>
+				</tr>	
+				<tr class="long-deco">
+					<td id="clear7-cell" colspan="7">
+						<label for ="clear7">	<input id="clear7" type="radio" name="select-deco" value="clear7">
+						<canvas id="editor-palette-deco-clear7" width="80" height="8"></canvas><span>clear7</span></label>
+					</td>				
+				</tr>
+			</table>
+				<img class="tools-button" id="button-eraser-deco" src="res/button/button-eraser-red.png" />
+
+		</div>
+	<div id="tetramino-panel">
+			<h2>Piece selection</h2>
+			<table>
+				<tr id="I-row">
+					<td id="Icw-cell">	<label for ="Icw">	<input id="Icw" type="radio" name="select" value="Icw">	 <canvas id="editor-palette-Icw" width="32" height="32"></canvas><span>cw</span></label></td>
+					<td id="Ii-cell">	<label for ="Ii">	<input id="Ii" type="radio" name="select" value="Ii">		<canvas id="editor-palette-Ii" width="32" height="32"></canvas>	<span>i</span></label></td>
+					<td id="Iccw-cell"> <label for ="Iccw"> <input id="Iccw" type="radio" name="select" value="Iccw">	<canvas id="editor-palette-Iccw" width="32" height="32"></canvas><span>cw</span></label></td>
+					<td id="Iu-cell">	<label for ="Iu">	<input id="Iu" type="radio" name="select" value="Iu">		<canvas id="editor-palette-Iu" width="32" height="32"></canvas><span>i</span></label></td>
+				</tr>
+			</table>
+			<table>
+				<tr id ="T-row">
+					<td id="Tcw-cell">	<label for ="Tcw">	<input id="Tcw" type="radio" name="select" value="Tcw">	 <canvas id="editor-palette-Tcw" width="24" height="24">	</canvas><span>cw</span></label></td>
+					<td id="Ti-cell">	<label for ="Ti">	<input id="Ti" type="radio" name="select" value="Ti">		<canvas id="editor-palette-Ti" width="24" height="24">	</canvas> <span>i</span></label></td>
+					<td id="Tccw-cell"> <label for ="Tccw"> <input id="Tccw" type="radio" name="select" value="Tccw">	<canvas id="editor-palette-Tccw" width="24" height="24"> </canvas><span>cw</span></label></td>
+					<td id="Tu-cell">	<label for ="Tu">	<input id="Tu" type="radio" name="select" value="Tu">		<canvas id="editor-palette-Tu" width="24" height="24">	</canvas><span>i</span></label></td>
+				</tr>
+				<tr id="L-row">
+					<td id="Lcw-cell">	<label for ="Lcw">	<input id="Lcw" type="radio" name="select" value="Lcw">	 <canvas id="editor-palette-Lcw" width="24" height="24">	<span>cw</span></label></td>
+					<td id="Li-cell">	<label for ="Li">	<input id="Li" type="radio" name="select" value="Li">		<canvas id="editor-palette-Li" width="24" height="24">	<span>i</span></label></td>
+					<td id="Lccw-cell"> <label for ="Lccw"> <input id="Lccw" type="radio" name="select" value="Lccw">	<canvas id="editor-palette-Lccw" width="24" height="24"> <span>cw</span></label></td>
+					<td id="Lu-cell">	<label for ="Lu">	<input id="Lu" type="radio" name="select" value="Lu">		<canvas id="editor-palette-Lu" width="24" height="24">	<span>i</span></label></td>
+				</tr>
+				<tr id="J-row">
+					<td id="Jcw-cell">	<label for ="Jcw">	<input id="Jcw" type="radio" name="select" value="Jcw">	 <canvas id="editor-palette-Jcw" width="24" height="24">	<span>cw</span></label></td>
+					<td id="Ji-cell">	<label for ="Ji">	<input id="Ji" type="radio" name="select" value="Ji">		<canvas id="editor-palette-Ji" width="24" height="24">	<span>i</span></label></td>
+					<td id="Jccw-cell"> <label for ="Jccw"> <input id="Jccw" type="radio" name="select" value="Jccw">	<canvas id="editor-palette-Jccw" width="24" height="24"> <span>cw</span></label></td>
+					<td id="Ju-cell">	<label for ="Ju">	<input id="Ju" type="radio" name="select" value="Ju">		<canvas id="editor-palette-Ju" width="24" height="24">	<span>i</span></label></td>
+				</tr>
+				<tr id="S-row">
+					<td id="Scw-cell">	<label for ="Scw">	<input id="Scw" type="radio" name="select" value="Scw">	 <canvas id="editor-palette-Scw" width="24" height="24">	<span>cw</span></label></td>
+					<td id="Si-cell">	<label for ="Si">	<input id="Si" type="radio" name="select" value="Si">		<canvas id="editor-palette-Si" width="24" height="24">	<span>i</span></label></td>
+					<td id="Sccw-cell"> <label for ="Sccw"> <input id="Sccw" type="radio" name="select" value="Sccw">	<canvas id="editor-palette-Sccw" width="24" height="24"> <span>cw</span></label></td>
+					<td id="Su-cell">	<label for ="Su">	<input id="Su" type="radio" name="select" value="Su">		<canvas id="editor-palette-Su" width="24" height="24">	<span>i</span></label></td>
+				</tr>
+				<tr id="Z-row">
+					<td id="Zcw-cell">	<label for ="Zcw">	<input id="Zcw" type="radio" name="select" value="Zcw">	 <canvas id="editor-palette-Zcw" width="24" height="24">	<span>cw</span></label></td>
+					<td id="Zi-cell">	<label for ="Zi">	<input id="Zi" type="radio" name="select" value="Zi">		<canvas id="editor-palette-Zi" width="24" height="24">	<span>i</span></label></td>
+					<td id="Zccw-cell"> <label for ="Zccw"> <input id="Zccw" type="radio" name="select" value="Zccw">	<canvas id="editor-palette-Zccw" width="24" height="24"> <span>cw</span></label></td>
+					<td id="Zu-cell">	<label for ="Zu">	<input id="Zu" type="radio" name="select" value="Zu">		<canvas id="editor-palette-Zu" width="24" height="24">	<span>i</span></label></td>
+				</tr>
+				<tr id="O-row">
+					<td id="Ocw-cell">	<label for ="Ocw">	<input id="Ocw" type="radio" name="select" value="Ocw">	 <canvas id="editor-palette-Ocw" width="24" height="24">	<span>cw</span></label></td>
+					<td id="Oi-cell">	<label for ="Oi">	<input id="Oi" type="radio" name="select" value="Oi">		<canvas id="editor-palette-Oi" width="24" height="24">	<span>i</span></label></td>
+					<td id="Occw-cell"> <label for ="Occw"> <input id="Occw" type="radio" name="select" value="Occw">	<canvas id="editor-palette-Occw" width="24" height="24"> <span>cw</span></label></td>
+					<td id="Ou-cell">	<label for ="Ou">	<input id="Ou" type="radio" name="select" value="Ou">		<canvas id="editor-palette-Ou" width="24" height="24">	<span>i</span></label></td>
+				</tr>
+			</table>
+			<div id="tools">
+				<img class="tools-button" id="button-drop" src="res/button/button-drop.png" />
+				<img class="tools-button" id="button-paint-bucket" src="res/button/button-paint-bucket-red.png" />
+				<!--<img class="tools-button" id="button-rectangular" src="res/button/button-paint-bucket-rectangular-red.png" /> <!-- maybe i'll implement that later... -->
+				<img class="tools-button" id="button-pencil" src="res/button/button-pencil-red.png" />
+				<img class="tools-button" id="button-eraser" src="res/button/button-eraser-red.png" />
+				<br />
+				<input type="checkbox" id="checkbox-active" style="display:inline" /> Active<input type="checkbox" id="checkbox-garbage" style="display:inline" /> Garbage
+				<!-- <input type="button" style="display:none" id="cmd_clear_active" value="C">
+				<input type="button" id="cmd_clear_inactive" value="C"> -->
+			</div>
+		</div>
+	<div id="panel-apcontrol" style="display:none">
+
+		<table style="margin:0 auto 0 auto">
+			<tbody>
+				<tr>
+					<td></td>
+					<td><input type="button" value="↑" id="cmd_move_up" /></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td><input type="button" value="←" id="cmd_move_left" /></td>
+					<td></td>
+					<td><input type="button" value="→" id="cmd_move_right" /></td>
+					</tr>
+				<tr>
+				<td><input type="button" value="↺" id="cmd_ccw" /></td>
+				<td><input type="button" value="↓" id="cmd_move_down" /></td>
+				<td><input type="button" value="↻" id="cmd_cw" /></td>
+				</tr>
+			</tbody>
+		</table>
+		<p style="text-align:center">
+			<img class="actions-button" id="cmd_paint" src="res/button/button-stamp.png" />
+			<img class="actions-button" id="cmd_lock" src="res/button/button-lock.png" />
+			<img class="actions-button" id="cmd_drop" src="res/button/button-drop.png" />
+		</p>   
+		
+		<h3>Opacity</h3>
+		<input type="text" value="1.0" id="pf-active-opacity" />
+		<br />
+		<input type="button" value="3" id="cmd_opacity_3" />
+		<input type="button" value="2" id="cmd_opacity_2" />
+		<input type="button" value="1" id="cmd_opacity_1" />
+		<input type="button" value="lock" id="cmd_opacity_lock" />
+		<input type="button" value="flash" id="cmd_opacity_flash" />
+	</div>
+
+	<div id="panel-proprieties" style="display:none">
+	<!--
+			Next 1: <select class="next-select" id="next1-select" >
+						<option value="I">I</option>
+						<option value="T">T</option>
+						<option value="L">L</option>
+						<option value="J">J</option>
+						<option value="S">S</option>
+						<option value="Z">Z</option>
+						<option value="O">O</option>
+					</select>
+		<br />
+		Next 2: <select class="next-select" id="next2-select" >
+					<option value="I">I</option>
+					<option value="T">T</option>
+					<option value="L">L</option>
+					<option value="J">J</option>
+					<option value="S">S</option>
+					<option value="Z">Z</option>
+					<option value="O">O</option>
+				</select>
+		<br />
+		Next 3: <select class="next-select" id="next3-select" >
+					<option value="I">I</option>
+					<option value="T">T</option>
+					<option value="L">L</option>
+					<option value="J">J</option>
+					<option value="S">S</option>
+					<option value="Z">Z</option>
+					<option value="O">O</option>
+				</select>
+				
+		<br />
+		<br />
+		Hold: <select class="next-select" id="hold-select" >
+				<option value="I">I</option>
+				<option value="T">T</option>
+				<option value="L">L</option>
+				<option value="J">J</option>
+				<option value="S">S</option>
+				<option value="Z">Z</option>
+				<option value="O">O</option>
+			</select>
+		<br />
+		<br />-->
+		Border: 
+		<br />
+		<select class="" id="border-select" >
+					<option value="master">Gray</option>
+					<option value="death">Red</option>
+					<option value="easy">Green</option>
+				</select>
+		<input type="button" id="change-all-border" value="Apply to all">
+		<br />
+		Rotation system: 
+		<br />
+		<select class="rs-select" id="rs-select" style="width:50px">
+							<option value="ARS">ARS</option>
+							<option value="SRS">SRS</option>
+						</select>
+		<input type="button" id="change-all-rs" value="Apply to all">
+		<br />
+
+		Duration (in frames):	 <input id="pf-duration" type="text" />
+
+		<input type="button" id="duration-1f" value="1">
+		<input type="button" id="duration-5f" value="5">
+		<input type="button" id="duration-15f" value="15">
+		<input type="button" id="duration-60f" value="60">
+		<br />
+		<input type="button" id="change-all-duration" value="Apply to all">
+		<br />
+		<input type="checkbox" id="activate-white-border" /> White border <input type="button" id="change-all-whiteborder" value="Apply to all">
+</div>	
+	
+	</div>
+	
+	
+	<div id="secondary-utilites">
+	<ul id="secondary-tab">
+			<li id="tab-actions">PF Actions</li>
+	</ul>
+
+	<div id="panel-actions">
+		<img class="actions-button" id="cmd_clear_inactive" src="res/button/button-waste-bin.png" />
+		<img class="actions-button" id="cmd_clear_active" src="res/button/button-waste-bin-active.png" />
+		<img class="actions-button" id="cmd_nuke" src="res/button/button-waste-bin-radioactive.png" />
+		
+		<input id="pf-cmd_del" value="-" type="button" />
+		<input id="pf-cmd_new" value="+" type="button" />
+		<input id="pf-cmd_clone" value="clone" type="button" />		
+		<!--<input type="button" id="cmd_nuke" value="Nuke">
+		<input type="button" id="cmd_paint" value="Paint">-->
+	</div>
+
+</div>
+<!--
+<div id="browser">
+	<table>
+	<tr id="preview-container">
+	<td class="preview-block" id="preview-plus"><input type="button" value="+" style="vertical-align: middle"></td>
+	</tr></table>
+</div>
+-->
+
+<div id="console">
+	<div class="consolediv">
+	 Export
+	 <textarea id="export" class="console-textarea" readonly="readonly" placeholder="Get your TeDiGe code from here."></textarea>
+	</div>
+	<div class="consolediv">
+	 Import
+	 <textarea id="import" class="console-textarea" placeholder="Place your TeDiGe code here. You can even keep the [tedige] tags if you're extra-lazy !"></textarea> 
+	</div>
+
+
+	<div id="import-export-wrapper">																		 
+	 <input name="export-type" value="All" type="radio" checked="checked"> All
+	 <input name="export-type" value="Current" type="radio"> Current
+	 <br />
+	 <input class="export-button" id="export-forum-button" type="button" value="Get forum code">
+	 <input class="export-button" id="export-editor-button" type="button" value="Get editor URL">
+	 <input class="export-button" id="export-viewer-button" type="button" value="Get viewer URL">
+	 <input type="button" id="fumen_import" value="Fumen Import" />
+	 <input id="import-button" value="Import" type="button">
+	<br />
+	 <input id="export-image-frame-button" type="button" value="Export frame as image">
+	 <input id="export-image-diagram-button" type="button" value="Export this diagram as gif">
+
+	</div>
+
+
+</div>
+</div>
+<input type="button" id="foobartest" value="Test" style="width:4em;height:4em; position:absolute; top:50px;left:600px" />
+<canvas id="pf-export"		width="97" height="177" style="z-index:999; background:gray;"></canvas>
+<img id="export-gif" />
+<div id="links">
+	<p><a href="http://www.tetrisconcept.net" title="Tetrisconcept">Tetrisconcept</a> | <a href="http://www.harddrop.com" title="Harddrop">Harddrop</a> | powered by <a href="http://jquery.com/">jQuery</a></p>
+</div>
+
+</body>
+</html>

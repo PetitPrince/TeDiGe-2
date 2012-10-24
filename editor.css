@@ -1,0 +1,412 @@
+body{
+     background-color: black;
+     color:white;
+}
+#overall-wrapper {
+     position: relative;
+}
+
+/*--------------- Left pane ---------------*/
+#playfield-wrapper {
+     border-radius: 0.5em  0.5em 0.5em 0.5em;
+     border: 0.25em solid #808080;
+     height: 360px;
+     padding: 0 10px 5px 10px;
+     width: 200px;
+     background-color: #333;
+}
+
+.pf-container {
+     height: 177px;
+     position: relative;
+     width: 97px;
+}
+.nexthold-container {
+     height: 32px;
+     position:relative;
+     width: 97px;
+     margin-bottom: 2px;
+}
+.nexthold-container canvas{
+     left: 0;
+     position: absolute;
+     top: 0;
+     background-image: url("res/nexthold_bg.png");
+}
+.pf-container canvas {
+     left: 0;
+     position: absolute;
+     top: 0;
+}
+#pf-progressbar{
+}
+.pf-control{
+height: 35px;
+}
+
+/*--------------- right pane ---------------*/
+
+#main-utilities {
+     border-radius:  0.5em 0.5em 0.5em 0.5em;
+     border-width:  0.25em;
+     border-style: solid;
+     height: 270px;
+     left: 250px;
+     position: absolute;
+     top: 0;
+     width: 164px;
+     padding: 10px;
+     background-color: #333;
+}
+.border-properties{
+     border-color: purple;
+}
+.border-actions{
+     border-color: white;
+}
+.border-deco{
+     border-color: blue;
+}
+.border-tetramino{
+     border-color: green;
+}
+.border-AP{
+     border-color: darkred;
+}
+
+#main-tab{
+position: absolute;
+right:-5.4em;
+margin-top:0;
+margin-bottom: 0;
+padding:0;
+}
+
+#main-tab li {
+     display: block;
+     height: 1.33em;
+     list-style-type: none;
+     margin: 0pt;
+     padding-left: 0.11em;
+     width: 5em;
+     border-top-right-radius: 6px;     
+     border-bottom-right-radius: 6px; 
+     margin-bottom: 3px;    
+}
+
+#main-tab li input {
+     display: none;
+}
+
+#main-tab #tab-actions {
+     margin-top: 100px;
+}
+#tab-tetramino {
+     background-color: green;
+     border: 1px solid green;
+}
+
+#tab-deco {
+     background-color: blue;
+     border: 1px solid blue;
+}
+
+
+#tab-properties{
+     background-color:purple;
+     color:white;
+     border-top: 1px solid purple;
+     border-right: 1px solid purple;
+     border-bottom: 1px solid purple;
+}
+
+#tab-apcontrol{
+     background-color:darkred;
+     color:white;
+     border-top: 1px solid darkred;
+     border-right: 1px solid darkred;
+     border-bottom: 1px solid darkred;
+}
+
+#secondary-utilites{
+     border-radius:  0.5em 0.5em 0.5em 0.5em;
+     border-width:  0.25em;
+     border-style: solid;
+     height: 45px;
+     left: 250px;
+     position: absolute;
+     top: 300px;
+     width: 164px;
+     padding: 10px;
+     background-color: #333;
+}
+
+
+#secondary-tab{
+position: absolute;
+right:-5.4em;
+margin-top:0;
+margin-bottom: 0;
+padding:0;
+}
+
+#secondary-tab li {
+     display: block;
+     height: 1.33em;
+     list-style-type: none;
+     margin: 0pt;
+     padding-left: 0.11em;
+     width: 5em;
+     border-top-right-radius: 6px;     
+     border-bottom-right-radius: 6px; 
+     margin-bottom: 3px;    
+}
+
+#secondary-tab li input {
+     display: none;
+}
+
+#tab-actions{
+     background-color:white;
+     color:black;
+     border-top: 1px solid white;
+     border-right: 1px solid white;
+     border-bottom: 1px solid white;
+}
+
+#tetramino-panel {
+    
+}
+
+#tetramino-panel h2 {
+     display: none;
+}
+
+#tetramino-panel td {
+     border: 1px solid #666;
+     height: 24px;
+     margin: 0pt;
+     padding: 0pt;
+     width: 24px;
+}
+
+#tetramino-panel td:hover{
+  box-shadow: inset 1px 1px 2px 0px #000;
+  border:1px solid #ccc;
+}
+#tetramino-panel tr#I-row td {
+     height: 32px;
+     width: 32px;
+}
+
+#tetramino-panel label {
+     display: block;
+     height: 24px;
+     width: 24px;
+}
+
+#tetramino-panel label span {
+     visibility: hidden;
+}
+
+#tetramino-panel input {
+     display: none;
+}
+
+/* -------------------- */
+
+#panel-decorations h2 {
+     display: none;
+}
+
+#panel-decorations td {
+     border: 1px solid #666;
+     margin: 0pt;
+     padding: 0pt;
+}
+
+#panel-decorations td:hover{
+  box-shadow: inset 1px 1px 2px 0px #000;
+
+  border:1px solid #ccc;
+}
+#panel-decorations tr#I-row td {
+     height: 32px;
+     width: 32px;
+}
+
+#panel-decorations .small-deco label {
+     display: block;
+     height: 8px;
+     width: 8px;
+}
+#panel-decorations .big-deco label {
+     display: block;
+     height: 16px;
+     width: 16px;
+     margin-left: 2px;
+}
+#panel-decorations .big-deco td{
+     height: 16px;
+     width: 16px;
+}
+#panel-decorations .long-deco label {
+     display: block;
+     height: 16px;
+     width: 80px;
+}
+#panel-decorations .long-deco td{
+     height: 16px;
+     width: 80px;
+}
+#panel-decorations label span {
+     visibility: hidden;
+}
+
+#panel-decorations input {
+     display: none;
+}
+
+
+/* ---------------------- */
+
+.left-pane{
+float:left;
+width: 100px;
+}
+
+.right-pane{
+padding-top:35px;
+float:right;
+width:100px;
+}
+
+
+#order-control, #newdel{
+     margin-top:5px;
+     text-align:center;
+}
+#frame-index{
+}
+
+#order-control input[type="button"] {
+     width: 2em;
+}
+#newdel{
+
+}
+#cmd_new, #cmd_del{
+}
+
+#tools {
+  margin-top: 5px;
+}
+
+ .tools-button {
+     border-radius: 5px 5px 5px 5px;
+     border: 1px solid #666;
+}
+.actions-button{
+     border-radius: 5px 5px 5px 5px;
+     border: 1px solid #666;
+   box-shadow: inset 0 1px 1px #ccc, inset 0 -5px 15px #333, 0 2px 1px black;
+}
+.actions-button{
+     border-radius: 5px 5px 5px 5px;
+     border: 1px solid #666;
+   box-shadow: inset 0 1px 1px #ccc, inset 0 -5px 15px #333, 0 2px 1px black;
+}
+
+ 
+ .pressed, #tools .tools-button:active,.actions-button:active{
+  box-shadow: inset 2px 2px 3px 0px #000 !important;
+  border-top:1px solid #ed0000 !important;
+  border-left:1px solid #ed0000 !important;
+  border-bottom:1px solid #a80000 !important;
+  border-right:1px solid #a80000 !important;
+
+
+}
+#tools .tools-button:hover, .actions-button:hover{
+  box-shadow: inset 1px 1px 2px 0px #000;
+  border:1px solid #ccc !important;
+}
+#console {
+     border-radius: 0.5em  0.5em 0.5em 0.5em;
+     border: 0.25em solid #808080;
+     padding: 10px;
+     width: 400px;
+     margin-top: 30px;
+     background-color: #333;
+}
+.consolediv{
+     width: 50%;
+     float: left;
+     text-align: center;
+}
+
+.consolediv textarea{
+     background-color: #222;
+	 height:10em;
+     color: white;
+}
+
+#browser {
+     border-radius: 0.5em  0.5em 0.5em 0.5em;
+     border: 0.25em solid #808080;
+     padding: 10px;
+     width: 410px;
+	 min-height: 5em;
+     margin-top: 10px;
+     background-color: #333;
+	 overflow-y:auto;
+}
+#browser #preview-container table{
+	width: 30px;
+	border-collapse: collapse;
+}
+#browser #preview-container table div{
+	width: 100%;
+	height: 100%;
+}
+div.inactive{opacity:0.7}
+#browser > table{
+padding-right: 10px;
+}
+
+.preview-block{
+border: 1px solid gray;
+}
+.preview-block:hover{
+  box-shadow: inset 1px 1px 2px 0px #000;
+  border:1px solid #ccc;
+}
+.preview-block div{
+text-align: center;
+}
+
+.preview-cell{
+height:3px;
+width: 3px;
+padding:0;
+}
+#browser input.delete{
+padding:0 2px;
+margin:0;
+color:red;
+font-size: 0.5em;
+border: 1px solid #808080;
+background-color: transparent;
+}
+#browser input.delete::-moz-focus-inner { /*For once, it's FF that doesn't behave properly*/
+    padding: 0;
+    border: 0
+}
+
+#browser input.delete:hover{
+color:darkred;
+}
+#browser input.select{
+margin: 0;
+vertical-align: middle;
+}
