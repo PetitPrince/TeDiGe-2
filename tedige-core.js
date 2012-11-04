@@ -8,31 +8,29 @@ I~Oasatbsbtisitjsjt~Ibdbdbebfbgbhcedfeefdfefffgfh~Zbpbpbqcocpdmdnelem~Sflflfmgdg
 --> Should give ME followed by YES
 */
 
+/** Painter
 
-/*
-	+++---------------------------------------------------------------+
-	¦¦¦	Class: Painter
-	¦¦¦ Painter interact with the canvases and the html page. It binds
-	¦¦¦ to / uses several layer of overlapping canvas elements. Think
-	¦¦¦ of it a bit like the view part of a MVC model.
-	¦¦¦	>						+-----------------------+
-	¦¦¦	>						V						¦
-	¦¦¦	>	Canvas/html <-- <Painter> <-- <Frame> <-- <Diagram>
-	¦¦¦	>			¦		^^^^^^^^						^
-	¦¦¦	>			¦										¦
-	¦¦¦	>			+--------------------------------------+
-	¦¦¦
-	¦¦¦
-	¦¦¦ Parameter:
-	¦¦¦		CanvasIDString	-	the id of the canvas element
-	¦¦¦		CanvasHeight	-	the height of the canvas element
-	¦¦¦		CanvasWidth		-	the width of the canvas element
-	¦¦¦		blockSize		-	the size of the canvas element
-	¦¦¦
-	¦¦¦ See also:
-	¦¦¦		<Frame>
-	¦¦¦		<Diagram>
-	+++---------------------------------------------------------------+
+	Painter interact with the canvases and the html page. It binds
+	to / uses several layer of overlapping canvas elements. Think
+	of it a bit like the view part of a MVC model.
+
+	<pre>
+	>                       +---------------------+
+	>                       V                     |
+	>    Canvas/html <-- Painter <-- Frame <-- Diagram
+	>           |       ^^^^^^^^                ^
+	>           |                               |
+	>           +-------------------------------+
+	</pre>
+
+	@class
+	@param {string} CanvasIDString The ID of the canvas element
+	@param {number} CanvasHeight The height of the canvas element
+	@param {number} CanvasWidth The width of the canvas element
+	@param {blockSize} blockSize The size of the canvas element
+	@requires Frame
+	@requires Diagram
+
 */
 function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 	/*
@@ -42,113 +40,115 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 		- block size: 8*8px
 	*/
 
-	// default parameter method from: http://stackoverflow.com/questions/894860/how-do-i-make-a-default-value-for-a-parameter-to-a-javascript-function
-
-	/*Property: CanvasHeight
-	Height of the Canvas in px.*/
-	this.CanvasHeight = typeof CanvasHeight !== 'undefined' ? CanvasHeight : 177;
-	/*Property: CanvasHeight
-	Width of the Canvas in px.*/
-	this.CanvasWidth = typeof CanvasHeight !== 'undefined' ? CanvasHeight : 97;
-	/*Property: CanvasHeight
-	Size of a block element in px.*/
-	this.blockSize = typeof blockSize !== 'undefined' ? blockSize : 8;
-
-	/*Property: myself
-	A variable referencing the class, used to exploit closure stuff in other methods*/
+	/** A variable referencing the class, used to exploit closure stuff in other methods*/
 	var myself = this;
 
+	// Default parameter method taken from: http://stackoverflow.com/questions/894860/how-do-i-make-a-default-value-for-a-parameter-to-a-javascript-function
+
+	/** Height of the Canvas in px.*/
+	this.CanvasHeight = typeof CanvasHeight !== 'undefined' ? CanvasHeight : 177;
+	/** Width of the Canvas in px.*/
+	this.CanvasWidth = typeof CanvasHeight !== 'undefined' ? CanvasHeight : 97;
+	/**Size of a block element in px.*/
+	this.blockSize = typeof blockSize !== 'undefined' ? blockSize : 8;
+
 	this.IDString = CanvasIDString;
+	/* ------------------------------- */
+	/* --- HTML-related properties --- */
+	/* ------------------------------- */
 
-	/*** HTML-related properties ***/
-
-	/*Properties: CanvasXXX
-	Get the jQuery object of the canvas identified by #XXX
-	Currently 9 canvases are used (that's probably too much), in appearance order:
-		preview - Where things gets drawn on mouseover
-		deco - Decorations: arrows, line clear effects, ...
-		active - Where the active piece is drawn
-		whiteborder - TGM's white pixel border
-		pf - Where the inactive piece is drawn
-		background - Where the background is drawn
-		border - where the border is drawn
-	nexthold - the next and hold box
-	*/
-	/*Properties: ContextXXX
-	Get the 2D context of the related canvas.*/
-	this.CanvasPF = $('#' + CanvasIDString + '-inactive');
-	this.ContextPF = this.CanvasPF[0].getContext('2d');
-
-	this.CanvasActive = $('#' + CanvasIDString + '-active');
-	this.ContextActive = this.CanvasActive[0].getContext('2d'); // cPF: ContextPF
-
-	this.CanvasBorder = $('#' + CanvasIDString + '-border');
-	this.ContextBorder = this.CanvasBorder[0].getContext('2d'); // cPF: ContextPF
-
+	/** Get the jQuery object of the preview canvas, where things gets drawn on mouseover*/
 	this.CanvasPreview = $('#' + CanvasIDString + '-preview');
+	/** Get the 2d context of the related canvas*/
 	this.ContextPreview = this.CanvasPreview[0].getContext('2d');
 
-	this.CanvasBackground = $('#' + CanvasIDString + '-background');
-	this.ContextBackground = this.CanvasBackground[0].getContext('2d');
-
-	this.CanvasWhiteborder = $('#' + CanvasIDString + '-whiteborder');
-	this.ContextWhiteborder = this.CanvasWhiteborder[0].getContext('2d');
-
+	/** Get the jQuery object of the deco canvas, where things like arrows, line clear effects,
+	symbols... are displayed*/
 	this.CanvasDeco = $('#' + CanvasIDString + '-deco');
+	/** Get the 2d context of the related canvas*/
 	this.ContextDeco = this.CanvasDeco[0].getContext('2d');
 
-	this.CanvasDecoPin = $('#' + CanvasIDString + '-decoPin');
-	this.ContextDecoPin = this.CanvasDecoPin[0].getContext('2d');
+	/** Get the jQuery object of the pf canvas where the inactive blocks are displayed */
+	this.CanvasPF = $('#' + CanvasIDString + '-inactive');
+	/** Get the 2d context of the related canvas*/
+	this.ContextPF = this.CanvasPF[0].getContext('2d');
 
+	/** Get the jQuery object of the active canvas, where the active pieces are displayed*/
+	this.CanvasActive = $('#' + CanvasIDString + '-active');
+	/** Get the 2d context of the related canvas*/
+	this.ContextActive = this.CanvasActive[0].getContext('2d'); // cPF: ContextPF
+
+	/** Get the jQuery object of the whiteborder canvas, where the TGM-ish white-border is drawn*/
 	this.CanvasWhiteborder = $('#' + CanvasIDString + '-whiteborder');
+	/** Get the 2d context of the related canvas*/
 	this.ContextWhiteborder = this.CanvasWhiteborder[0].getContext('2d');
 
+	/** Get the jQuery object of the background canvas.*/
+	this.CanvasBackground = $('#' + CanvasIDString + '-background');
+	/** Get the 2d context of the related canvas*/
+	this.ContextBackground = this.CanvasBackground[0].getContext('2d');
+
+	/** Get the jQuery object of the border canvas.*/
+	this.CanvasBorder = $('#' + CanvasIDString + '-border');
+	/** Get the 2d context of the related canvas*/
+	this.ContextBorder = this.CanvasBorder[0].getContext('2d'); // cPF: ContextPF
+
+	/** Get the jQuery object of the decopin canvas, where the "pin" is drawn in editor mode*/ // TODO: move this to tedige-editor.js
+	this.CanvasDecoPin = $('#' + CanvasIDString + '-decoPin');
+	/** Get the 2d context of the related canvas*/
+	this.ContextDecoPin = this.CanvasDecoPin[0].getContext('2d');
+
+	/* ---------------- */
+
+	/** Get the jQuery object of the NextHold canvas, where the next and holded piece are drawn*/
 	this.CanvasNextHold = $('#' + CanvasIDString + '-nexthold');
+	/** Get the 2d context of the related canvas*/
 	this.ContextNextHold = this.CanvasNextHold[0].getContext('2d');
 
+	/** Get the jQuery object of the progressbar canvas.*/
 	this.CanvasProgressbar = $('#' + CanvasIDString + '-progressbar');
+	/** Get the 2d context of the related canvas*/
 	this.ContextProgressbar = this.CanvasProgressbar[0].getContext('2d');
 
+	/** Get the jQuery object of the control canvas, where the joystick is drawn*/
 	this.CanvasControl = $('#' + CanvasIDString + '-control');
+	/** Get the 2d context of the related canvas*/
 	this.ContextControl = this.CanvasControl[0].getContext('2d');
 
+	/** Get the jQuery object of the export canvas.*/
 	this.CanvasExport = $('#pf-export');
+	/** Get the 2d context of the related canvas*/
 	this.ContextExport = this.CanvasExport[0].getContext('2d');
 
-	/*** Canvas-related properties ***/
+	/* --------------------------------- */
+	/* --- Canvas-related properties --- */
+	/* --------------------------------- */
 
-	/*Property: PFOriginX
-	Sets the position of the playfield relative to the canvas*/
+	/** Sets the position of the playfield relative to the canvas*/
 	this.PFOriginX = 1 * this.blockSize;
+	/** Sets the position of the playfield relative to the canvas*/
 	this.PFOriginY = 1 * this.blockSize;
-	/*Property: PFOriginX
-	Sets the position of the playfield relative to the page*/
-	// get the absolute position of the canvas
+	/**Sets the position of the playfield relative to the page*/
 	this.PFOriginXAbsolute = this.CanvasPF.offset().left + this.PFOriginX - 1;
+	/**Sets the position of the playfield relative to the page*/
 	this.PFOriginYAbsolute = this.CanvasPF.offset().top + this.PFOriginY;
 
-	/*Property: CntrlOriginX
-	Sets the position of the controls (joystick, buttons) relative to the page*/
-	// get the absolute position of the canvas
+	/** Sets the position of the controls (joystick, buttons) relative to the page*/
 	this.CntrlOriginX = this.CanvasControl.offset().left;
+	/** Sets the position of the controls (joystick, buttons) relative to the page*/
 	this.CntrlOriginY = this.CanvasControl.offset().top;
 
 
-	/*Property: sprite
-	An image object that contains the blocks' sprite*/
+	/** An image object that contains the blocks' sprite*/
 	this.sprite = '';
-	/*Property: spritemini
-	An image object that contains the blocks' sprite, mini version*/
+	/**An image object that contains the blocks' sprite, mini version*/
 	this.spritemini = '';
-	/*Property: spritedeco
-	An image object that contains the decorations' sprite*/
+	/** An image object that contains the decorations' sprite*/
 	this.spritedeco = '';
 
-	/*Property: ready
-	A boolean that sets if the painter object is ready to be painter, i.e. if the sprites have loaded*/
+	/** A boolean that sets if the painter object is ready to be painter, i.e. if the sprites have loaded*/
 	this.ready = false;
-	/* Method: init
-	Loads the image into the sprite object*/
+	/** Loads the image into the sprite object*/
 	this.init = function () {
 		// Don't know if it's the correct way to preload the image...
 		// ARS.sprite = document.createElement('img'); // doesn't work in chrome ?!
@@ -172,11 +172,10 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 
 	};
 
-	/* Method: eraseLayer
-		Erase the content one layer (the canvas still exists).
+	/** Erase the content one layer (the canvas still exists)..
 
-		Parameter:
-			layer - define which layer will be erased. Either 'inactive', 'active','preview', 'nexthold', 'whiteborder' or 'all' */
+		@param {string} layer Define which layer will be erased. Possible value: 'inactive', 'active','preview', 'nexthold', 'whiteborder' or 'all'
+	*/
 	this.eraseLayer = function (layer) {
 		var Canvas;
 		switch (layer)
@@ -209,43 +208,56 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 		}
 		Canvas.attr('width', Canvas.width());
 	};
-	/* Method: eraseBlock
-		Erase a 'block' area at the designated coordinate.
 
-		Parameters:
-			x - x position, in block unit
-			y - y position, in block unit*/
+	/** Erase a 'block' area at the designated coordinate.
+
+		@param {number} x x position, in block unit
+		@param {number} y y position, in block unit
+	*/
 	this.eraseBlock = function (x, y) {
 		this.ContextPF.clearRect(this.PFOriginX+x*this.blockSize,this.PFOriginY+y*this.blockSize,this.blockSize,this.blockSize);
 	};
 
-	/* Method: eraseDeco
-		Erase a 'block' area at the designated coordinate in the decoration layer.
+	/**Erase a 'block' area at the designated coordinate in the decoration layer.
 
-		Parameters:
-			x - x position, in block unit
-			y - y position, in block unit*/
+		@param {number} x x position, in block unit
+		@param {number} y y position, in block unit
+	*/
 	this.eraseDeco = function(x,y){
 		this.ContextDeco.clearRect(this.PFOriginX+x*this.blockSize,this.PFOriginY+y*this.blockSize,this.blockSize,this.blockSize);
 	};
 
+	/** Change the value of the comment textarea.
+
+		@param {string} str Value of the new comment
+	*/
 	this.drawComment = function(str){
 		$('#'+this.IDString+'-comment').val(str);
 	};
+
+	/** Change the value of the duration textarea.
+
+		@param {string} str Value of the new duration
+	*/
 	this.drawDuration = function(str){
 		$('#'+this.IDString+'-duration').val(str);
+	// TODO: move this to tedige-editor.js
 	};
+
+	/** Change the value of the opacity textarea.
+
+		@param {string} str Value of the new opacity
+	*/
 	this.drawOpacity = function(str){
 		$('#'+this.IDString+'-active-opacity').val(str);
-	// TODO: this has nothing to do in normal load, only in editor mode !!
+	// TODO: move this to tedige-editor.js
 	};
 
-	/* Method: drawProgressbar
-		Draw the progressbar according to its status given in parameter
+	/** Draw the progressbar according to its status given in parameter
 
-		Parameters:
-			CurrentFrame - Which frame are we on ?
-			TotalFrame - How many frame there are*/
+		@param {number} CurrentFrame Which frame are we on ?
+		@param {number} TotalFrame How many frame there are
+	*/
 	this.drawProgressbar = function(CurrentFrame,TotalFrame){
 		if(CurrentFrame <= TotalFrame && CurrentFrame > 0) // filter out invalid input
 		{
@@ -258,11 +270,10 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 		}
 	};
 
-	/* Method: drawWhiteBorder
-		Draw a TGM-like white pixel around inactive blocks in the whole playfield.
+	/** Draw a TGM-like white pixel around inactive blocks in the whole playfield.
 
-		Parameter:
-			playfield - the playfield on which to draw the white border*/
+		@param playfield The playfield on which to draw the white border
+	*/
 	this.drawWhiteBorder = function(playfield)
 	{
 		// todo: do an 'anti white pixel' that clear instead of draw
@@ -277,13 +288,12 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 			}
 		}
 	};
-	/* Method: drawLocalWhitePixel
-		Draw a TGM-like white pixel around in an empty case.
+	/** Draw a TGM-like white pixel around in an empty case.
 
-		Parameters:
-			playfield - the playfield on which to draw the white border
-			x - x coordinate, in block unit
-			y - y coordinate, in block unit*/
+		@param playfield The playfield on which to draw the white border
+		@param {number} x X coordinate, in block unit
+		@param {number} y Y coordinate, in block unit
+	*/
 	this.drawLocalWhiteBorder = function(playfield,x,y){
 		// Todo (procrastination level: 99999): I cannot get really good squary corners...
 		this.ContextWhiteborder.beginPath();
@@ -504,9 +514,7 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 
 	};
 
-
-	/* Method: drawGrid
-		Draw a block sized grid on the background layer, for no particular reason
+	/** Draw a block sized grid on the background layer, for no particular reason
 	*/
 	this.drawGrid = function(){
 		// todo: change if width/height variable
@@ -529,11 +537,12 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 		this.ContextBackground.closePath();
 	};
 
-	/* Method: drawBorder
-		Draws the Tetrion (the playfield's border).
+	/** Draws the Tetrion (the playfield's border).
 
-		Parameter:
-		kind - define what kind of tetrion you want. Currently supported: 'master' (gray-bluish), 'easy' (green) and 'death' (red). Defaults to master if none is selected*/
+		@param {string} kind Define what kind of tetrion you want. Currently supported:
+		'master' (gray-bluish), 'easy' (green) and 'death' (red). Defaults to master if
+		none is selected
+	*/
 	this.drawBorder = function(kind){
 		var color1 = '#afafaf';
 		var color2 = '#46545f';
@@ -634,14 +643,14 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 
 	}; // end drawborder
 
-	/* Method: drawNextHold
-		Draws a part of the next or holded piece.
+	/** Draws a part of the next or holded piece.
 
-		Parameter:
-		position - define which position will be modified. 0 is hold, 1 is the next1 piece, 2 is the next2 piece, ...
-		type - type of the tetraminmo */
-	this.drawNextHold = function(position,type){
-		matrix = getMatrix(type, 'i', 'ARS'); // TODO: make that rotation system idenpendant ?
+		@param {number} position Define which position will be drawn. 0 is hold, 1 is the next1 piece, 2 is the next2 piece, ...
+		@param {string} type Type of the tetraminmo. Possible value: (SZLJTOIG)
+		@param {string} RS Define the style of the block. Possible value: 'ARS, 'SRS'
+	*/
+	this.drawNextHold = function(position,type,RS){
+		matrix = getMatrix(type, 'i', RS); // TODO: make that rotation system idenpendant ?
 
 		switch(position){
 		case 0:
@@ -653,20 +662,28 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 					if (matrix[i][j]) {
 
 					//this.ContextNextHold.clearRect(this.CanvasNextHold.offset().left);
-						this.drawBlock(parseInt(-1+j,10),parseInt(2+i,10),type,'ARS','nextholdmini');
+						this.drawBlock(parseInt(-1+j,10),parseInt(2+i,10),type,RS,'nextholdmini');
 					}
 				}
 			}
 		break;
 
 		case 1:
-			this.ContextNextHold.clearRect(4*this.blockSize,this.blockSize+3,4*this.blockSize,3*this.blockSize);
+			this.ContextNextHold.clearRect(4*this.blockSize,this.blockSize,4*this.blockSize,3*this.blockSize+3);
 			if(!type)
 				{return;}
 			for(var i = 0; i < 4; i++) {
 				for(var j = 0; j < 4; j++) {
 					if (matrix[i][j]) {
-						this.drawBlock(parseInt(3+j,10),parseInt(0+i,10),type,'ARS','nexthold');
+						if(RS == "SRS")
+						{
+							this.drawBlock(parseInt(3+j,10),parseInt(1+i,10),type,RS,'nexthold');
+						}
+						else
+						{
+							this.drawBlock(parseInt(3+j,10),parseInt(0+i,10),type,RS,'nexthold');
+						}
+						
 					}
 				}
 			}
@@ -679,7 +696,7 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 			for(var i = 0; i < 4; i++) {
 				for(var j = 0; j < 4; j++) {
 					if (matrix[i][j]) {
-						this.drawBlock(parseInt(13+j,10),parseInt(3+i,10),type,'ARS','nextholdmini');
+						this.drawBlock(parseInt(13+j,10),parseInt(3+i,10),type,RS,'nextholdmini');
 					}
 				}
 			}
@@ -692,7 +709,7 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 			for(var i = 0; i < 4; i++) {
 				for(var j = 0; j < 4; j++) {
 					if (matrix[i][j]) {
-						this.drawBlock(parseInt(17+j,10),parseInt(3+i,10),type,'ARS','nextholdmini');
+						this.drawBlock(parseInt(17+j,10),parseInt(3+i,10),type,RS,'nextholdmini');
 					}
 				}
 			}
@@ -701,11 +718,11 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 		// ToDo: what happens when nextArray.length > 3 ? (i.e. more next than 3)
 
 	};
-	/* Method: changeActiveOpacity
-		Change the opacity of the active layer.
 
-		Parameter:
-		level - a number between 0 and 1 (alternatively, 'flash' can be used instead of '1.0') */
+	/** Change the opacity of the active layer.
+
+		@param {(number|string)} level A number between 0 and 1 (alternatively, 'flash' can be used instead of '1.0').
+	*/
 	this.changeActiveOpacity = function(level){
 		if (level == 'Flash' || level == 'flash')
 		{
@@ -717,8 +734,13 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 		}
 	};
 
-	/* Method: drawDeco
-		Draws a decoration at the designated coordinate.*/
+	/** Draws a decoration at the designated coordinate.
+
+		@param {number} x X coordinate.
+		@param {number} y Y coordinate.
+		@param {string} kind Type of decoration.
+		@param {string} layer Target layer. Possible values : ('preview' 'eraser' or 'dec').
+	*/
 	this.drawDeco = function(x,y,kind,layer){
 		if(!kind)
 		{
@@ -790,11 +812,14 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 		var ny = this.PFOriginY+((y)*(this.blockSize));
 		if(layer != 'eraser')
 		{
-				ctx.drawImage(sprite, // original image
-							ox,oy, //coordinate on the original image
-							w,h, // size of the rectangle to will be cut
-							nx,ny, // destination coordinate
-							w,h); // destination size
+			// clear what's below
+			ctx.clearRect(nx,ny,w,h);
+			// draw the image
+			ctx.drawImage(sprite, // original image
+						ox,oy, //coordinate on the original image
+						w,h, // size of the rectangle to will be cut
+						nx,ny, // destination coordinate
+						w,h); // destination size
 
 		}
 		else
@@ -818,11 +843,16 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 		}
 
 	}; // end drawDeco
-	/* Method: drawBrowserBlock
-		Draws a block in the playfield browser (that nifty thing from tages)
 
-		Same parameter as drawBlock !
-		*/
+	/** Draws a block in the playfield browser (that nifty thing from tages)
+
+		@param {number} x Horizontal coordinate
+		@param {number} y Vertical coordinate
+		@param {string} type Define the color of the block to be drawn. Possible values: (SZLJTOIG)
+		@param {string} RS Define the style of the block. Possible values: ARS, SRS
+		@param {number} id Define the id of the playfield in which the block is drawn
+		@param {string} context Define on which layer the block will be drawn. Possible values: 'inactive', 'resetactive', 'active'
+	*/
 	this.drawBrowserBlock = function(x,y,type,RS,id,context){
 		var color;
 		switch(RS){
@@ -921,16 +951,16 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 
 	};
 
-
-	/* Method: drawBlock
+	/** Method: drawBlock
 		Draw one block on a given layer, relative to the origin and using a block-length as unit.
 
-		Parameters:
-		x - horizontal coordinate
-		y - vertical coordinate
-		type - define the color of the block to be drawn
-		RS - define the style of the block
-		context - define on which layer the block will be drawn*/
+		@param {number} x Horizontal coordinate
+		@param {number} y Vertical coordinate
+		@param {string} type Define the color of the block to be drawn. Possible values: (SZLJTOIG)
+		@param {string} RS Define the style of the block. Possible value: 'ARS, 'SRS'
+		@param {string} context Define on which layer the block will be drawn. Possible value: 'inactive', 'preview', 'active','flash','nexthold','nextholdmini'
+		@param {boolean} highlight Define wether to highlight the drawblock action or not.
+	*/
 	this.drawBlock = function(x,y,type,RS,context,highlight){
 		if(type){
 			var ctx;
@@ -1119,12 +1149,11 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 		}
 	};//end drawblock
 
-	/*Method: highlight
-		Highlight one block. Currently draw an expanding circle.
+	/** Highlight one block. Currently draw an expanding circle.
 
-		Parameters:
-		x - x coordinate
-		y - y coordinate*/
+		@param {number} x Horizontal coordinate
+		@param {number} y Vertical coordinate
+	*/
 	this.highlight = function(x,y){
 		var coordx = this.PFOriginX+((x+0.5)*this.blockSize);
 		var coordy = this.PFOriginY+((y+0.5)*this.blockSize);
@@ -1198,20 +1227,19 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 		//this.ContextPreview(x,y,counter,2*Math.PI,false);
 	}*/
 
-	/*Method: resetJoystick
-		Draw the joystick in rest position*/
+	/** Draw the joystick in rest position
+	*/
 	this.resetJoystick = function(){
 		var height = this.CanvasControl.height();
 		this.ContextControl.clearRect(0,0,height,height);
 		this.drawJoystick('all','rest');
 	};
 
-	/*Method: drawJoystick
-		Draw the joystick
+	/** Draw the joystick
 
-		Parameters:
-		direction - 'all', 'u', 'r', 'l', 'd', 'ul', 'ur', 'dl', 'dr' ... corresponds to the joystick movement
-		state - 'rest', 'pressed' or 'holded'*/
+		@param {string} direction Define which joystick position to draw. Possible value: 'all', 'u', 'r', 'l', 'd', 'ul', 'ur', 'dl', 'dr'
+		@param {string} state Define which color to draw. Possible value: 'rest', 'pressed' or 'holded'
+	*/
 	this.drawJoystick = function(direction,state){
 		var height = this.CanvasControl.height();
 		if (direction == 'all')
@@ -1306,12 +1334,12 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 		}
 
 	};
-	/*Method: drawAllButtons
-		Draw all the button in a particular state
 
-		Parameters:
-		state - 'rest', 'pressed' or 'holded'
-		layout - (not used at the moment; TODO: allow alternative button layout)*/
+	/** Draw all the button in a particular state
+
+		@param {string} state Define in which color the buttos are drawn. Possible value: 'rest', 'pressed' or 'holded'
+		@param {string} layout - (not used at the moment; TODO: allow alternative button layout)
+	*/
 	this.drawAllButtons = function(state,layout){
 		this.drawButton('A',state);
 		this.drawButton('B',state);
@@ -1321,13 +1349,13 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 		//this.drawButton('E',state);
 		//this.drawButton('F',state);
 	};
-	/*Method: drawButton
-		Draw a joystick button in a particular state.
+
+	/** Draw a joystick button in a particular state.
 
 		Parameters:
-		button - 'A', 'B', 'C', 'D' for now
-		state - 'rest', 'pressed' or 'holded'*/
-
+		@param {string} button Define which button to draw. Possible value: 'A', 'B', 'C', 'D' for now.
+		@param {string} state Define in which color the button is drawn. Possible value: 'rest', 'pressed' or 'holded'.
+	*/
 	this.drawButton = function(button,state){
 		var height = this.CanvasControl.height();
 		var radius = height/5;
@@ -1439,13 +1467,11 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 
 	};
 
-	/*Method: frameCount
-		Update the html part of the frame counter
+	/** Update the html part of the frame counter
 
-		Parameters:
-		cur - current frame number
-		tot - total frame number*/
-
+		@param {number} cur Current frame number
+		@param {number} tot Total frame number
+	*/
 	this.frameCount = function(cur,tot){
 
 		$('#'+CanvasIDString+'-current-frame').attr('value',cur);
@@ -1453,13 +1479,12 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 
 	};
 
-	/*Method: generateNewPreviewTable
-		Generate the browser thingy from tages. TODO: NOT WORKING AT THE MOMENT
+	/** Generate the browser thingy from tages. TODO: NOT WORKING AT THE MOMENT
 		Also: WHY IS THIS ON THE MAIN FUMEN JS FILE AND NOT IN INTERFACE ??!
 
-		Parameters:
-		id - frame id
-		position - where to draw*/
+		@param {number} id Frame id
+		@param {number} position where to draw (relative to the other playfields
+	*/
 
 	this.generateNewPreviewTable = function(id,position){
 
@@ -1494,13 +1519,11 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 
 	};
 
-	/*Method: deletePreviewTable
-		Delete a browser playfield table. TODO: NOT WORKING AT THE MOMENT
+	/** Delete a browser playfield table. TODO: NOT WORKING AT THE MOMENT
 
-		Parameters:
-		cur - current frame number
-		tot - total frame number*/
-
+		@param {number} id Frame id
+		@param {number} position
+	*/
 	this.deletePreviewTable = function(id,position){
 		//console.log(id);
 		console.log('position: '+position);
@@ -1508,10 +1531,8 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 		$('#browser #preview-container > td:nth-child('+parseInt(position+1,10)+')').remove();
 	};
 
-	/*Method: exportImage
-		Export the current frame into a png image
-		*/
-
+	/** Export the current frame into a png image. TODO: move this to tedige-editor.js
+	*/
 	this.exportImage = function(){
 		this.CanvasExport.attr('width',this.CanvasExport.width());
 		var buffer = document.createElement('canvas');
@@ -1541,34 +1562,41 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 	};
 } // end painter -------------------------------------------------------------------------------
 
-/*
-	+++--------------------------------------------------------------+
-	¦¦¦	Class: Diagram
-	¦¦¦	Diagram stores <frame>s and manipulate them.
-	¦¦¦	It receives command from the html and gives order to the
-	¦¦¦	underlying frame or directly to the painter
-	¦¦¦	It acts a bit like a model in a MVC model.
-	¦¦¦
-	¦¦¦ >						+-----------------------+
-	¦¦¦ >						V						¦
-	¦¦¦ >	Canvas/html <-- <Painter> <-- <Frame> <-- <Diagram>
-	¦¦¦ >			¦								   ^^^^^^^^
-	¦¦¦ >			¦									   ^
-    ¦¦¦ >			+--------------------------------------+
-	¦¦¦
-	¦¦¦ Parameter:
-	¦¦¦		painter - a reference to its associated painter
-	+++--------------------------------------------------------------+
-*/
 
+/** Painter
+
+	Diagram stores <frame>s and manipulate them. It receives command from the html and gives order
+	to the underlying frame or directly to the painter. It acts a bit like a model in a MVC model.
+
+	<pre>
+	>                       +---------------------+
+	>                       V                     |
+	>    Canvas/html <-- Painter <-- Frame <-- Diagram
+	>           |                              ^^^^^^^
+	>           |                               ^
+	>           +-------------------------------+
+	</pre>
+
+	@class
+	@param Painter A reference to its associated painter.
+	@requires Frame
+	@requires Painter
+
+*/
 function Diagram(painter){
+	/** A variable referencing the class, used to exploit closure stuff in other methods*/
 	var myself = this;
+	/** A reference to the diagram's associated painter*/
 	this.painter = painter;
+	/** An array containing Frames.*/
 	this.frames = [];
+	/** A integer  that represent the current working frame*/
 	this.current_frame = 0;
+	/** A boolean that tells if the current frame is playing or not when the play/pause button is pressed */
 	this.playing = false;
-	/* Method: init
-		Initialize the frames array.*/
+
+	/** Initialize the frames array.
+	*/
 	this.init = function(){
 		// Draws the initial playfield (essentially a blank playfield)
 		this.frames.push(new Frame(this.painter));
@@ -1582,13 +1610,15 @@ function Diagram(painter){
 	/* -- Management -- */
 	/* ---------------- */
 
-	/* Method: new_frame
-		Adds a new frame after the current one and displays it.
-		>	[Sophie] {Elisa} [Therese] [Claire]
-		>					^
-		>				[Jeanne]
-		>	=>
-		>	Sophie Elisa Jeanne Therese Claire*/
+	/** Adds a new frame after the current one and displays it.
+		<pre>
+		>    [Sophie] {Elisa} [Therese] [Claire]
+		>                    ^
+		>                [Jeanne]
+		>    =>
+		>    Sophie Elisa Jeanne Therese Claire
+		</pre>
+	*/
 	this.new_frame = function(){
 		this.current_frame++;
 		this.painter.eraseLayer('all');
@@ -1597,8 +1627,8 @@ function Diagram(painter){
 		this.update_framecount();
 	};
 
-	/* Method: new_copy_frame
-		Makes a new frame based on the current frame*/
+	/** Makes a new frame based on the current frame
+	*/
 	this.new_copy_frame = function(){
 		//this.frames.push(jQuery.extend(true, {}, this.frames[this.current_frame])) // deep copy the current frame
 		var saved_frame = this.frames[this.current_frame].print();
@@ -1606,8 +1636,8 @@ function Diagram(painter){
 		this.frames[this.current_frame].load(saved_frame,'blank');
 	};
 
-	/* Method: remove_current_frame
-		Remove the current frame from existence*/
+	/** Remove the current frame from existence
+	*/
 	this.remove_current_frame = function(){
 		if(this.frames.length > 1 )
 		{
@@ -1635,10 +1665,14 @@ function Diagram(painter){
 		}
 	};
 
-	/* Method: remove_following_frames
-		Remove every frame after the current one. Analogous to 'remove following' in fumen.
-		*/
+	/** Remove every frame after the current one. Analogous to 'remove following' in fumen.
+	*/
 	this.remove_following_frames = function(){
+		console.log('in');
+		this.frames.splice(this.current_frame+1);
+		this.frames[this.current_frame].draw();
+		console.log('out');
+
 	/* TODO PRIORITY NOT FUNCTIONAL FOR NOW
 		var i = this.current_frame;
 		this.current_frame = this.frames.length;
@@ -1653,8 +1687,8 @@ function Diagram(painter){
 	*/
 	};
 
-	/* Method: remove_all_playfields
-		Nukes everything !*/
+	/** Nukes everything !
+	*/
 	this.remove_all_playfields = function(){
 		this.current_frame = this.frames.length;
 		while(this.current_frame > 0)
@@ -1680,12 +1714,10 @@ function Diagram(painter){
 	/* -- Navigation -- */
 	/* ---------------- */
 
-	/* Method: goto_frame
-		Erase everything, paint what's on the given frame number
+	/** Erase everything, paint what's on the given frame number
 
-		Parameter:
-		frame_number - the frame number
-		*/
+		@param {number} frame_number Indicate
+	*/
 	this.goto_frame = function(frame_number){
 		this.painter.eraseLayer('all');
 		this.current_frame = frame_number;
@@ -1693,8 +1725,8 @@ function Diagram(painter){
 		this.update_framecount();
 	};
 
-	/* Method: first_frame
-		Switches the current frame to the first one, displays it.*/
+	/** Switches the current frame to the first one, displays it.
+	*/
 	this.first_frame = function(){
 		this.painter.eraseLayer('all');
 		this.current_frame = 0;
@@ -1702,8 +1734,8 @@ function Diagram(painter){
 		this.update_framecount();
 	};
 
-	/* Method: previous_frame
-		Switches the previous frame to the previous one, displays it.*/
+	/** Switches the previous frame to the previous one, displays it.
+	*/
 	this.previous_frame = function(){
 		if(this.current_frame > 0)
 		{
@@ -1714,8 +1746,8 @@ function Diagram(painter){
 		}
 	};
 
-	/* Method: next_frame
-		Switches the current frame to the next one, displays it.*/
+	/** Switches the current frame to the next one, displays it.
+	*/
 	this.next_frame = function(){
 				this.painter.eraseLayer('all');
 				this.current_frame++,
@@ -1723,8 +1755,8 @@ function Diagram(painter){
 				this.update_framecount();
 	};
 
-	/* Method: last_frame
-		Switches the current frame to the last one, displays it.*/
+	/** Switches the current frame to the last one, displays it.
+	*/
 	this.last_frame = function(){
 		this.painter.eraseLayer('all');
 		this.current_frame = parseInt(this.frames.length-1,0); // http://nicolaasmatthijs.blogspot.com/2009/05/missing-radix-parameter.html
@@ -1732,8 +1764,8 @@ function Diagram(painter){
 		this.update_framecount();
 	};
 
-	/* Method: update_framecount
-		Update the displayed frame index..*/
+	/** Update the displayed frame index.
+	*/
 	this.update_framecount = function(){
 		this.painter.frameCount(this.current_frame+1, this.frames.length);
 		this.painter.drawProgressbar(this.current_frame+1,this.frames.length);
@@ -1743,11 +1775,9 @@ function Diagram(painter){
 	/* -- Save/Load and stuff -- */
 	/* ------------------------- */
 
-	/*Method: print
-		Print the diagram
+	/** Print the diagram
 
-		Returns:
-		A string encoded with the format described below*/
+		@return {string} A string encoded in TeDiGe format*/
 	this.print = function(){
 		var output = '';
 		output += this.frames[0].print();
@@ -1761,17 +1791,14 @@ function Diagram(painter){
 	};// end print
 
 
-	/* Method: print_differences
-		Return the differences between two frames in a formatted string.
-		WARNING: if you modify that, please also modify Frame.print
+	/** Return the differences between two frames in a formatted string. WARNING: if you modify
+		that, please also modify Frame.print
 
-		Parameters:
-			reference_frame - reference frame number
-			final_frame - final frame number
+		@param {number} reference_frame Reference frame number
+		@param {number} final_frame Final frame number
 
-		Returns:
-			A string encoded with the format described below.
-*/
+		@return {string} A string encoded in TeDiGe format
+	*/
 	this.print_differences = function(final_frame,reference_frame){
 		var output = '';
 		var tmp ='';
@@ -2078,7 +2105,7 @@ function Diagram(painter){
 		{
 			for(var i=0, istop = this.frames[final_frame].nexthold.length;i<istop;i++)
 			{
-				if(this.nexthold[i])
+				if(this.frames[final_frame].nexthold[i])
 				{
 					tmp += this.frames[final_frame].nexthold[i];
 				}
@@ -2103,11 +2130,11 @@ function Diagram(painter){
 
 	};// end print_differences
 
-	/*Method: load TODO: MOVE TO TEDIGE-EDITOR.JS
-		Load the encoded string given in parameter into the diagram
+	/** Load the encoded string given in parameter into the diagram TODO: MOVE TO TEDIGE-EDITOR.JS
 
-		Parameter:
-		str - A string encoded with the format described below*/
+		@param {string} str A string encoded with the format described below
+	*/
+
 	this.load = function(str){
 		if(!str){return;} // check if there's nothing
 		this.remove_all_playfields();
@@ -2127,51 +2154,91 @@ function Diagram(painter){
 
 } // end Diagram -------------------------------------------------------------------------------
 
-
-/*
-	+++--------------------------------------------------------------+
-	¦¦¦	Class: Frame
-	¦¦¦	Frame stores the playfield, the active piece and everything
-	¦¦¦	needed to describe a single frame of the game.
-	¦¦¦	It receives command from Diagram and calls painter to update
-	¦¦¦	the display.
-	¦¦¦
-	¦¦¦ >						+-----------------------+
-	¦¦¦ >						V						¦
-	¦¦¦ >	Canvas/html <-- <Painter> <-- <Frame> <-- <Diagram>
-	¦¦¦ >			¦					  ^^^^^^^
-	¦¦¦ >			¦									   ^
-    ¦¦¦ >			+--------------------------------------+
-	¦¦¦
-	¦¦¦ Parameter:
-	¦¦¦		painter - a reference to its associated painter
-	+++--------------------------------------------------------------+
-*/
-
+/** Global counter, used to give and unique ID the the frames*/
 var GLOBAL_FRAME_COUNTER = 0;
 
+/** Frame
+
+	Frame stores the playfield, the active piece and everything needed to describe a single frame
+	of the game.
+
+	It receives command from Diagram and calls painter to update the display.
+
+	<pre>
+	>                       +---------------------+
+	>                       V                     |
+	>    Canvas/html <-- Painter <-- Frame <-- Diagram
+	>           |                    ^^^^^      ^
+	>           |                               |
+	>           +-------------------------------+
+	</pre>
+
+	@class
+	@param Painter A reference to its associated painter.
+	@requires Painter
+*/
 function Frame(painter){
-	var myself = this;
 	GLOBAL_FRAME_COUNTER++;
+	/** A variable referencing the class, used to exploit closure stuff in other methods*/
+	var myself = this;
+
+	/** An unique ID*/
 	this.id = GLOBAL_FRAME_COUNTER;
+
+	/** A referece to the associated painter*/
 	this.painter = painter;
+
+	/** Height of the playfield*/
 	this.height = 20;
+
+	/** Width of the playfield*/
 	this.width = 10;
+
+	/** Rotation system of the playfield. Possible value: 'ARS','SRS'*/
 	this.RS = 'ARS';
+
+	/** Border style. Possible value: 'Master','Death','Easy'*/
 	this.border = 'Master';
+
+	/** Boolean that represent wether the whiteborder should be drawn or not*/
 	this.whiteborder = false;
+
+	/** 3 Dimensional playfield array*/
 	this.playfield = [];// Initialization of the playfield table; first coord = x; second = y;
+
+	/** Active piece type. Possible value: SZLJTOIG*/
 	this.activePieceType = '';
+
+	/** Active piece orientation. Possible value: i cw ccw u*/
 	this.activePieceOrientation = '';
+
+	/** Active piece X coordinate*/
 	this.activePiecePositionX = '';
+
+	/** Active piece Y coordinate*/
 	this.activePiecePositionY = '';
+
+	/** Number between 0 and 1*/
 	this.activePieceOpacity = 1.0;
-	this.duration = 15; // frame duration, in frame (== 1/60 s)
+
+	/** Frame duration in frame (=1/60s)*/
+	this.duration = 15;
+
+	/** Array containing the holded, next1, next2 and next3 pieces. Possible value: SZLJTOIG */
 	this.nexthold = ['','','',''];
+
+	/** String that represent the joystick direction. Possible value: u, r, l, d, ul, ur, dl, dr*/
 	this.joystick_direction = 'c';
+
+	/** String that represent the joystick state. Possible value: 'rest', 'holded', 'pressed'*/
 	this.joystick_state = 'rest';
+
+	/** Array containing  the button state. Possible value: 'rest', 'holded', 'pressed'*/
 	this.button_state = ['rest','rest','rest','rest','rest','rest'];
+
+	/** String containing the user comment*/
 	this.comment = '';
+
 
 	// initialization of the frame. Should I make a method instead ?
 		for(var oi=0, oistop = this.width; oi<oistop; oi++){
@@ -2192,41 +2259,39 @@ function Frame(painter){
 	/* -- Utility -- */
 	/* ------------- */
 
-	/* Method: is_in
-		Check whether a pair of coordinate is in the tetrion or not.
+	/** Check whether a pair of coordinate is in the tetrion or not.
 
-		Parameters:
-			x - x coordinate
-			y - y coordinate*/
+		@param {number} x X position, in block unit
+		@param {number} y Y position, in block unit
+
+		@return {bolean} Return a boolean that tells if the coordinate is in the playfield (true) or not (false)
+	*/
 	this.is_in = function(x,y){
 		if(x < 0 ||y < 0 || x>=this.width || y>=this.height)
 			{return false;}
 		return true;
 	};
 
-	/*Method: lookup
-		Return the block's type at the designated coordinate
+	/** Return the block's type at the designated coordinate
 
-		Parameters:
-			x - the x coordinate
-			y - the y coordinate
-		Returns:
-			The block's type at the designated coordinate
+		@param {number} x X position, in block unit
+		@param {number} y Y position, in block unit
+
+		@return {string} Block type at the designated coordinate
 	*/
 	this.lookup = function(x,y){
 		return this.playfield[x][y][0];
 	};
 
-	/*Method: piece_is_in
-		Checks if a given piece would still be in the playfield
+	/** Checks if a given piece would still be in the playfield
 
 		Parameter:
-			x - x coordinate
-			y - y coordinate
-			type - piece type
-			orientation - piece orientation
-		Returns:
-		True or false
+		@param {number} x X position, in block unit
+		@param {number} y Y position, in block unit
+		@param {string} type Piece type. Possible value: SZLJTOIG
+		@param {string} orientation Piece orientation. Possible value:  i cw ccw u
+
+		@return {boolean}
 	*/
 	this.piece_is_in = function(x,y,type,orientation){
 		var matrix = getMatrix(type, orientation, this.RS);
@@ -2255,11 +2320,10 @@ function Frame(painter){
 	/* -- Save/Load and stuff -- */
 	/* ------------------------- */
 
-	/* Method: draw // DO NOT MOVE TO TEDIGE-EDITOR
-		Draws everything according to what's in memory.
+	/** Draws everything according to what's in memory.
 
-		Parameters:
-			exception - an object containing a list of thing to be force-redrawed (because normally it shouldn't be)*/
+		@param {string} exception An object containing a list of thing to be force-redrawed (because normally it shouldn't be) (todo:  ?? NOT IMPLEMENTED YET)
+	*/
 	this.draw = function(exception){
 		for(var i = 0, istop = this.width; i < istop; i++) {
 			for(var j = 0, jstop = this.height; j < jstop; j++) {
@@ -2285,7 +2349,7 @@ function Frame(painter){
 
 		for(var i=0, istop = this.nexthold.length;i<istop;i++)
 		{
-			this.painter.drawNextHold(i,this.nexthold[i]);
+			this.painter.drawNextHold(i,this.nexthold[i],this.RS);
 		}
 
 		if (!(exception && exception.hasOwnProperty(border))) // // http://stackoverflow.com/questions/6075458/performance-differences-between-jquery-inarray-vs-object-hasownproperty
@@ -2314,7 +2378,7 @@ function Frame(painter){
 		if(this.activePieceOpacity == 'Flash')
 		{
 			this.addPiece(this.activePiecePositionX,this.activePiecePositionY,this.activePieceType,this.activePieceOrientation,'Flash',false);
-
+			// TODO remove addPiece dependancy
 		}
 
 		this.painter.eraseLayer('whiteborder');
@@ -2325,13 +2389,11 @@ function Frame(painter){
 
 	};//end draw
 
-	/*Method: print // DO NOT MOVE TO TEDIGE-EDITOR
-		Print a string that describe the playfield.
+	/** Print a string that describe the playfield.
 		WARNING: if you modify that, please also modify diagram.printdifference
 
-		Parameters:
-			exception - an object containing a list of things of facultative or over-repetitive element (like RS)(todo:  ?? NOT IMPLEMENTED YET)*/
-
+		@param {string} exception An object containing a list of things of facultative or over-repetitive element (like RS)(todo:  ?? NOT IMPLEMENTED YET)
+	*/
 	this.print = function(){
 		var output= '';
 		var tmp ='';
@@ -2602,13 +2664,11 @@ function Frame(painter){
 
 	}; // end print
 
-	/*Method: load
-	Load the playfield from a descriptive string.
+	/** Load the playfield from a descriptive string.
 
-	Parameters:
-		str - the descriptive string
-		format - either nothing or 'differences'*/
-
+		@param {string} str The descriptive string
+		@param {strong} format Possible value: '' or 'differences'
+	*/
 	this.load = function(str, format){
 		if(format != 'differences')
 		{
@@ -2824,9 +2884,6 @@ function Frame(painter){
 
 }//end frame
 
-/*Routine: ARS
-	Define the pieces orientation and their color.*/
-
 /* Rotation definition*/
 
 	/*
@@ -2873,7 +2930,7 @@ o: rotation area
 L: final result
  */
 
-
+/** Definition of the Arika Rotation System*/
 var ARS = {
 	I: {
 		color : 'red',
@@ -3069,6 +3126,7 @@ var ARS = {
 	}
 };
 
+/** Definition of the Super Rotation System*/
 var SRS = {
 	I: {
 		color : 'cyan',
@@ -3282,6 +3340,7 @@ var SRS = {
 	}
 };
 
+/** Definition of the decorations*/
 var decoration ={
 	n1: {s: [0,0], e: [1,1]},
 	n2: {s: [1,0], e: [2,1]},
@@ -3398,6 +3457,12 @@ var decoration ={
 
 ////////////////////////////////////////////////////////////////////
 
+/** Return a piece coordinate matrix
+	@function
+	@param {string} type Piece type
+	@param {orientation} type Piece type
+	@param {string} type Piece type
+*/
 function getMatrix(type,orientation, RS){
 	var matrix;
 	switch(RS)
@@ -3577,13 +3642,19 @@ function getMatrix(type,orientation, RS){
 
 }
 
+/** Return a piece coordinate matrix
+	@function
+	@param {string} type Piece type
+	@param {orientation} type Piece type
+	@param {string} type Piece type
+*/
+/** Convert a letter to its corresponding number and vice-versa.
+	Currently convert the 19 first number (including zero) because
+	we don't need further coordinate (for now).
+	A possible expansion would be to also encode [A-Z] (uppcase)
 
-
-/*Function: alphanumconvert
-Convert a letter to its corresponding number and vice-versa.
-Currently convert the 19 first number (including zero) because
-we don't need further coordinate (for now).
-A possible expansion would be to also encode [A-Z] (uppcase)
+	@param {(string|number)} input Letter or number
+	@return {(string|number)} Number or letter
 */
 function alphanumconvert(input){
 	var output;

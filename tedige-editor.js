@@ -1,178 +1,199 @@
-﻿
+﻿/** Draw a single palette decoration
+
+	@function
+	@param {string} kind Define the color of the block to be drawn. Possible values: (SZLJTOIG)
+	@param {number} blockSize Size of a typical block
+	@param sprite Sprite object
+*/
 function drawPaletteDecoCell(kind,blockSize,sprite){
 
-		var Canvas = $('#editor-palette-deco-'+kind);
-		var ctx = Canvas[0].getContext('2d');
+	var Canvas = $('#editor-palette-deco-'+kind);
+	var ctx = Canvas[0].getContext('2d');
 
-		var spriteOffsetStart, spriteOffsetEnd;
-		switch(kind){
-			case 'n1':	spriteOffsetStart = decoration.n1.s; spriteOffsetEnd = decoration.n1.e; break;
-			case 'n2':	spriteOffsetStart = decoration.n2.s; spriteOffsetEnd = decoration.n2.e; break;
-			case 'n3':	spriteOffsetStart = decoration.n3.s; spriteOffsetEnd = decoration.n3.e; break;
-			case 'n4':	spriteOffsetStart = decoration.n4.s; spriteOffsetEnd = decoration.n4.e; break;
-			case 'n5':	spriteOffsetStart = decoration.n5.s; spriteOffsetEnd = decoration.n5.e; break;
-			case 'n6':	spriteOffsetStart = decoration.n6.s; spriteOffsetEnd = decoration.n6.e; break;
-			case 'n7':	spriteOffsetStart = decoration.n7.s; spriteOffsetEnd = decoration.n7.e; break;
-			case 'n8':	spriteOffsetStart = decoration.n8.s; spriteOffsetEnd = decoration.n8.e; break;
-			case 'n9':	spriteOffsetStart = decoration.n9.s; spriteOffsetEnd = decoration.n9.e; break;
-			case 'n0':	spriteOffsetStart = decoration.n0.s; spriteOffsetEnd = decoration.n0.e; break;
-			case 'smallcw':	spriteOffsetStart = decoration.smallcw.s; spriteOffsetEnd = decoration.smallcw.e; break;
-			case 'smallccw':	spriteOffsetStart = decoration.smallccw.s; spriteOffsetEnd = decoration.smallccw.e; break;
-			case 'smalloktick':	spriteOffsetStart = decoration.smalloktick.s; spriteOffsetEnd = decoration.smalloktick.e; break;
-			case 'smallokcircle':	spriteOffsetStart = decoration.smallokcircle.s; spriteOffsetEnd = decoration.smallokcircle.e; break;
-			case 'smallnocross':	spriteOffsetStart = decoration.smallnocross.s; spriteOffsetEnd = decoration.smallnocross.e; break;
-			case 'smallquestion':	spriteOffsetStart = decoration.smallquestion.s; spriteOffsetEnd = decoration.smallquestion.e; break;
-			case 'smallexclamation':	spriteOffsetStart = decoration.smallexclamation.s; spriteOffsetEnd = decoration.smallexclamation.e; break;
-			case 'nwarrow':	spriteOffsetStart = decoration.nwarrow.s; spriteOffsetEnd = decoration.nwarrow.e; break;
-			case 'narrow':	spriteOffsetStart = decoration.narrow.s; spriteOffsetEnd = decoration.narrow.e; break;
-			case 'nearrow':	spriteOffsetStart = decoration.nearrow.s; spriteOffsetEnd = decoration.nearrow.e; break;
-			case 'earrow':	spriteOffsetStart = decoration.earrow.s; spriteOffsetEnd = decoration.earrow.e; break;
-			case 'searrow':	spriteOffsetStart = decoration.searrow.s; spriteOffsetEnd = decoration.searrow.e; break;
-			case 'sarrow':	spriteOffsetStart = decoration.sarrow.s; spriteOffsetEnd = decoration.sarrow.e; break;
-			case 'swarrow':	spriteOffsetStart = decoration.swarrow.s; spriteOffsetEnd = decoration.swarrow.e; break;
-			case 'warrow':	spriteOffsetStart = decoration.warrow.s; spriteOffsetEnd = decoration.warrow.e; break;
-			case 'bigcw':	spriteOffsetStart = decoration.bigcw.s; spriteOffsetEnd = decoration.bigcw.e; break;
-			case 'bigccw':	spriteOffsetStart = decoration.bigccw.s; spriteOffsetEnd = decoration.bigccw.e; break;
-			case 'bigquestion':	spriteOffsetStart = decoration.bigquestion.s; spriteOffsetEnd = decoration.bigquestion.e; break;
-			case 'bigexclamation':	spriteOffsetStart = decoration.bigexclamation.s; spriteOffsetEnd = decoration.bigexclamation.e; break;
-			case 'bigoktick':	spriteOffsetStart = decoration.bigoktick.s; spriteOffsetEnd = decoration.bigoktick.e; break;
-			case 'bigokcircle':	spriteOffsetStart = decoration.bigokcircle.s; spriteOffsetEnd = decoration.bigokcircle.e; break;
-			case 'bignocross':	spriteOffsetStart = decoration.bignocross.s; spriteOffsetEnd = decoration.bignocross.e; break;
-			case 'overlayyellow':	spriteOffsetStart = decoration.overlayyellow.s; spriteOffsetEnd = decoration.overlayyellow.e; break;
-			case 'overlayblue':	spriteOffsetStart = decoration.overlayblue.s; spriteOffsetEnd = decoration.overlayblue.e; break;
-			case 'overlaygreen':	spriteOffsetStart = decoration.overlaygreen.s; spriteOffsetEnd = decoration.overlaygreen.e; break;
-			case 'overlaypink':	spriteOffsetStart = decoration.overlaypink.s; spriteOffsetEnd = decoration.overlaypink.e; break;
-			case 'overlayorange':	spriteOffsetStart = decoration.overlayorange.s; spriteOffsetEnd = decoration.overlayorange.e; break;
-			case 'clear1':	spriteOffsetStart = decoration.clear1.s; spriteOffsetEnd = decoration.clear1.e; break;
-			case 'clear2':	spriteOffsetStart = decoration.clear2.s; spriteOffsetEnd = decoration.clear2.e; break;
-			case 'clear3':	spriteOffsetStart = decoration.clear3.s; spriteOffsetEnd = decoration.clear3.e; break;
-			case 'clear4':	spriteOffsetStart = decoration.clear4.s; spriteOffsetEnd = decoration.clear4.e; break;
-			case 'clear5':	spriteOffsetStart = decoration.clear5.s; spriteOffsetEnd = decoration.clear5.e; break;
-			case 'clear6':	spriteOffsetStart = decoration.clear6.s; spriteOffsetEnd = decoration.clear6.e; break;
-			case 'clear7':	spriteOffsetStart = decoration.clear7.s; spriteOffsetEnd = decoration.clear7.e; break;
-			}
+	var spriteOffsetStart, spriteOffsetEnd;
+	switch(kind){
+		case 'n1':	spriteOffsetStart = decoration.n1.s; spriteOffsetEnd = decoration.n1.e; break;
+		case 'n2':	spriteOffsetStart = decoration.n2.s; spriteOffsetEnd = decoration.n2.e; break;
+		case 'n3':	spriteOffsetStart = decoration.n3.s; spriteOffsetEnd = decoration.n3.e; break;
+		case 'n4':	spriteOffsetStart = decoration.n4.s; spriteOffsetEnd = decoration.n4.e; break;
+		case 'n5':	spriteOffsetStart = decoration.n5.s; spriteOffsetEnd = decoration.n5.e; break;
+		case 'n6':	spriteOffsetStart = decoration.n6.s; spriteOffsetEnd = decoration.n6.e; break;
+		case 'n7':	spriteOffsetStart = decoration.n7.s; spriteOffsetEnd = decoration.n7.e; break;
+		case 'n8':	spriteOffsetStart = decoration.n8.s; spriteOffsetEnd = decoration.n8.e; break;
+		case 'n9':	spriteOffsetStart = decoration.n9.s; spriteOffsetEnd = decoration.n9.e; break;
+		case 'n0':	spriteOffsetStart = decoration.n0.s; spriteOffsetEnd = decoration.n0.e; break;
+		case 'smallcw':	spriteOffsetStart = decoration.smallcw.s; spriteOffsetEnd = decoration.smallcw.e; break;
+		case 'smallccw':	spriteOffsetStart = decoration.smallccw.s; spriteOffsetEnd = decoration.smallccw.e; break;
+		case 'smalloktick':	spriteOffsetStart = decoration.smalloktick.s; spriteOffsetEnd = decoration.smalloktick.e; break;
+		case 'smallokcircle':	spriteOffsetStart = decoration.smallokcircle.s; spriteOffsetEnd = decoration.smallokcircle.e; break;
+		case 'smallnocross':	spriteOffsetStart = decoration.smallnocross.s; spriteOffsetEnd = decoration.smallnocross.e; break;
+		case 'smallquestion':	spriteOffsetStart = decoration.smallquestion.s; spriteOffsetEnd = decoration.smallquestion.e; break;
+		case 'smallexclamation':	spriteOffsetStart = decoration.smallexclamation.s; spriteOffsetEnd = decoration.smallexclamation.e; break;
+		case 'nwarrow':	spriteOffsetStart = decoration.nwarrow.s; spriteOffsetEnd = decoration.nwarrow.e; break;
+		case 'narrow':	spriteOffsetStart = decoration.narrow.s; spriteOffsetEnd = decoration.narrow.e; break;
+		case 'nearrow':	spriteOffsetStart = decoration.nearrow.s; spriteOffsetEnd = decoration.nearrow.e; break;
+		case 'earrow':	spriteOffsetStart = decoration.earrow.s; spriteOffsetEnd = decoration.earrow.e; break;
+		case 'searrow':	spriteOffsetStart = decoration.searrow.s; spriteOffsetEnd = decoration.searrow.e; break;
+		case 'sarrow':	spriteOffsetStart = decoration.sarrow.s; spriteOffsetEnd = decoration.sarrow.e; break;
+		case 'swarrow':	spriteOffsetStart = decoration.swarrow.s; spriteOffsetEnd = decoration.swarrow.e; break;
+		case 'warrow':	spriteOffsetStart = decoration.warrow.s; spriteOffsetEnd = decoration.warrow.e; break;
+		case 'bigcw':	spriteOffsetStart = decoration.bigcw.s; spriteOffsetEnd = decoration.bigcw.e; break;
+		case 'bigccw':	spriteOffsetStart = decoration.bigccw.s; spriteOffsetEnd = decoration.bigccw.e; break;
+		case 'bigquestion':	spriteOffsetStart = decoration.bigquestion.s; spriteOffsetEnd = decoration.bigquestion.e; break;
+		case 'bigexclamation':	spriteOffsetStart = decoration.bigexclamation.s; spriteOffsetEnd = decoration.bigexclamation.e; break;
+		case 'bigoktick':	spriteOffsetStart = decoration.bigoktick.s; spriteOffsetEnd = decoration.bigoktick.e; break;
+		case 'bigokcircle':	spriteOffsetStart = decoration.bigokcircle.s; spriteOffsetEnd = decoration.bigokcircle.e; break;
+		case 'bignocross':	spriteOffsetStart = decoration.bignocross.s; spriteOffsetEnd = decoration.bignocross.e; break;
+		case 'overlayyellow':	spriteOffsetStart = decoration.overlayyellow.s; spriteOffsetEnd = decoration.overlayyellow.e; break;
+		case 'overlayblue':	spriteOffsetStart = decoration.overlayblue.s; spriteOffsetEnd = decoration.overlayblue.e; break;
+		case 'overlaygreen':	spriteOffsetStart = decoration.overlaygreen.s; spriteOffsetEnd = decoration.overlaygreen.e; break;
+		case 'overlaypink':	spriteOffsetStart = decoration.overlaypink.s; spriteOffsetEnd = decoration.overlaypink.e; break;
+		case 'overlayorange':	spriteOffsetStart = decoration.overlayorange.s; spriteOffsetEnd = decoration.overlayorange.e; break;
+		case 'clear1':	spriteOffsetStart = decoration.clear1.s; spriteOffsetEnd = decoration.clear1.e; break;
+		case 'clear2':	spriteOffsetStart = decoration.clear2.s; spriteOffsetEnd = decoration.clear2.e; break;
+		case 'clear3':	spriteOffsetStart = decoration.clear3.s; spriteOffsetEnd = decoration.clear3.e; break;
+		case 'clear4':	spriteOffsetStart = decoration.clear4.s; spriteOffsetEnd = decoration.clear4.e; break;
+		case 'clear5':	spriteOffsetStart = decoration.clear5.s; spriteOffsetEnd = decoration.clear5.e; break;
+		case 'clear6':	spriteOffsetStart = decoration.clear6.s; spriteOffsetEnd = decoration.clear6.e; break;
+		case 'clear7':	spriteOffsetStart = decoration.clear7.s; spriteOffsetEnd = decoration.clear7.e; break;
+		}
 
-		var ox = spriteOffsetStart[0]*(blockSize);
-		var oy = spriteOffsetStart[1]*(blockSize);
-		var w = (spriteOffsetEnd[0]-spriteOffsetStart[0])*(blockSize);
+	var ox = spriteOffsetStart[0]*(blockSize);
+	var oy = spriteOffsetStart[1]*(blockSize);
+	var w = (spriteOffsetEnd[0]-spriteOffsetStart[0])*(blockSize);
 
-		var h = (spriteOffsetEnd[1]-spriteOffsetStart[1])*(blockSize);
-		var nx = 0;
-		var ny = 0;
+	var h = (spriteOffsetEnd[1]-spriteOffsetStart[1])*(blockSize);
+	var nx = 0;
+	var ny = 0;
 
-			ctx.drawImage(sprite, // original image
-						  ox,oy, //coordinate on the original image
-						  w,h, // size of the rectangle to will be cut
-						  nx,ny, // destination coordinate
-						  w,h); // destination size
+	ctx.drawImage(sprite, // original image
+				  ox,oy, //coordinate on the original image
+				  w,h, // size of the rectangle to will be cut
+				  nx,ny, // destination coordinate
+				  w,h); // destination size
 
 }
 
+/** Draw a single palette piece
+
+	@function
+	@param {string} type Piece type. Possible value: SZLJTOIG
+	@param {string} orientation Piece orientation. Possible value:  i cw ccw u
+	@param {string} RS Define the style of the block. Possible value: 'ARS, 'SRS'
+	@param {number} blockSize Size of a typical block
+	@param sprite Sprite object
+*/
 function drawPaletteCell(type,orientation,RS,blockSize,sprite){
-		var Canvas = $('#editor-palette-'+type+orientation);
-		var ctx = Canvas[0].getContext('2d');
-		var matrix = getMatrix(type, orientation, RS);
-		Canvas.attr('width',Canvas.width());
+	var Canvas = $('#editor-palette-'+type+orientation);
+	var ctx = Canvas[0].getContext('2d');
+	var matrix = getMatrix(type, orientation, RS);
+	Canvas.attr('width',Canvas.width());
 
-		var color,spriteOffset;
-		switch(RS){
-			case 'ARS':
-				switch(type){
-					case 'I':
-						color = ARS.I.color;
-						spriteOffset = ARS.I.offset;
-						break;
-					case 'T':
-						color = ARS.T.color;
-						spriteOffset = ARS.T.offset;
-						break;
-					case 'L':
-						color = ARS.L.color;
-						spriteOffset = ARS.L.offset;
-						break;
-					case 'J':
-						color = ARS.J.color;
-						spriteOffset = ARS.J.offset;
-						break;
-					case 'S':
-						color = ARS.S.color;
-						spriteOffset = ARS.S.offset;
-						break;
-					case 'Z':
-						color = ARS.Z.color;
-						spriteOffset = ARS.Z.offset;
-						break;
-					case 'O':
-						color = ARS.O.color;
-						spriteOffset = ARS.O.offset;
-						break;
-					case 'G':
-						color = ARS.G.color;
-						spriteOffset = ARS.G.offset;
-						break;
-				}
-			break;
-			case 'SRS':
-				switch(type){
-					case 'I':
-						color = SRS.I.color;
-						spriteOffset = SRS.I.offset;
-						break;
-					case 'T':
-						color = SRS.T.color;
-						spriteOffset = SRS.T.offset;
-						break;
-					case 'L':
-						color = SRS.L.color;
-						spriteOffset = SRS.L.offset;
-						break;
-					case 'J':
-						color = SRS.J.color;
-						spriteOffset = SRS.J.offset;
-						break;
-					case 'S':
-						color = SRS.S.color;
-						spriteOffset = SRS.S.offset;
-						break;
-					case 'Z':
-						color = SRS.Z.color;
-						spriteOffset = SRS.Z.offset;
-						break;
-					case 'O':
-						color = SRS.O.color;
-						spriteOffset = SRS.O.offset;
-						break;
-					case 'G':
-						color = SRS.G.color;
-						spriteOffset = SRS.G.offset;
-						break;
-				}
-			break;
+	var color,spriteOffset;
+	switch(RS){
+		case 'ARS':
+			switch(type){
+				case 'I':
+					color = ARS.I.color;
+					spriteOffset = ARS.I.offset;
+					break;
+				case 'T':
+					color = ARS.T.color;
+					spriteOffset = ARS.T.offset;
+					break;
+				case 'L':
+					color = ARS.L.color;
+					spriteOffset = ARS.L.offset;
+					break;
+				case 'J':
+					color = ARS.J.color;
+					spriteOffset = ARS.J.offset;
+					break;
+				case 'S':
+					color = ARS.S.color;
+					spriteOffset = ARS.S.offset;
+					break;
+				case 'Z':
+					color = ARS.Z.color;
+					spriteOffset = ARS.Z.offset;
+					break;
+				case 'O':
+					color = ARS.O.color;
+					spriteOffset = ARS.O.offset;
+					break;
+				case 'G':
+					color = ARS.G.color;
+					spriteOffset = ARS.G.offset;
+					break;
 			}
-
-		for (var i = 0; i < 4; i++) {
-			for (var j = 0; j < 4; j++) {
-				if (matrix[i][j]) {
-					ctx.beginPath();
-					ctx.rect(parseInt(j*blockSize,10),parseInt(i*blockSize,10),blockSize,blockSize);
-					ctx.fillStyle = color;
-					ctx.fill();
-					ctx.closePath();
-					if (sprite) {
-						ctx.drawImage(sprite, // original image
-									  spriteOffset[0]*blockSize,spriteOffset[1]*blockSize, //coordinate on the original image
-									  blockSize,blockSize, // size of the rectangle to will be cut
-									  parseInt(j*blockSize,10),parseInt(i*blockSize,10), // destination coordinate
-									  blockSize,blockSize); // destination size
-					}
-
-				}
+		break;
+		case 'SRS':
+			switch(type){
+				case 'I':
+					color = SRS.I.color;
+					spriteOffset = SRS.I.offset;
+					break;
+				case 'T':
+					color = SRS.T.color;
+					spriteOffset = SRS.T.offset;
+					break;
+				case 'L':
+					color = SRS.L.color;
+					spriteOffset = SRS.L.offset;
+					break;
+				case 'J':
+					color = SRS.J.color;
+					spriteOffset = SRS.J.offset;
+					break;
+				case 'S':
+					color = SRS.S.color;
+					spriteOffset = SRS.S.offset;
+					break;
+				case 'Z':
+					color = SRS.Z.color;
+					spriteOffset = SRS.Z.offset;
+					break;
+				case 'O':
+					color = SRS.O.color;
+					spriteOffset = SRS.O.offset;
+					break;
+				case 'G':
+					color = SRS.G.color;
+					spriteOffset = SRS.G.offset;
+					break;
 			}
+		break;
 		}
 
-	}//end drawpalettecell
+	for (var i = 0; i < 4; i++) {
+		for (var j = 0; j < 4; j++) {
+			if (matrix[i][j]) {
+				ctx.beginPath();
+				ctx.rect(parseInt(j*blockSize,10),parseInt(i*blockSize,10),blockSize,blockSize);
+				ctx.fillStyle = color;
+				ctx.fill();
+				ctx.closePath();
+				if (sprite) {
+					ctx.drawImage(sprite, // original image
+								  spriteOffset[0]*blockSize,spriteOffset[1]*blockSize, //coordinate on the original image
+								  blockSize,blockSize, // size of the rectangle to will be cut
+								  parseInt(j*blockSize,10),parseInt(i*blockSize,10), // destination coordinate
+								  blockSize,blockSize); // destination size
+				}
 
+			}
+		}
+	}
 
+}//end drawpalettecell
+
+/** Draw the entire tetramino palette
+
+	@function
+	@param {string} RS Define the style of the block. Possible value: 'ARS, 'SRS'
+	@param {number} blockSize Size of a typical block
+	@param sprite Sprite object
+*/
 function drawPalette(RS, blockSize,sprite){
 	var type = ['I','T','S','Z','L','J','O'];
 	var orientation = ['i','cw','ccw','u'];
@@ -184,6 +205,12 @@ function drawPalette(RS, blockSize,sprite){
 	}
 }
 
+/** Draw the entire decoration palette
+
+	@function
+	@param {number} blockSize Size of a typical block
+	@param sprite Sprite object
+*/
 function drawPaletteDeco(blockSize,sprite){
 	var type = ['n1','n2','n3','n4','n5','n6','n7','n8','n9','n0','smallccw','smallcw','smalloktick','smallokcircle','smallnocross','smallquestion','smallexclamation','nwarrow','narrow','nearrow','earrow','searrow','sarrow','swarrow','warrow','bigcw','bigccw','smallquestion','bigquestion','bigexclamation','bigoktick','bigokcircle','bignocross','overlayyellow','overlayblue','overlaygreen','overlaypink','overlaypink','clear1','clear2','clear3','clear4','clear5','clear6','clear7'];
 
@@ -192,462 +219,533 @@ function drawPaletteDeco(blockSize,sprite){
 	}
 }
 
-	/* ------------------------------------------- */
-	/* -- Frame:: Frames-wide properties change -- */
-	/* ------------------------------------------- */
-	
-	/* Method: change_border TODO: MOVE TO TEDIGE-EDITOR.JS
-		Changes the border of the diagram.*/
-	Diagram.prototype.modify_border = function(kind){
-		for(var i=0, istop = this.frames.length ; i<istop ;i++)
-		{
-			this.frames[i].border = kind;
-		}
-		this.frames[this.current_frame].modify_border(kind);
-	};
+/* ------------------------------------------- */
+/* -- Frame:: Frames-wide properties change -- */
+/* ------------------------------------------- */
 
-	/* Method: modify_RS
-		Change the rotation system for the whole diagram
-		*/
-	Diagram.prototype.modify_RS = function(system){
-		for(var i=0, istop = this.frames.length ; i<istop ;i++)
-		{
-			this.frames[i].RS = system;
-		}
-		this.frames[this.current_frame].modify_RS(system);
-	};
-	/* Method: modify_whiteborder
-		Change the rotation system for the whole diagram
-		*/
-	Diagram.prototype.modify_whiteborder = function(value){
-		for(var i=0, istop = this.frames.length ; i<istop ;i++)
-		{
-			this.frames[i].whiteborder = value;
-		}
-		this.frames[this.current_frame].modify_whiteborder(value);
-	};
-	/* Method: modify_duration
-		Change the duration of each frame of a diagram
-		*/
-	Diagram.prototype.modify_duration = function(new_duration){
-		for(var i=0, istop = this.frames.length ; i<istop ;i++)
-		{
-			this.frames[i].duration = new_duration;
-		}
-	};
+/** Changes the border style of the diagram.
 
-	Diagram.prototype.flate_encode = function (str) {
-	return $.base64.encode(RawDeflate.deflate(unescape(encodeURIComponent(str))));
-	};
+	@param {string} kind Desired border type. Currently supported:
+		'master' (gray-bluish), 'easy' (green) and 'death' (red). Defaults to master if
+		none is selected
+*/
+Diagram.prototype.modify_border = function(kind){
+	for(var i=0, istop = this.frames.length ; i<istop ;i++)
+	{
+		this.frames[i].border = kind;
+	}
+	this.frames[this.current_frame].modify_border(kind);
+};
 
-	Diagram.prototype.flate_decode = function(str) {
-	return decodeURIComponent(escape(RawDeflate.inflate($.base64.decode(str))));
-	};
+/** Change the rotation system for the whole diagram
 
-	Diagram.prototype.getGIF = function(){
-	 var encoder = new GIFEncoder();
-	 encoder.setRepeat(0); // sets an infinite loop
-	 encoder.setDelay(500); // frame rate in ms... maybe I should try to patch this and get a variable rate ?
-	 encoder.start();
-	 encoder.setQuality(50);
-	 for(var i=0, istop = this.frames.length ; i<istop ;i++)
-		{
+	@param {string} system Desired rotation system. Possible value: 'ARS', 'SRS'
+*/
+Diagram.prototype.modify_RS = function(system){
+	for(var i=0, istop = this.frames.length ; i<istop ;i++)
+	{
+		this.frames[i].RS = system;
+	}
+	this.frames[this.current_frame].modify_RS(system);
+};
+
+/** Change the state of the white border for every frame
+
+	@param {boolean} Whiteborder status
+*/
+Diagram.prototype.modify_whiteborder = function(value){
+	for(var i=0, istop = this.frames.length ; i<istop ;i++)
+	{
+		this.frames[i].whiteborder = value;
+	}
+	this.frames[this.current_frame].modify_whiteborder(value);
+};
+
+/** Change the duration of each frame of a diagram
+
+	@param {number} Desired new duration
+*/
+Diagram.prototype.modify_duration = function(new_duration){
+	for(var i=0, istop = this.frames.length ; i<istop ;i++)
+	{
+		this.frames[i].duration = new_duration;
+	}
+};
+
+/** Encode a string with deflate
+
+	@param {string} Input string
+	@return {string} Output encoded string
+*/
+Diagram.prototype.flate_encode = function (str) {
+return $.base64.encode(RawDeflate.deflate(unescape(encodeURIComponent(str))));
+};
+
+/** Decode a string with deflate
+
+	@param {string} Input string
+	@return {string} Output decoded string
+*/
+Diagram.prototype.flate_decode = function(str) {
+return decodeURIComponent(escape(RawDeflate.inflate($.base64.decode(str))));
+};
+
+/** Generate a gif from the diagram data*/
+Diagram.prototype.getGIF = function(){
+	var encoder = new GIFEncoder();
+	encoder.setRepeat(0); // sets an infinite loop
+	encoder.setDelay(500); // frame rate in ms... maybe I should try to patch this and get a variable rate ?
+	encoder.start();
+	encoder.setQuality(50);
+	for(var i=0, istop = this.frames.length ; i<istop ;i++)
+	{
 		this.goto_frame(i);
 		this.painter.exportImage();
 		encoder.addFrame(this.painter.ContextExport);
-		}
-	 encoder.finish();
-	 var binary_gif = encoder.stream().getData();
+	}
+	encoder.finish();
+	var binary_gif = encoder.stream().getData();
 	document.getElementById('export-gif').src = 'data:image/gif;base64,'+$.base64.encode(encoder.stream().getData());
-	};
+};
 
-	
-	/* --------------------------- */
-	/* -- Modifications (basic) -- */
-	/* --------------------------- */
-	
-	/* Method: modify
-		Modify the inactive layer.
-		Parameters:
-			x - horizontal coordinate
-			y - vertical coordinate
-			type - type of the block*/
-	Frame.prototype.modify = function(x,y,type){
-		if (type == 'E')
-		{
-			this.playfield[x][y][0] = '';
-		}
-		else
-		{
-			this.playfield[x][y][0] = type;
-		}
-			this.painter.drawBrowserBlock(x,y,type,this.RS,this.id,'inactive'); // I hope putting this here won't have any nasty side-effect
-	};
 
-	/*Method: removeBlock
-		Empties a block at the given coordinate.
-		Parameters:
-			x - horizontal coordinate
-			y - vertical coordinate
-	*/
-	Frame.prototype.removeBlock = function(x,y){
+/* --------------------------- */
+/* -- Modifications (basic) -- */
+/* --------------------------- */
+
+/** Modify a block in the inactive layer.
+
+	@param {number} x Horizontal coordinate
+	@param {number} y Vertical coordinate
+	@param {string} type Piece type. Possible value: SZLJTOIG and E (empty)
+*/
+Frame.prototype.modify = function(x,y,type){
+	if (type == 'E')
+	{
 		this.playfield[x][y][0] = '';
-		this.painter.eraseBlock(x,y);
-		this.painter.drawBrowserBlock(x,y,'E',this.RS,this.id); // I hope putting this here won't have any nasty side-effect
-		if (this.whiteborder)
-		{
-			this.painter.drawLocalWhiteBorder(this.playfield,x,y,'inactive');
-		}
+	}
+	else
+	{
+		this.playfield[x][y][0] = type;
+	}
+		//this.painter.drawBrowserBlock(x,y,type,this.RS,this.id,'inactive'); // I hope putting this here won't have any nasty side-effect
+};
 
-	};
+/** Remove a block at the given coordinate.
 
-	/*Method: removeBlock
-		Empties a block at the given coordinate.
-		Parameters:
-			x - horizontal coordinate
-			y - vertical coordinate
+	@param {number} x Horizontal coordinate
+	@param {number} y Vertical coordinate
+*/
+Frame.prototype.removeBlock = function(x,y){
+	this.playfield[x][y][0] = '';
+	this.painter.eraseBlock(x,y);
+	//this.painter.drawBrowserBlock(x,y,'E',this.RS,this.id); // I hope putting this here won't have any nasty side-effect
+	if (this.whiteborder)
+	{
+		this.painter.drawLocalWhiteBorder(this.playfield,x,y,'inactive');
+	}
+
+};
+
+/** Remove a decoration block at the given coordinate.
+
+	@param {number} x Horizontal coordinate
+	@param {number} y Vertical coordinate
+*/
+Frame.prototype.removeDeco = function(x,y){
+	this.painter.drawDeco(x,y,this.playfield[x][y][1],'eraser');
+	this.playfield[x][y][1] = '';
+};
+
+
+
+/** Modify the decoration layer.
+
+	@param {number} x Horizontal coordinate
+	@param {number} y Vertical coordinate
+	@param {string} type Type of the decoration
+*/
+Frame.prototype.modify_decoration = function(x,y,type){
+	this.playfield[x][y][1] = type;
+};
+
+/** Modify the next pieces.
+
+		@param {number} position Define which position will be modified. 0 is hold, 1 is the next1 piece, 2 is the next2 piece, ...
+		@param {string} type Type of the tetraminmo. Possible value: (SZLJTOIG)
 	*/
-	Frame.prototype.removeDeco = function(x,y){
-		this.painter.drawDeco(x,y,this.playfield[x][y][1],'eraser');
-		this.playfield[x][y][1] = '';
-	};
+Frame.prototype.modify_nexthold = function(position,type){
+	this.nexthold[position] = type;
+};
 
+/** Modify the active piece.
 
-	/*Method: modify_decoration
-		Modify the decoration layer.
-		Parameters:
-			x - horizontal coordinate
-			y - vertical coordinate
-			type - type of the block*/
-	Frame.prototype.modify_decoration = function(x,y,type){
-		this.playfield[x][y][1] = type;
-	};
+	@param {number} level Opacity level, a number between 0 and 1.
+*/
+Frame.prototype.modify_AP_opacity = function(level){
+	this.activePieceOpacity = level;
+	this.painter.changeActiveOpacity(level);
+	if (level == 'Flash' || level == 'flash')
+	{
+	  this.addPiece(this.activePiecePositionX,this.activePiecePositionY,this.activePieceType,this.activePieceOrientation,'Flash',false);
+	}
 
-	/*Method: modify_next
-		Modify the next pieces.
+};
 
-		Parameters:
-			position - the piece to be modified. '0' is hold, '1' is next1, '2' is next2, ...
-			type - the piece type
-		*/
-	Frame.prototype.modify_nexthold = function(position,type){
-		this.nexthold[position] = type;
-	};
+/** Erase and delete one layer.
 
-	/*Method: modify_next DEPRECATED
-		Modify the next pieces.
-
-		Parameters:
-			position - the piece to be modified. '1' is next1, '2' is next2, ...
-			type - the piece type
-		*/
-	Frame.prototype.modify_next = function(position,type){
-		this.nexthold[position] = type;
-		this.painter.drawNext(this.nexthold);
-	};
-
-	/*Method: modify_hold
-		Modify the holded piece.
-
-		Parameters:
-			type - the piece type
-	*/
-	Frame.prototype.modify_hold = function(type){
-		this.nexthold[0] = type;
-		this.painter.drawNext(this.nexthold);
-	};
-
-	/*Method: modify_hold
-		Modify the holded piece.
-
-		Parameters:
-			type - the piece type
-	*/
-	Frame.prototype.modify_AP_opacity = function(level){
-		this.activePieceOpacity = level;
-		this.painter.changeActiveOpacity(level);
-		if (level == 'Flash' || level == 'flash')
-		{
-		  this.addPiece(this.activePiecePositionX,this.activePiecePositionY,this.activePieceType,this.activePieceOrientation,'Flash',false);
-		}
-
-	};
-
-	/* Method: clear
-		Erase and delete one layer.
-
-		Parameter:
-			mode - define which layer will be cleared. Either 'inactive','active' or 'all'*/
-	Frame.prototype.clear = function(mode){
-		switch(mode)
-		{
-			case 'inactive':
-				this.painter.eraseLayer('inactive');
-				for(var i = 0, istop = this.width; i < istop; i++) {
-					for(var j = 0, jstop = this.height; j < jstop; j++) {
-							this.playfield[i][j][0] = '';
-						}
-				}
-				break;
-			case 'active':
-				this.painter.eraseLayer('active');
-				this.activePieceType = '';
-				this.activePieceOrientation = '';
-				this.activePiecePositionX = '';
-				this.activePiecePositionY = '';
-				break;
-			case 'all':
-				this.painter.eraseLayer('inactive');
-				for(var i = 0, istop = this.width; i < istop; i++) {
-					for(var j = 0, jstop = this.height; j < jstop; j++) {
-							this.playfield[i][j][0] = '';
-						}
-				}
-				this.painter.eraseLayer('active');
-				this.activePieceType = '';
-				this.activePieceOrientation = '';
-				this.activePiecePositionX = '';
-				this.activePiecePositionY = '';
-				this.comment = '';
+	@param {string} mode Define which layer will be cleared. Possible value: 'inactive','active' or 'all'*/
+Frame.prototype.clear = function(mode){
+	switch(mode)
+	{
+		case 'inactive':
+			this.painter.eraseLayer('inactive');
+			for(var i = 0, istop = this.width; i < istop; i++) {
+				for(var j = 0, jstop = this.height; j < jstop; j++) {
+						this.playfield[i][j][0] = '';
+					}
+			}
 			break;
+		case 'active':
+			this.painter.eraseLayer('active');
+			this.activePieceType = '';
+			this.activePieceOrientation = '';
+			this.activePiecePositionX = '';
+			this.activePiecePositionY = '';
+			break;
+		case 'decoration':
+			this.painter.eraseLayer('decoration');
+			for(var i = 0, istop = this.width; i < istop; i++) {
+				for(var j = 0, jstop = this.height; j < jstop; j++) {
+						this.playfield[i][j][1] = '';
+					}
+			}
+
+			break;
+		case 'all':
+			this.painter.eraseLayer('inactive');
+			this.painter.eraseLayer('active');
+			this.painter.eraseLayer('decoration');
+			for(var i = 0, istop = this.width; i < istop; i++) {
+				for(var j = 0, jstop = this.height; j < jstop; j++) {
+						this.playfield[i][j][0] = '';
+						this.playfield[i][j][1] = '';
+					}
+			}
+			this.activePieceType = '';
+			this.activePieceOrientation = '';
+			this.activePiecePositionX = '';
+			this.activePiecePositionY = '';
+			this.comment = '';
+		break;
+	}
+};
+
+/**Changes the rotation system and call a redraw.
+
+	@param {string} system Desired rotation system
+*/
+Frame.prototype.modify_RS = function(system){
+	this.RS = system;
+	this.draw();
+};
+/** Changes the duration of a frame.
+
+	@param {number} new_duration Desired new duration.
+*/
+Frame.prototype.modify_duration = function(new_duration){
+	this.duration = new_duration;
+};
+
+/** Changes the border type.
+
+	@param {string} kind Desired border type. Currently supported:
+		'master' (gray-bluish), 'easy' (green) and 'death' (red). Defaults to master if
+		none is selected
+*/
+Frame.prototype.modify_border = function(new_border){
+	this.border = new_border;
+	this.painter.drawBorder(this.border);
+};
+
+/** Change the whiteborder status (on or off)
+	@param {boolean} Whiteborder status
+*/
+Frame.prototype.modify_whiteborder = function(new_border){
+	this.whiteborder = new_border;
+	if (this.whiteborder)
+	{
+		this.painter.drawWhiteBorder(this.playfield);
+	}
+	else
+	{
+		this.painter.eraseLayer('whiteborder');
+
+	}
+
+};
+
+/** Change the control appearance
+
+	@param {string} direction Define in which position the joystick is. Possible value: 'all', 'u', 'r', 'l', 'd', 'ul', 'ur', 'dl', 'dr'
+	@param {string} state Define which color to draw. Possible value: 'rest', 'pressed' or 'holded'
+*/
+Frame.prototype.modify_control = function(direction,state){
+	this.joystick_state = state;
+	this.joystick_direction = direction;
+	this.painter.drawJoystick(this.joystick_direction,this.joystick_state);
+};
+
+/** Change the chosen button appearance
+
+	@param {string} button Define which button to draw. Possible value: 'A', 'B', 'C', 'D' for now.
+	@param {string} state Define in which color the button is drawn. Possible value: 'rest', 'pressed' or 'holded'.
+*/
+Frame.prototype.modify_button = function(button,state){
+	var index = '';
+	switch(button)
+	{
+		case 'A': index = 0; break;
+		case 'B': index = 1; break;
+		case 'C': index = 2; break;
+		case 'D': index = 3; break;
+		//case 'E': index = 4; break;
+		//case 'F': index = 5; break;
+	}
+	this.button_state[index] = state;
+	this.painter.drawButton(button,state);
+};
+
+/* ----------------------------- */
+/* -- Modifications (advanced)-- */
+/* ----------------------------- */
+
+/** 	Fill the playfield with a piece type, similar to a 'paint bucket' tool. Thanks DigitalDevil for the original code !
+
+	@param {number} x Horizontal coordinate
+	@param {number} y Vertical coordinate
+	@param {string} replaced Possible value: SZLJTOIG
+	@param {string} replacer Possible value: SZLJTOIG
+*/
+Frame.prototype.recursive_fill = function(x,y, replaced, replacer) {
+
+	x = parseFloat(x);
+	y = parseFloat(y);
+
+	if (this.playfield[x][y][0] != replaced)
+		{return;}
+
+	this.modify(x, y, replacer);
+	this.painter.drawBlock(x,y,replacer,this.RS,'inactive');
+	if (this.whiteborder)
+		{this.painter.drawLocalWhiteBorder(this.playfield,x,y);}
+
+	if (y-1 >= 0)
+		{this.recursive_fill(x, y-1, replaced, replacer);}
+
+	if (y+1 < this.height)
+		{this.recursive_fill(x, y+1, replaced, replacer);}
+
+	if (x+1 < this.width)
+		{this.recursive_fill(x+1, y, replaced, replacer);}
+
+	if (x-1 >= 0)
+		{this.recursive_fill(x-1, y, replaced, replacer);}
+};
+
+/** 'Macro' method that modifies several times a given layer according to the tetramino shape given in parameter.
+
+	@param {number} x Horizontal coordinate
+	@param {number} y Vertical coordinate
+	@param {string} type Define the color of the block to be added. Possible values: (SZLJTOIG)
+	@param {string} orientation Orientation of the tetramino; Possible values: 'i', 'cw', 'ccw' or 'u'
+	@param {string} mode Define which layer will be modified. Possible value: 'inactive','active',
+					'garbage','preview','decoration-preview','decoration','erase','preview-eraser','Flash'
+	@param {boolean}} drop Is the method is in drop mode ?
+*/
+Frame.prototype.addPiece = function(x,y,type,orientation,mode,drop){
+	var matrix = getMatrix(type, orientation, this.RS);
+	var still_droping = true;
+	var counter = 0;
+	while(drop & still_droping ){
+		counter = 0;
+		for(var i = 0; i < 4; i++) {
+			for(var j = 0; j < 4; j++) {
+				if (matrix[i][j] &&
+					this.is_in(parseInt(x-1+j,10),parseInt(y+i,10)) &&
+					!(this.playfield[parseInt(x-1+j,10)][parseInt(y+i,10)][0])
+					)
+				{
+					counter++;
+				}
+			}
 		}
-	};
-
-	/* Method: modify_RS
-		Changes the rotation system and call a redraw. */
-	Frame.prototype.modify_RS = function(system){
-		this.RS = system;
-		this.draw();
-	};
-	/* Method: modify_RS
-		Changes the duration of a frame. */
-	Frame.prototype.modify_duration = function(new_duration){
-		this.duration = new_duration;
-	};
-
-	Frame.prototype.modify_border = function(new_border){
-		this.border = new_border;
-		this.painter.drawBorder(this.border);
-	};
-
-	Frame.prototype.modify_whiteborder = function(new_border){
-		this.whiteborder = new_border;
-		if (this.whiteborder)
-		{
-			this.painter.drawWhiteBorder(this.playfield);
+		if (counter != 4) {
+			still_droping = false;
 		}
 		else
 		{
-			this.painter.eraseLayer('whiteborder');
-
+			y++;
 		}
+	}
 
-	};
+	if (mode == 'inactive' || mode == 'garbage') {
+		this.painter.CanvasPreview.attr('width',this.painter.CanvasPreview.width()); //erase the preview layer
+	}
+	if (mode == 'active') {
+		this.activePieceType = type;
+		this.activePieceOrientation = orientation;
+		this.activePiecePositionX = x;
+		this.activePiecePositionY = y;
+		this.painter.CanvasActive.attr('width',this.painter.CanvasPreview.width()); //erase the active layer
+		this.painter.drawBrowserBlock(parseInt(x,10),parseInt(y,10),type,this.RS,this.id,'resetactive'); // TODO: potential bug ? (used erroneously parseInt(x+i) and parseInt(y+j) before...)
+	}
 
-	/*Method: modify_control
-		Change the control appearance
-		Parameters:
-			direction - ul, u, ur, l, r, dl, d, dl
-			state - rest, pressed, holded
-	*/
-	Frame.prototype.modify_control = function(direction,state){
-		this.joystick_state = state;
-		this.joystick_direction = direction;
-		this.painter.drawJoystick(this.joystick_direction,this.joystick_state);
-	};
+	if (mode == 'decoration-preview')
+	{
+		this.painter.drawDeco(x,y,type,'preview');
+	}
+	else if (mode =='decoration'){
+		this.modify_decoration(x,y,type);
+		this.painter.drawDeco(x,y,type,'decoration');
+		this.painter.highlight(x,y);
+	}
+	else
+	{
+		for(var i = 0; i < 4; i++) {
+			for(var j = 0; j < 4; j++) {
 
-	/*Method: modify_button
-		Change the chosen button appearance
-		Parameters:
-			button - a,b,c,d,e,f
-			state - rest, pressed, holded*/
-	Frame.prototype.modify_button = function(button,state){
-		var index = '';
-		switch(button)
-		{
-			case 'A': index = 0; break;
-			case 'B': index = 1; break;
-			case 'C': index = 2; break;
-			case 'D': index = 3; break;
-			//case 'E': index = 4; break;
-			//case 'F': index = 5; break;
-		}
-		this.button_state[index] = state;
-		this.painter.drawButton(button,state);
-	};
-
-	/* ----------------------------- */
-	/* -- Modifications (advanced)-- */
-	/* ----------------------------- */
-
-	/*Method: recursive_fill
-		Fill the playfield with a piece type, similar to a 'paint bucket' tool. Thanks DigitalDevil for the original code !
-
-		Parameter
-			x - x coordinate
-			y - y coordinate
-			replaced
-			replacer
-	*/
-	Frame.prototype.recursive_fill = function(x,y, replaced, replacer) {
-		/**
-		*  Fills the playfield like a paint bucket. Thanks Digital !
-			todo: bug on click on an already filled ?
-		*/
-
-		x = parseFloat(x);
-		y = parseFloat(y);
-
-		if (this.playfield[x][y][0] != replaced)
-			{return;}
-
-		this.modify(x, y, replacer);
-		this.painter.drawBlock(x,y,replacer,this.RS,'inactive');
-		if (this.whiteborder)
-			{this.painter.drawLocalWhiteBorder(this.playfield,x,y);}
-
-		if (y-1 >= 0)
-			{this.recursive_fill(x, y-1, replaced, replacer);}
-
-		if (y+1 < this.height)
-			{this.recursive_fill(x, y+1, replaced, replacer);}
-
-		if (x+1 < this.width)
-			{this.recursive_fill(x+1, y, replaced, replacer);}
-
-		if (x-1 >= 0)
-			{this.recursive_fill(x-1, y, replaced, replacer);}
-	};
-
-	/* Method: addPiece
-		'Macro' method that modifies several times a given layer according to the tetramino shape given in parameter.
-
-		Parameters:
-		x - horizontal coordinate
-		y - vertical coordinate
-		type - type of the tetramino
-		orientation - orientation of the tetramino; either 'i', 'cw', 'ccw' or 'u'
-		mode - define which layer will be modified
-		drop - is the method is in drop mode ?*/
-	Frame.prototype.addPiece = function(x,y,type,orientation,mode,drop){
-		var matrix = getMatrix(type, orientation, this.RS);
-		var still_droping = true;
-		var counter = 0;
-		while(drop
-				& still_droping ){
-			counter = 0;
-			for(var i = 0; i < 4; i++) {
-				for(var j = 0; j < 4; j++) {
-					if (matrix[i][j] &&
-						this.is_in(parseInt(x-1+j,10),parseInt(y+i,10)) &&
-						!(this.playfield[parseInt(x-1+j,10)][parseInt(y+i,10)][0])
-						)
+				//if (matrix[i][j] && this.is_in(parseInt(x-1+j,10),parseInt(y-1+i,10))) {
+				if (matrix[i][j] && this.piece_is_in(x,y,type,orientation)) {
+					switch(mode)
 					{
-						counter++;
+						case 'inactive':
+							this.modify(parseInt(x-1+j,10),parseInt(y-1+i,10),type);
+							this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,'inactive');
+							if (this.whiteborder)
+							{
+								this.painter.drawLocalWhiteBorder(this.playfield,x-1+j,y-1+i);
+							}
+
+							this.painter.highlight(x-1+j,y-1+i);
+						break;
+						case 'garbage':
+							this.modify(parseInt(x-1+j,10),parseInt(y-1+i,10),'G');
+							this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),'G',this.RS,'inactive');
+							if (this.whiteborder)
+							{
+								this.painter.drawLocalWhiteBorder(this.playfield,x-1+j,y-1+i);
+							}
+
+							this.painter.highlight(x-1+j,y-1+i);
+						break;
+						case 'preview':
+							this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,'preview');
+						break;
+						case 'active':
+							this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,'active');
+							this.painter.highlight(x-1+j,y-1+i);
+							this.painter.drawBrowserBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,this.id,'active'); // erase this line to disable the browser thing
+						break;
+						case 'erase':
+							this.removeBlock(parseInt(x-1+j,10),parseInt(y-1+i,10));
+							this.painter.highlight(x-1+j,y-1+i);
+							this.painter.drawBrowserBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),'E',this.RS,this.id,'inactive'); // erase this line to disable the browser thing
+						break;
+						case 'preview-eraser':
+							this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),'G',this.RS,'preview');
+						break;
+						case 'Flash':
+							this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,'flash');
+							this.painter.highlight(x-1+j,y-1+i);
+							this.painter.drawBrowserBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,this.id,'active'); // erase this line to disable the browser thing
+						break;
 					}
 				}
 			}
-			if (counter != 4) {
-				still_droping = false;
-			}
-			else
+		}
+	}
+
+}; //end drawpiece
+
+Frame.prototype.stack_lines = function(){
+	var row_empty = true;
+	for (var j = 0, jstop = this.height; j < jstop; j++) // start at the top row and go down
+		{
+			row_empty = true;
+			// searches the row to find out how many blocks are in it
+			for (var i = 0, istop = this.width; i < istop; i++)
 			{
-				y++;
+				if (this.playfield[i][j][0])
+				{
+					row_empty = false;
+				}
 			}
-		}
-
-		if (mode == 'inactive' || mode == 'garbage') {
-			this.painter.CanvasPreview.attr('width',this.painter.CanvasPreview.width()); //erase the preview layer
-		}
-		if (mode == 'active') {
-			this.activePieceType = type;
-			this.activePieceOrientation = orientation;
-			this.activePiecePositionX = x;
-			this.activePiecePositionY = y;
-			this.painter.CanvasActive.attr('width',this.painter.CanvasPreview.width()); //erase the active layer
-			this.painter.drawBrowserBlock(parseInt(x,10),parseInt(y,10),type,this.RS,this.id,'resetactive'); // TODO: potential bug ? (used erroneously parseInt(x+i) and parseInt(y+j) before...)
-		}
-
-		if (mode == 'decoration-preview')
-		{
-			this.painter.drawDeco(x,y,type,'preview');
-		}
-		else if (mode =='decoration'){
-			this.modify_decoration(x,y,type);
-			this.painter.drawDeco(x,y,type,'decoration');
-			this.painter.highlight(x,y);
-		}
-		else
-		{
-			for(var i = 0; i < 4; i++) {
-				for(var j = 0; j < 4; j++) {
-
-					//if (matrix[i][j] && this.is_in(parseInt(x-1+j,10),parseInt(y-1+i,10))) {
-					if (matrix[i][j] && this.piece_is_in(x,y,type,orientation)) {
-						switch(mode)
+	
+			// if the line is empty, shift the upwards rows
+			if (row_empty)
+			{
+				// shifts rows down beginning at specified row and going up
+				for (k = j; k > -1; k--)
+				{
+					// if not the top row, copy row above
+					if ( k != 0)
+					{
+						for (i = 0; i < this.width; i++)
 						{
-							case 'inactive':
-								this.modify(parseInt(x-1+j,10),parseInt(y-1+i,10),type);
-								this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,'inactive');
-								if (this.whiteborder)
-								{
-									this.painter.drawLocalWhiteBorder(this.playfield,x-1+j,y-1+i);
-								}
-
-								this.painter.highlight(x-1+j,y-1+i);
-							break;
-							case 'garbage':
-								this.modify(parseInt(x-1+j,10),parseInt(y-1+i,10),'G');
-								this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),'G',this.RS,'inactive');
-								if (this.whiteborder)
-								{
-									this.painter.drawLocalWhiteBorder(this.playfield,x-1+j,y-1+i);
-								}
-
-								this.painter.highlight(x-1+j,y-1+i);
-							break;
-							case 'preview':
-								this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,'preview');
-							break;
-							case 'active':
-								this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,'active');
-								this.painter.highlight(x-1+j,y-1+i);
-								this.painter.drawBrowserBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,this.id,'active'); // erase this line to disable the browser thing
-							break;
-							case 'erase':
-								this.removeBlock(parseInt(x-1+j,10),parseInt(y-1+i,10));
-								this.painter.highlight(x-1+j,y-1+i);
-								this.painter.drawBrowserBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),'E',this.RS,this.id,'inactive'); // erase this line to disable the browser thing
-							break;
-							case 'preview-eraser':
-								this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),'G',this.RS,'preview');
-							break;
-							case 'Flash':
-								this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,'flash');
-								this.painter.highlight(x-1+j,y-1+i);
-								this.painter.drawBrowserBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,this.id,'active'); // erase this line to disable the browser thing
-							break;
+							this.modify(i, k, this.playfield[i][k-1][0]);
 						}
 					}
 				}
 			}
 		}
+	this.painter.eraseLayer('inactive');
+	this.draw();
+};
 
-	}; //end drawpiece
+Frame.prototype.clear_lines = function(){
+	var row_occupation = 0; // to track how many blocks are on a row
+	for (var j = 0, jstop = this.height; j < jstop; j++) // start at the top row and go down
+		{
+			row_occupation = 0;
+			// searches the row to find out how many blocks are in it
+			for (var i = 0, istop = this.width; i < istop; i++)
+			{
+				if (this.playfield[i][j][0])
+				{
+					row_occupation++;
+				}
+			}
+	
+			// clears line if row is completely occupied
+			if (row_occupation == this.width)
+			{
+				for (var k=0,kstop = this.width;k<kstop;k++)
+				{
+					this.removeBlock(k,j);
+				}
+			}
+		}
+};
+/* ------------------------ */
+/* -- Active piece stuff -- */
+/* ------------------------ */
 
-	/* ------------------------ */
-	/* -- Active piece stuff -- */
-	/* ------------------------ */
-
-	/* Method paintActivePiece
-		'Paint' the active piece into the inactive layer*/
-	Frame.prototype.paintActivePiece = function(){
+/**'Paint' the active piece into the inactive layer
+*/
+Frame.prototype.paintActivePiece = function(){
+	if(this.activePiecePositionX)
+	{
 		this.addPiece(this.activePiecePositionX,this.activePiecePositionY,this.activePieceType,this.activePieceOrientation,'inactive',false);
-	};
 
-	/* Method lockActivePiece
-		Set the active piece variable to zero, paint the active piece*/
-	Frame.prototype.lockActivePiece = function(){
+	}
+};
+
+/** Set the active piece variable to zero, paint the active piece
+*/
+Frame.prototype.lockActivePiece = function(){
+	if(this.activePiecePositionX)
+	{
 		this.paintActivePiece();
 		this.activePieceType = '';
 		this.activePieceOrientation = '';
@@ -655,24 +753,29 @@ function drawPaletteDeco(blockSize,sprite){
 		this.activePiecePositionY = '';
 		this.activePieceOpacity = 1.0;
 		this.painter.eraseLayer('active');
+	}
+};
 
-	};
-	/* Method dropActivePiece
-		Call addPiece at the same coordinate than the current one, only with the drop flag on, effectively dropping the active piece*/
-	Frame.prototype.dropActivePiece = function(){
+/** Call addPiece at the same coordinate than the current one, only with the drop flag on,
+effectively dropping the active piece
+*/
+Frame.prototype.dropActivePiece = function(){
+		if(this.activePiecePositionX)
+	{
+
 		this.addPiece(this.activePiecePositionX,this.activePiecePositionY,this.activePieceType,this.activePieceOrientation,'active',true);
-	};
-	/* Method dropActivePiece
-		Move the active piece in the given direction by calling addPiece again
+	}
+};
 
-		Parameter:
+/** Move the active piece in the given direction by calling addPiece again
 
-			direction - 'left', 'right', 'up', 'down'
-		*/
-	Frame.prototype.moveActivePiece = function(direction){
-	var posX = this.activePiecePositionX;
-	var posY = this.activePiecePositionY;
-
+	@param {string} direction Direction in which the piece move. Possible value:'left', 'right', 'up', 'down'
+	*/
+Frame.prototype.moveActivePiece = function(direction){
+	if(this.activePiecePositionX)
+	{
+		var posX = this.activePiecePositionX;
+		var posY = this.activePiecePositionY;
 		switch(direction)
 		{
 			case 'left':
@@ -690,66 +793,65 @@ function drawPaletteDeco(blockSize,sprite){
 		}
 		if (this.piece_is_in(posX,posY,this.activePieceType,this.activePieceOrientation))
 		{
-		  this.addPiece(posX,posY,this.activePieceType,this.activePieceOrientation,'active',false);
+		this.addPiece(posX,posY,this.activePieceType,this.activePieceOrientation,'active',false);
 		}
-	};
-	/* Method dropActivePiece
-		Rotate the active piece in the given direction by calling addPiece again
+	}
+};
 
-		Parameter:
+/** Rotate the active piece in the given direction by calling addPiece again
 
-			direction - 'cw', 'ccw'
-		*/
-	Frame.prototype.rotateActivePiece = function(direction){
-	var ori = this.activePieceOrientation;
+	@param {string} direction Direction in which the piece rotate. Possible value:'cw', 'ccw'
+	*/
+Frame.prototype.rotateActivePiece = function(direction){
+var ori = this.activePieceOrientation;
 
-		switch(direction)
-		{
-			case 'cw':
-				switch(ori)
-				{
-					case 'i':
-						ori = 'cw';
-					break;
-					case 'cw':
-						ori = 'u';
-					break;
-					case 'u':
-						ori = 'ccw';
-					break;
-					case 'ccw':
-						ori = 'i';
-					break;
-				}
-			break;
-			case 'ccw':
-				switch(ori)
-				{
-					case 'i':
-						ori = 'ccw';
-					break;
-					case 'ccw':
-						ori = 'u';
-					break;
-					case 'u':
-						ori = 'cw';
-					break;
-					case 'cw':
-						ori = 'i';
-					break;
-				}
-			break;
+	switch(direction)
+	{
+		case 'cw':
+			switch(ori)
+			{
+				case 'i':
+					ori = 'cw';
+				break;
+				case 'cw':
+					ori = 'u';
+				break;
+				case 'u':
+					ori = 'ccw';
+				break;
+				case 'ccw':
+					ori = 'i';
+				break;
+			}
+		break;
+		case 'ccw':
+			switch(ori)
+			{
+				case 'i':
+					ori = 'ccw';
+				break;
+				case 'ccw':
+					ori = 'u';
+				break;
+				case 'u':
+					ori = 'cw';
+				break;
+				case 'cw':
+					ori = 'i';
+				break;
+			}
+		break;
 
-		}
-		if (this.piece_is_in(this.activePiecePositionX,this.activePiecePositionY,this.activePieceType,ori))
-		{
-		  this.addPiece(this.activePiecePositionX,this.activePiecePositionY,this.activePieceType,ori,'active',false);
-		}
-	};
-
+	}
+	if (this.piece_is_in(this.activePiecePositionX,this.activePiecePositionY,this.activePieceType,ori))
+	{
+	  this.addPiece(this.activePiecePositionX,this.activePiecePositionY,this.activePieceType,ori,'active',false);
+	}
+};
 
 
-	
+
+
 $(document).ready(function(){
 	/* ------------------------------------------------------------------------- */
 	/* ------------------------------------------------------------------------- */
@@ -812,8 +914,6 @@ $(document).ready(function(){
 	/* ------------------------------------------------------------------------- */
 
 
-	/*Event: CanvasPreview.mousemove
-		Manages the move event on the outermost canvas*/
 	aDiag.painter.CanvasPreview.mousemove(function(e){
 		var mouseX = e.pageX;
 		var mouseY = e.pageY;
@@ -1196,12 +1296,12 @@ $(document).ready(function(){
 			if(!aDiag.frames[aDiag.current_frame].nexthold[0])
 			{
 				aDiag.frames[aDiag.current_frame].modify_nexthold(0,type);
-				aDiag.painter.drawNextHold(0,type);
+				aDiag.painter.drawNextHold(0,type,aDiag.frames[aDiag.current_frame].RS);
 			}
 			else
 			{
 				aDiag.frames[aDiag.current_frame].modify_nexthold(0,'');
-				aDiag.painter.drawNextHold(0,'');
+				aDiag.painter.drawNextHold(0,'',aDiag.frames[aDiag.current_frame].RS);
 			}
 
 		}
@@ -1209,36 +1309,36 @@ $(document).ready(function(){
 			if(!aDiag.frames[aDiag.current_frame].nexthold[1])
 			{
 				aDiag.frames[aDiag.current_frame].modify_nexthold(1,type);
-				aDiag.painter.drawNextHold(1,type);
+				aDiag.painter.drawNextHold(1,type,aDiag.frames[aDiag.current_frame].RS);
 			}
 			else
 			{
 				aDiag.frames[aDiag.current_frame].modify_nexthold(1,'');
-				aDiag.painter.drawNextHold(1,'');
+				aDiag.painter.drawNextHold(1,'',aDiag.frames[aDiag.current_frame].RS);
 			}
 		}
 		if (pfX >= 8 && pfX < 11) {
 			if(!aDiag.frames[aDiag.current_frame].nexthold[2])
 			{
 				aDiag.frames[aDiag.current_frame].modify_nexthold(2,type);
-				aDiag.painter.drawNextHold(2,type);
+				aDiag.painter.drawNextHold(2,type,aDiag.frames[aDiag.current_frame].RS);
 			}
 			else
 			{
 				aDiag.frames[aDiag.current_frame].modify_nexthold(2,'');
-				aDiag.painter.drawNextHold(2,'');
+				aDiag.painter.drawNextHold(2,'',aDiag.frames[aDiag.current_frame].RS);
 			}
 		}
 		if (pfX >= 11) {
 			if(!aDiag.frames[aDiag.current_frame].nexthold[3])
 			{
 				aDiag.frames[aDiag.current_frame].modify_nexthold(3,type);
-				aDiag.painter.drawNextHold(3,type);
+				aDiag.painter.drawNextHold(3,type,aDiag.frames[aDiag.current_frame].RS);
 			}
 			else
 			{
 				aDiag.frames[aDiag.current_frame].modify_nexthold(3,'');
-				aDiag.painter.drawNextHold(3,'');
+				aDiag.painter.drawNextHold(3,'',aDiag.frames[aDiag.current_frame].RS);
 			}
 		}
 
@@ -1247,41 +1347,47 @@ $(document).ready(function(){
 	/* ------------------------------------------------------------------------- */
 	/* --------------------------- BUTTON MANAGEMENT  -------------------------- */
 	/* ------------------------------------------------------------------------- */
-
-	$('#pf-current-frame').blur(function(){
-		if ($('#pf-current-frame').val() > 0 && $('#pf-current-frame').val() <= aDiag.frames.length)
-		{aDiag.goto_frame(parseInt($('#pf-current-frame').val()-1,10));}
+	/*--- Playfield ---*/
+	$('#pf-cmd_first').click(function(){
+		aDiag.first_frame();
 
 	});
 
+	$('#pf-cmd_prev').click(function(){
+		aDiag.previous_frame();
+		opacity_highlight_remove();
+		opacity_auto_highlight();
+	});
+
+	$('#pf-cmd_next').click(function(){
+		if(aDiag.current_frame < aDiag.frames.length - 1){
+		aDiag.next_frame();
+		opacity_highlight_remove();
+		opacity_auto_highlight();
+		}
+		else
+		{
+		$('#pf-cmd_clone').click();
+		}
+	});
+
+	$('#pf-cmd_last').click(function(){
+		aDiag.last_frame();
+	});
+	
+	// Progressbar
+	$('#pf-current-frame').blur(function(){
+		if ($('#pf-current-frame').val() > 0 && $('#pf-current-frame').val() <= aDiag.frames.length)
+		{aDiag.goto_frame(parseInt($('#pf-current-frame').val()-1,10));}
+	});
+
+	// Comment
 	$('#pf-comment').blur(function(){
 		aDiag.frames[aDiag.current_frame].comment = $(this).val();
 	});
 
-	$('#pf-duration').blur(function(){
-		aDiag.frames[aDiag.current_frame].duration = parseFloat($(this).val());
-	});
+	/*--- Active piece buttons ---*/
 
-	$('#pf-active-opacity').blur(function(){
-		aDiag.frames[aDiag.current_frame].modify_AP_opacity($(this).val());
-	});
-
-
-	$('#cmd_clear_active').click(function(){
-		aDiag.frames[aDiag.current_frame].clear('active');
-	});
-
-	$('#cmd_paint').click(function(){
-		aDiag.frames[aDiag.current_frame].paintActivePiece();
-	});
-
-	$('#cmd_lock').click(function(){
-		aDiag.frames[aDiag.current_frame].lockActivePiece();
-	});
-
-	$('#cmd_drop').click(function(){
-		aDiag.frames[aDiag.current_frame].dropActivePiece();
-	});
 	$('#cmd_move_up').click(function(){
 		aDiag.frames[aDiag.current_frame].moveActivePiece('up');
 	});
@@ -1298,14 +1404,443 @@ $(document).ready(function(){
 	$('#cmd_ccw').click(function(){
 		aDiag.frames[aDiag.current_frame].rotateActivePiece('ccw');
 	});
-
 	$('#cmd_cw').click(function(){
 		aDiag.frames[aDiag.current_frame].rotateActivePiece('cw');
+	});
+
+	$('#cmd_paint').click(function(){
+		aDiag.frames[aDiag.current_frame].paintActivePiece();
+	});
+	$('#cmd_lock').click(function(){
+		aDiag.frames[aDiag.current_frame].lockActivePiece();
+		if(IS_TIMING)
+		{
+			$('#cmd_reset_timer').click();
+		}
+		
+		// TODO:  hook on reset timer
+	});
+	$('#cmd_drop').click(function(){
+		aDiag.frames[aDiag.current_frame].dropActivePiece();
+	});
+	
+	$('#pf-duration').blur(function(){
+		aDiag.frames[aDiag.current_frame].duration = parseFloat($(this).val());
+	});
+
+	$('#pf-active-opacity').blur(function(){
+		aDiag.frames[aDiag.current_frame].modify_AP_opacity($(this).val());
+	});
+	// TODO: var $cmd_opacity_3 = $('#cmd_opacity_3') 
+
+	var $cmd_opacity_none = $('#cmd_opacity_none'),
+	$cmd_opacity_3 = $('#cmd_opacity_3'),
+	$cmd_opacity_2 = $('#cmd_opacity_2'),
+	$cmd_opacity_1 = $('#cmd_opacity_1'),
+	$cmd_opacity_lock = $('#cmd_opacity_lock'),
+	$cmd_opacity_flash = $('#cmd_opacity_flash'); 
+
+	function opacity_highlight_remove(){
+		$cmd_opacity_none.removeClass('pressed');
+		$cmd_opacity_3.removeClass('pressed');
+		$cmd_opacity_2.removeClass('pressed');
+		$cmd_opacity_1.removeClass('pressed');
+		$cmd_opacity_lock.removeClass('pressed');
+		$cmd_opacity_flash.removeClass('pressed');
+	}
+	// todo: what happens to the button when we change the frame ?
+	function opacity_auto_highlight(){
+		switch($('#pf-active-opacity').val()){
+		case '1.0':
+			$('#cmd_opacity_none').addClass('pressed')
+			break;
+		case '0.9':
+			$('#cmd_opacity_3').addClass('pressed')
+			break;
+		case '0.8':
+			$('#cmd_opacity_2').addClass('pressed')
+			break;
+		case '0.7':
+			$('#cmd_opacity_1').addClass('pressed')
+			break;
+		case '0.55':
+			$('#cmd_opacity_lock').addClass('pressed')
+			break;
+		case 'Flash':
+			$('#cmd_opacity_flash').addClass('pressed')
+			break;
+		}
+	}
+
+	// TODO more cache !
+
+	$('#cmd_opacity_none').click(function(){
+		$('#pf-active-opacity').val('1.0').blur();
+		opacity_highlight_remove();
+		$(this).addClass('pressed');
+	});
+	$('#cmd_opacity_3').click(function(){
+		$('#pf-active-opacity').val('0.9').blur();
+		opacity_highlight_remove();
+		$(this).addClass('pressed');
+	});
+	$('#cmd_opacity_2').click(function(){
+		$('#pf-active-opacity').val('0.8').blur();
+		opacity_highlight_remove();
+		$(this).addClass('pressed');
+	});
+	$('#cmd_opacity_1').click(function(){
+		$('#pf-active-opacity').val('0.7').blur();
+		opacity_highlight_remove();
+		$(this).addClass('pressed');
+	});
+	$('#cmd_opacity_lock').click(function(){
+		$('#pf-active-opacity').val('0.55').blur();
+		opacity_highlight_remove();
+		$(this).addClass('pressed');
+	});
+	$('#cmd_opacity_flash').click(function(){
+		$('#pf-active-opacity').val('Flash').blur();
+		opacity_highlight_remove();
+		$(this).addClass('pressed');
+	});
+
+	var TIMER, TIMER_MODE,IS_TIMING = false;
+
+	$('#cmd_startstop_timer').click(function(){
+		
+		if(IS_TIMING) // -> stop timer
+		{
+			$(this).attr('value','Start timer');
+			IS_TIMING = false;
+			$('#indic').html('');
+			$('#cmd_timer_tick').attr('style','display:none');
+			$('#hr_tick').attr('style','display:none;');
+		}
+		else // -> start timer
+		{
+			$(this).attr('value','Stop timer');
+			IS_TIMING = true;
+			TIMER = 1;
+			$('#indic').html(parseInt(TIMER_MODEL[$('#timer-select').val()].lock-TIMER,10)+' frames left until lock');
+			$('#cmd_timer_tick').attr('style','');
+			$('#hr_tick').attr('style','');
+		}
+		
+	});
+
+	function timer_tick(){
+		console.log(TIMER);
+		TIMER++;
+		$('#indic').html(parseInt(TIMER_MODEL[$('#timer-select').val()].lock-TIMER,10)+' frames left until lock');
+		if(TIMER <= TIMER_MODEL[$('#timer-select').val()].separation1) // 12
+		{
+			$('#cmd_opacity_none').click();
+		console.log('v0');
+		}
+		if (TIMER <= TIMER_MODEL[$('#timer-select').val()].separation2 &&
+			TIMER > TIMER_MODEL[$('#timer-select').val()].separation1) //18
+		{
+			$('#cmd_opacity_3').click();
+		console.log('v1');
+		}
+		if (TIMER <= TIMER_MODEL[$('#timer-select').val()].separation3 &&
+			TIMER > TIMER_MODEL[$('#timer-select').val()].separation1 &&
+			TIMER > TIMER_MODEL[$('#timer-select').val()].separation2) //24
+		{
+			$('#cmd_opacity_2').click();
+		console.log('v2');
+		}
+		if (TIMER <= TIMER_MODEL[$('#timer-select').val()].separation4 &&
+			TIMER > TIMER_MODEL[$('#timer-select').val()].separation1 &&
+			TIMER > TIMER_MODEL[$('#timer-select').val()].separation2 &&
+			TIMER > TIMER_MODEL[$('#timer-select').val()].separation3) // 30
+		{
+			$('#cmd_opacity_1').click();
+		console.log('v3');
+		}
+		if(TIMER  == parseInt(TIMER_MODEL[$('#timer-select').val()].separation4)) // 30
+		{
+			$('#cmd_opacity_lock').click();
+			$('#indic').html('Lock');
+		}
+		if(TIMER  == parseInt(1+TIMER_MODEL[$('#timer-select').val()].separation4)) // 30
+		{
+			$('#cmd_opacity_flash').click();
+			$('#indic').html('Flash');
+		}
+		if(TIMER  == parseInt(2+TIMER_MODEL[$('#timer-select').val()].separation4)) // 30
+		{
+			$('#cmd_opacity_flash').click();
+			$('#indic').html('Flash');
+		}
+		if(TIMER  > parseInt(2+TIMER_MODEL[$('#timer-select').val()].separation4)) // 30
+		{
+			$('#indic').html('Locked!');
+			$('#cmd_lock').click();
+			$('#cmd_startstop_timer').click();
+		}
+		
+	}
+	var TIMER_MODEL = {
+		TGM1: {
+			ARE: 30,
+			lock: 30, // 30 -1
+			separation1: 12, // +12f = 40%
+			separation2: 18, // +6f = 20%
+			separation3: 24, // +6f = 20%
+			separation4: 30 // +6f =20%
+			// 
+			},
+		Master000699:{
+			ARE: 25,
+			lock: 30,
+			separation1: 12,
+			seperation2: 18,
+			separation3: 24,
+			separation4: 30
+		},
+		Master700799:{
+			ARE: 16,
+			lock: 30,
+			separation1: 12,
+			seperation2: 18,
+			separation3: 24,
+			separation4: 30
+		},
+		Master800899:{
+			ARE: 12,
+			lock: 30,
+			separation1: 12,
+			seperation2: 18,
+			separation3: 24,
+			separation4: 30
+		},
+		Master900999:{
+			ARE: 12,
+			lock: 17,
+			separation1: 6,
+			seperation2: 10,
+			separation3: 14,
+			separation4: 17
+		},
+		Master10001099:{
+			ARE: 6,
+			lock: 17,
+			separation1: 6,
+			seperation2: 10,
+			separation3: 14,
+			separation4: 17
+		},
+		Master11001199:{
+			ARE: 5,
+			lock: 15,
+			separation1: 6,
+			seperation2: 10,
+			separation3: 13,
+			separation4: 15
+		},
+		Master12001299:{
+			ARE: 4,
+			lock: 15,
+			separation1: 6,
+			seperation2: 10,
+			separation3: 13,
+			separation4: 15
+		},
+		Death000099:{
+			ARE: 16,
+			lock: 30,
+			separation1: 12,
+			seperation2: 18,
+			separation3: 24,
+			separation4: 30
+		},
+		Death100199:{
+			ARE: 12,
+			lock: 26,
+			separation1: 10,
+			seperation2: 16,
+			separation3: 21,
+			separation4: 26
+		},
+		Death200299:{
+			ARE: 12,
+			lock: 22,
+			separation1: 9,
+			seperation2: 14,
+			separation3: 18,
+			separation4: 22
+		},
+		Death300399:{
+			ARE: 6,
+			lock: 18,
+			separation1: 8,
+			seperation2: 12,
+			separation3: 15,
+			separation4: 18
+		},
+		Death400499:{
+			ARE: 5,
+			lock: 15,
+			separation1: 6,
+			seperation2: 9,
+			separation3: 12,
+			separation4: 15
+		},
+		Death500999:{
+			ARE: 4,
+			lock: 15,
+			separation1: 6,
+			seperation2: 9,
+			separation3: 12,
+			separation4: 15
+		},
+		Shirase000199:{
+			ARE: 10,
+			lock: 18,
+			separation1: 8,
+			seperation2: 12,
+			separation3: 15,
+			separation4: 18
+		},
+		Shirase200299:{
+			ARE: 10,
+			lock: 17,
+			separation1: 7,
+			seperation2: 11,
+			separation3: 14,
+			separation4: 17
+		},
+		Shirase300499:{
+			ARE: 4,
+			lock: 15,
+			separation1: 6,
+			seperation2: 9,
+			separation3: 12,
+			separation4: 15
+		},
+		Shirase500599:{
+			ARE: 4,
+			lock: 13,
+			separation1: 6,
+			seperation2: 9,
+			separation3: 11,
+			separation4: 13
+		},
+		Shirase6001099:{
+			ARE: 4,
+			lock: 12,
+			separation1: 6,
+			seperation2: 8,
+			separation3: 10,
+			separation4: 12
+		},
+		Shirase11001199:{
+			ARE: 4,
+			lock: 10,
+			separation1: 4,
+			seperation2: 6,
+			separation3: 8,
+			separation4: 10
+		},
+		Shirase12001299:{
+			ARE: 4,
+			lock: 8,
+			separation1: 4,
+			seperation2: 6,
+			separation3: 7,
+			separation4: 8
+		},
+		TDSSRS:{
+			ARE: 1, // 0 in reality
+			lock: 30,
+			separation1: 10,
+			seperation2: 17,
+			separation3: 25,
+			separation4: 30
+		}
+	}
+
+	/*--- Frame buttons ---*/
+	$('#cmd_clear_lines').click(function(){
+		aDiag.frames[aDiag.current_frame].clear_lines();
+	});
+	$('#cmd_stack_lines').click(function(){
+		aDiag.frames[aDiag.current_frame].stack_lines();
+	});
+	$('#cmd_clearstack_lines').click(function(){
+		aDiag.frames[aDiag.current_frame].clear_lines();
+		aDiag.frames[aDiag.current_frame].stack_lines();
 	});
 
 	$('#cmd_clear_inactive').click(function(){
 		aDiag.frames[aDiag.current_frame].clear('inactive');
 	});
+	$('#cmd_clear_active').click(function(){
+		aDiag.frames[aDiag.current_frame].clear('active');
+	});
+	$('#cmd_clear_decoration').click(function(){
+		aDiag.frames[aDiag.current_frame].clear('decoration');
+	});
+
+	$('#cmd_clear_all').click(function(){
+		aDiag.frames[aDiag.current_frame].clear('all');
+	});
+
+	$('#activate-white-border').click(function(){
+	//change-all-border
+
+		if ($('#activate-white-border:checked').val())
+		{
+			aDiag.frames[aDiag.current_frame].modify_whiteborder(true);
+		}
+		else
+		{
+			aDiag.frames[aDiag.current_frame].modify_whiteborder(false);
+		}
+
+	});
+	$('#change-all-whiteborder').click(function(){
+		aDiag.modify_whiteborder($('#border-select').val());
+	});
+
+	$('#border-select').change(function(){
+		aDiag.frames[aDiag.current_frame].modify_border($('#border-select').val());
+	});
+	$('#change-all-border').click(function(){
+		aDiag.modify_border($('#border-select').val());
+	});
+
+	$('#rs-select').change(function(){
+		aDiag.frames[aDiag.current_frame].modify_RS($('#rs-select').val());
+	});
+	$('#change-all-rs').click(function(){
+		aDiag.modify_RS($('#rs-select').val());
+	});
+
+	$('#duration-1f').click(function(){
+		$('#pf-duration').val('1').blur();
+	});
+	$('#duration-5f').click(function(){
+		$('#pf-duration').val('5').blur();
+	});
+	$('#duration-15f').click(function(){
+		$('#pf-duration').val('15').blur();
+	});
+	$('#duration-60f').click(function(){
+		$('#pf-duration').val('60').blur();
+	});
+	$('#duration-remaining').click(function(){
+		// TODO: implement this
+		//$('#pf-duration').val('60').blur();
+	});
+	$('#change-all-duration').click(function(){
+		aDiag.modify_duration(parseInt($('#pf-duration').val(),10));
+		console.log(parseInt($('#pf-duration').val(),10));
+	});
+
+	/*--- Diagram buttons ---*/
 
 	$('#pf-cmd_new').click(function(){
 		aDiag.new_frame();
@@ -1314,37 +1849,34 @@ $(document).ready(function(){
 	$('#pf-cmd_clone').click(function(){
 		aDiag.new_copy_frame();
 		aDiag.frames[aDiag.current_frame].draw();
+		if(IS_TIMING)
+		{
+			timer_tick();
+		}
 	});
-
 	$('#pf-cmd_del').click(function(){
 		aDiag.remove_current_frame();
 		aDiag.frames[aDiag.current_frame].draw();
 		aDiag.update_framecount();
 	});
-
-
-	$('#pf-cmd_first').click(function(){
-		aDiag.first_frame();
+	$('#pf-cmd_remove_following').click(function(){
+		aDiag.remove_following_frames();
+		aDiag.frames[aDiag.current_frame].draw();
+		aDiag.update_framecount();
 	});
 
-	$('#pf-cmd_prev').click(function(){
-		aDiag.previous_frame();
-	});
-
-	$('#pf-cmd_next').click(function(){
-		if(aDiag.current_frame < aDiag.frames.length - 1){
-		aDiag.next_frame();
-		}
-		else
+	$('#cmd_nuke').click(function(){
+		var confirmation = window.confirm('This will reset everything ! Are you sure ?');
+		if (confirmation)
 		{
-		aDiag.new_copy_frame();
+		aDiag.remove_all_playfields();
 		aDiag.frames[aDiag.current_frame].draw();
 		}
 	});
-
-	$('#pf-cmd_last').click(function(){
-		aDiag.last_frame();
+	$('#cmd_timer_tick').click(function(){
+		timer_tick();
 	});
+	/* -------------------------- */
 
 	$('#tetramino-panel table').click(function(){
 		$('#tetramino-panel td').removeClass('pressed');
@@ -1635,6 +2167,9 @@ $(document).ready(function(){
 
 	});
 
+
+
+
 	/* ---------------------------------------------------------------------------- */
 	/* --------------------------- ANIMATION MANAGEMENT  -------------------------- */
 	/* ---------------------------------------------------------------------------- */
@@ -1752,17 +2287,11 @@ $(document).ready(function(){
 
 
 	var $mainutilities = $('#main-utilities');
-	var $secondaryutilities = $('#main-utilities');
 	var $tabdeco = $('#tab-deco');
 	var $tabtetramino = $('#tab-tetramino');
-	var $tabactions = $('#tab-actions');
-	var $tabapcontrol = $('#tab-apcontrol');
-	var $tabproperties = $('#tab-properties');
 
 	var $tetraminopanel = $('#tetramino-panel');
 	var $decorationspanel = $('#panel-decorations');
-	var $apcontrolpanel = $('#panel-apcontrol');
-	var $propertiespanel = $('#panel-proprieties');
 
 	//var $actionspanel = $("#panel-actions");
 
@@ -1773,47 +2302,12 @@ $(document).ready(function(){
 		TETRAMINO_PANEL = false;
 	}
 
-	function hideallpanelexcept(exception){
+	function primary_hideallpanelexcept(exception){
 		if (exception !='decorationspanel')
 			{$decorationspanel.fadeOut(200);}
 		if (exception !='tetraminopanel')
 			{$tetraminopanel.fadeOut(200);}
-		if (exception !='propertiespanel')
-			{$propertiespanel.fadeOut(200);}
-		if (exception !='apcontrolpanel')
-			{$apcontrolpanel.fadeOut(200);}
 	}
-
-
-	$tabdeco.click(function(){
-		setpanelfalse();
-		DECORATION_PANEL = true;
-		$mainutilities.removeClass().addClass('border-deco');
-		hideallpanelexcept('decorationspanel');
-		$decorationspanel.delay(200).fadeIn();
-	});
-
-	$tabtetramino.click(function(){
-		setpanelfalse();
-		TETRAMINO_PANEL = true;
-		$mainutilities.removeClass().addClass('border-tetramino');
-		hideallpanelexcept('tetraminopanel');
-		$tetraminopanel.delay(200).fadeIn(200);
-		setTimeout(function(){drawPalette(aDiag.frames[aDiag.current_frame].RS,8,aPainter.sprite)},200); // TODO: isn't there a better way to do that ?
-
-	});
-
-	$tabproperties.click(function(){
-		$secondaryutilities.removeClass().addClass('border-properties');
-		hideallpanelexcept('propertiespanel');
-		$propertiespanel.delay(200).fadeIn(200);
-	});
-
-	$tabapcontrol.click(function(){
-		$secondaryutilities.removeClass().addClass('border-AP');
-		hideallpanelexcept('apcontrolpanel');
-		$apcontrolpanel.delay(200).fadeIn(200);
-	});
 
 	/*
 	$tabactions.click(function(){
@@ -1842,7 +2336,7 @@ $(document).ready(function(){
 		$eraser.removeClass('pressed');
 	}
 
-	function hideallpanelexcept(currentpanel){
+	function primary_hideallpanelexcept(currentpanel){
 		if(currentpanel != 'deco')
 			{$decorationspanel.fadeOut();}
 		if(currentpanel != 'pieceselection')
@@ -1857,7 +2351,7 @@ $(document).ready(function(){
 
 
 	$tabdeco.click(function(){
-		hideallpanelexcept('deco');
+		primary_hideallpanelexcept('deco');
 		setpanelfalse();
 		DECORATION_PANEL = true;
 		$utilities.removeClass().addClass('border-deco');
@@ -1865,7 +2359,7 @@ $(document).ready(function(){
 	});
 
 	$tabtetramino.mousedown(function(){
-		hideallpanelexcept('pieceselection');
+		primary_hideallpanelexcept('pieceselection');
 		setpanelfalse();
 		TETRAMINO_PANEL = true;
 		$utilities.removeClass().addClass('border-active');
@@ -1875,7 +2369,7 @@ $(document).ready(function(){
 	});
 
 	$tabproperties.mousedown(function(){
-		hideallpanelexcept('properties');
+		primary_hideallpanelexcept('properties');
 		setpanelfalse();
 		$propertiespanel.fadeIn();
 		$utilities.removeClass().addClass('border-properties');
@@ -1883,7 +2377,7 @@ $(document).ready(function(){
 	});
 
 	$tabactions.mousedown(function(){
-		hideallpanelexcept('actions');
+		primary_hideallpanelexcept('actions');
 		settoolfalse();
 		$actionspanel.fadeIn();
 	});
@@ -1972,24 +2466,6 @@ $(document).ready(function(){
 		}
 	});
 
-//////// Actions panel////////////
-
-	$('#cmd_nuke').click(function(){
-		var confirmation = window.confirm('This will reset everything ! Are you sure ?');
-		if (confirmation)
-		{
-		aDiag.remove_all_playfields();
-		aDiag.frames[aDiag.current_frame].draw();
-		}
-	});
-	$('#cmd_remove_following').click(function(){
-		aDiag.frames[aDiag.current_frame].paintActivePiece();
-		aDiag.frames[aDiag.current_frame].draw();
-	});
-
-	$('#cmd_paint').click(function(){
-		aDiag.frames[aDiag.current_frame].paintActivePiece();
-	});
 
 //////// Properties panel////////////
 	/*
@@ -2009,67 +2485,7 @@ $(document).ready(function(){
 		aDiag.frames[aDiag.current_frame].modify_nexthold(0,$('#hold-select').val());
 	});
 	*/
-	$('#activate-white-border').click(function(){
-	//change-all-border
-
-		if ($('#activate-white-border:checked').val())
-		{
-			aDiag.frames[aDiag.current_frame].modify_whiteborder(true);
-		}
-		else
-		{
-			aDiag.frames[aDiag.current_frame].modify_whiteborder(false);
-		}
-
-	});
-
-	$('#change-all-border').click(function(){
-		aDiag.modify_border($('#border-select').val());
-	});
-
-	$('#rs-select').change(function(){
-		aDiag.frames[aDiag.current_frame].modify_RS($('#rs-select').val());
-	});
-	$('#change-all-rs').click(function(){
-		aDiag.modify_RS($('#rs-select').val());
-	});
-
-	$('#change-all-whiteborder').click(function(){
-		aDiag.modify_whiteborder($('#border-select').val());
-	});
-
-	$('#change-all-duration').click(function(){
-		aDiag.modify_duration(parseInt($('#pf-duration').val(),10));
-		console.log(parseInt($('#pf-duration').val(),10));
-	});
-	$('#duration-1f').click(function(){
-		$('#pf-duration').val('1').blur();
-	});
-	$('#duration-5f').click(function(){
-		$('#pf-duration').val('5').blur();
-	});
-	$('#duration-15f').click(function(){
-		$('#pf-duration').val('15').blur();
-	});
-	$('#duration-60f').click(function(){
-		$('#pf-duration').val('60').blur();
-	});
-
-	$('#cmd_opacity_3').click(function(){
-		$('#pf-active-opacity').val('0.9').blur();
-	});
-	$('#cmd_opacity_2').click(function(){
-		$('#pf-active-opacity').val('0.8').blur();
-	});
-	$('#cmd_opacity_1').click(function(){
-		$('#pf-active-opacity').val('0.7').blur();
-	});
-	$('#cmd_opacity_lock').click(function(){
-		$('#pf-active-opacity').val('0.65').blur();
-	});
-	$('#cmd_opacity_flash').click(function(){
-		$('#pf-active-opacity').val('Flash').blur();
-	});
+	
 
 
 	$('#export-image-frame-button').click(function(){
@@ -2235,3 +2651,188 @@ $(document).ready(function(){
 
 }); // end jquery.ready
 
+/*
+	var TIMER_MODEL = {
+		TGM1: {
+			ARE: 30,
+			lock: 30,
+			separation1: 10,
+			seperation2: 6,
+			separation3: 6,
+			separation4: 6
+			// 10+6+6+6 = 28; 28 + 1 + 2 = 31
+			},
+		Master000699:{
+			ARE: 25,
+			lock: 30,
+			separation1: 10,
+			seperation2: 6,
+			separation3: 6,
+			separation4: 6
+		},
+		Master700799:{
+			ARE: 16,
+			lock: 30,
+			separation1: 10,
+			seperation2: 6,
+			separation3: 6,
+			separation4: 6
+		},
+		Master800899:{
+			ARE: 12,
+			lock: 30,
+			separation1: 10,
+			seperation2: 6,
+			separation3: 6,
+			separation4: 6
+		},
+		Master900999:{
+			ARE: 12,
+			lock: 17,
+			separation1: 6,
+			seperation2: 4,
+			separation3: 4,
+			separation4: 3
+			// 5 + 4 + 3 + 3 = 14
+		},
+		Master10001099:{
+			ARE: 6,
+			lock: 17,
+			separation1: 6,
+			seperation2: 4,
+			separation3: 4,
+			separation4: 3
+			// 5 + 4 + 3 + 3 = 14
+		},
+		Master11001199:{
+			ARE: 5,
+			lock: 15,
+			separation1: 5,
+			seperation2: 4,
+			separation3: 4,
+			separation4: 3
+			// 4 + 4 + 3 + 3 = 14
+		},
+		Master12001299:{
+			ARE: 4,
+			lock: 15,
+			separation1: 5,
+			seperation2: 4,
+			separation3: 4,
+			separation4: 3
+			// 4 + 4 + 3 + 3 = 14
+		},
+		Death000099:{
+			ARE: 16,
+			lock: 30,
+			separation1: 10,
+			seperation2: 6,
+			separation3: 6,
+			separation4: 6
+		},
+		Death100199:{
+			ARE: 12,
+			lock: 26,
+			separation1: 9,
+			seperation2: 6,
+			separation3: 6,
+			separation4: 5
+		},
+		Death200299:{
+			ARE: 12,
+			lock: 22,
+			separation1: 7,
+			seperation2: 5,
+			separation3: 4,
+			separation4: 4
+		},
+		Death300399:{
+			ARE: 6,
+			lock: 18,
+			separation1: 6,
+			seperation2: 4,
+			separation3: 4,
+			separation4: 4
+		},
+		Death400499:{
+			ARE: 5,
+			lock: 15,
+			separation1: 5,
+			seperation2: 3,
+			separation3: 3,
+			separation4: 3
+		},
+		Death500999:{
+			ARE: 4,
+			lock: 15,
+			separation1: 5,
+			seperation2: 3,
+			separation3: 3,
+			separation4: 3
+		},
+		Shirase000199:{
+			ARE: 10,
+			lock: 18,
+			separation1: 6,
+			seperation2: 4,
+			separation3: 4,
+			separation4: 4
+		},
+		Shirase200299:{
+			ARE: 10,
+			lock: 17,
+			separation1: 6,
+			seperation2: 4,
+			separation3: 4,
+			separation4: 3
+		},
+		Shirase300499:{
+			ARE: 4,
+			lock: 15,
+			separation1: 5,
+			seperation2: 3,
+			separation3: 3,
+			separation4: 3
+		},
+		Shirase500599:{
+			ARE: 4,
+			lock: 13,
+			separation1: 4,
+			seperation2: 3,
+			separation3: 3,
+			separation4: 3
+		},
+		Shirase6001099:{
+			ARE: 4,
+			lock: 12,
+			separation1: 4,
+			seperation2: 3,
+			separation3: 3,
+			separation4: 2
+		},
+		Shirase11001199:{
+			ARE: 4,
+			lock: 10,
+			separation1: 4,
+			seperation2: 2,
+			separation3: 2,
+			separation4: 2
+		},
+		Shirase12001299:{
+			ARE: 4,
+			lock: 8,
+			separation1: 4,
+			seperation2: 2,
+			separation3: 1,
+			separation4: 1
+		},
+		TDSSRS:{
+			ARE: 1, // 0 in reality
+			lock: 30,
+			separation1: 10,
+			seperation2: 7,
+			separation3: 8,
+			separation4: 6
+		}
+	}
+*/

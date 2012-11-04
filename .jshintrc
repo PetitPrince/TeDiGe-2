@@ -1,24 +1,15 @@
 {
-    // --------------------------------------------------------------------
-    // JSHint Configuration
-    // --------------------------------------------------------------------
-
-    "trailing" : true, // Prohibit trailing whitespaces.
-    
-
-    "browser" : true, // Standard browser globals e.g. `window`, `document`.
-    "jquery" : true, // Enable globals exposed by jQuery JavaScript library.
-
-    "white" : false, // Check against strict whitespace and indentation rules.
-    "smarttabs": true,
+	// --------------------------------------------------------------------
+	// JSHint Configuration
+	// --------------------------------------------------------------------
+	"trailing" : true, // Prohibit trailing whitespaces.
+	"browser" : true, // Standard browser globals e.g. `window`, `document`.
+	"jquery" : true, // Enable globals exposed by jQuery JavaScript library.
+	"white" : false, // Check against strict whitespace and indentation rules.
+	"smarttabs": true,
 	"curly": true,
-    "maxerr" : 20000, // Maximum errors before stopping.
+	"maxerr" : 20000, // Maximum errors before stopping.
 	"immed": true,
 	"quotmark": "single",
 	"shadow": true, // for "variable is already defined"
-    "predef" : [ // Extra globals.
-        //"exampleVar",
-        //"anotherCoolGlobal",
-        //"iLoveDouglas"
-    ]
 }
