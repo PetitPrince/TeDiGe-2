@@ -97,7 +97,9 @@ return decodeURIComponent(escape(RawDeflate.inflate($.base64.decode(str))));
 								diagrams[newID].frames[diagrams[newID].current_frame].draw();
 							break;
 						}
+					diagrams[newID].first_frame();
 					}
+
 				}
 				},10);
 
