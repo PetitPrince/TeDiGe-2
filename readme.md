@@ -12,7 +12,7 @@ To use TeDiGe-2, you need to generate some TeDiGe-2 code and display it somewher
 You should have this folder structure similar to this:
 <pre>
 |- res
-  |---- <lot of stuff>
+  |---- lot of stuff
 |- jquery.js
 |- editor.html
 |- tedige-editor.css
