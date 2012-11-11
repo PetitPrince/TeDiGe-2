@@ -27,7 +27,7 @@ You should have this folder structure similar to this:
 Simply open editor.html . Note that the "get editor/viewer string" function assumes that viewer.html and editor.html are in the same folder.
 
 
-### Displaying the diagrams in an iframe
+### Displaying the diagrams in your page
 
 In your header place
 
