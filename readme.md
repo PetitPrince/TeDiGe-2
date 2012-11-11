@@ -105,4 +105,5 @@ TeDiGe-2 uses uglify-js2 to compress its code, and js-doc toolkit to generate it
 
 License
 --------
-Consider TeDiGe-2 to be under Creative Commons 3 Attribution (CC3 BY) ![CC3 BY Logo](http://i.creativecommons.org/l/by/3.0/ch/88x31.png "CC3 BY Logo")
+TeDiGe-2 is under Creative Commons 3 Attribution (CC3 BY) ![CC3 BY Logo](http://i.creativecommons.org/l/by/3.0/ch/88x31.png "CC3 BY Logo")
+Also, TeDiGe-2 is not affiliated nor endorsed by the Tetris Company (except if they happend to fork it :D). Yes, I know I use your trademark, but don't sue me, it would be stupid.
