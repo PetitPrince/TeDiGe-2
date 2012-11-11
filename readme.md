@@ -101,7 +101,7 @@ Contributing & Reporting bug
 ----------------------------
 If you want a particular feature or wish to report a big, please use the github system.
 
-TeDiGe-2 uses uglify-js2 to compress its code, and js-doc toolkit to generate its code.
+TeDiGe-2 uses [uglify-js2](https://github.com/mishoo/UglifyJS2) to compress its code, and [js-doc toolkit](https://code.google.com/p/jsdoc-toolkit/) to generate its documentation.
 
 License
 --------
