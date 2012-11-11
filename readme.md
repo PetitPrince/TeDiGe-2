@@ -11,16 +11,16 @@ Usage
 To use TeDiGe-2, you need to generate some TeDiGe-2 code and display it somewhere.
 You should have this folder structure similar to this:
 <pre>
-? res
-    ? <lot of stuff>
-? jquery.js
-? editor.html
-? tedige-editor.css
-? tedige-editor.min.js
-? tedige-inline.min.js
-? tedige-viewer.css
-? tedige-viewer.min.js
-? viewer.html
+|- res
+  |---- <lot of stuff>
+|- jquery.js
+|- editor.html
+|- tedige-editor.css
+|- tedige-editor.min.js
+|- tedige-inline.min.js
+|- tedige-viewer.css
+|- tedige-viewer.min.js
+|- viewer.html
 </pre>
 
 ### Setting up the editor
