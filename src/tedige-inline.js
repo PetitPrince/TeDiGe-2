@@ -1,4 +1,22 @@
-﻿	$(document).ready(function(){
+﻿/** @preserve TeDiGe -2- Inline code, used to generate embedded diagram (forum, etc...) - https://github.com/PetitPrince/TeDiGe-2/  */
+/** Encode a string with deflate
+
+	@param {string} Input string
+	@return {string} Output encoded string
+*/
+Diagram.prototype.flate_encode = function (str) {
+return $.base64.encode(RawDeflate.deflate(unescape(encodeURIComponent(str))));
+};
+
+/** Decode a string with deflate
+
+	@param {string} Input string
+	@return {string} Output decoded string
+*/
+Diagram.prototype.flate_decode = function(str) {
+return decodeURIComponent(escape(RawDeflate.inflate($.base64.decode(str))));
+};
+	$(document).ready(function(){
 		
 		// there's potentially loads and loads of playfield to render, so we create some containers
 		var diagrams = [];
@@ -45,7 +63,7 @@
 			insert[i++] = '		</div>';
 			insert[i++] = '	</div>';
 			insert[i++] = '	<div id="under">';
-			insert[i++] = '		<textarea readonly="" id="'+newID+'" class="comment"></textarea>';
+			insert[i++] = '		<textarea readonly="" id="'+newID+'-comment" class="comment"></textarea>';
 			insert[i++] = '	</div>';
 			$("#"+newID).html(insert.join('\n'));
 			
@@ -53,7 +71,6 @@
 			diagrams[newID] = new Diagram(painters[newID]);
 			diagrams[newID].init();
 			painters[newID].init();
-			console.log(newID); // remove this
 			});
 
 			// now that the initialization is finished, let's loop a second time
@@ -65,8 +82,7 @@
 				if(painters[newID].ready) {
 					clearInterval(initiator);
 					var titlesearch = $("#"+newID).attr('title');
-					console.log("titlesearch: "+titlesearch);
-					if(titlesearch) // load if there's something in the url
+					if(titlesearch) // load if there's something in the title
 					{
 					var littlestr = titlesearch.split("-");
 						switch(littlestr[1])

@@ -1,0 +1,1191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="generator" content="JsDoc Toolkit" />
+		
+		<title>JsDoc Reference - Diagram</title>
+
+        <link rel="stylesheet" href="../static/default.css" type="text/css" media="screen" charset="utf-8" />
+	</head>
+
+	<body>
+<!-- ============================== header ================================= -->	
+		<!-- begin static/header.html -->
+		<div id="header">
+</div>
+		<!-- end static/header.html -->
+
+        
+
+<!-- ============================== classes index ============================ -->
+		<div id="index">
+            <div id="docs">
+                
+            </div>
+			
+<h2>Index</h2>
+<ul class="classList">
+  <li><a href="../files.html">File Index</a></li>
+  <li><a href="../index.html">Class Index</a></li>
+  <li><a href="../symbolindex.html">Symbol Index</a></li>
+</ul>
+<h2>Classes</h2>
+<ul class="classList">
+	
+	<li><i><a href="../symbols/_global_.html">_global_</a></i></li>
+	
+	<li><a href="../symbols/Diagram.html">Diagram</a></li>
+	
+	<li><a href="../symbols/Frame.html">Frame</a></li>
+	
+	<li><a href="../symbols/Painter.html">Painter</a></li>
+	
+</ul>
+
+		</div>
+		
+        <div id="symbolList">
+           <!-- constructor list -->
+           
+             <h3>
+                 Class 
+             </h3>
+             <ul>
+                <li >
+                  <a href="../symbols/Diagram.html">Diagram</a>
+                </li>
+             </ul>
+           
+           <!-- end constructor list -->
+
+           <!-- properties list -->
+           
+           
+             <h3>Fields</h3>
+             <ul>
+               
+                 <li>
+                   <a href="../symbols/Diagram.html#current_frame">current_frame</a>
+                 </li>
+               
+                 <li>
+                   <a href="../symbols/Diagram.html#frames">frames</a>
+                 </li>
+               
+                 <li>
+                   <a href="../symbols/Diagram.html#-myself">myself</a>
+                 </li>
+               
+                 <li>
+                   <a href="../symbols/Diagram.html#painter">painter</a>
+                 </li>
+               
+                 <li>
+                   <a href="../symbols/Diagram.html#playing">playing</a>
+                 </li>
+               
+             </ul>
+           
+           <!-- end properties list -->
+
+           <!-- function summary -->
+           
+           
+             <h3>Methods</h3>
+             <ul>
+               
+                   <li>
+                        <a href="../symbols/Diagram.html#first_frame">first_frame</a>
+                    </li>
+               
+                   <li>
+                        <a href="../symbols/Diagram.html#flate_decode">flate_decode</a>
+                    </li>
+               
+                   <li>
+                        <a href="../symbols/Diagram.html#flate_encode">flate_encode</a>
+                    </li>
+               
+                   <li>
+                        <a href="../symbols/Diagram.html#getGIF">getGIF</a>
+                    </li>
+               
+                   <li>
+                        <a href="../symbols/Diagram.html#goto_frame">goto_frame</a>
+                    </li>
+               
+                   <li>
+                        <a href="../symbols/Diagram.html#init">init</a>
+                    </li>
+               
+                   <li>
+                        <a href="../symbols/Diagram.html#last_frame">last_frame</a>
+                    </li>
+               
+                   <li>
+                        <a href="../symbols/Diagram.html#load">load</a>
+                    </li>
+               
+                   <li>
+                        <a href="../symbols/Diagram.html#modify_border">modify_border</a>
+                    </li>
+               
+                   <li>
+                        <a href="../symbols/Diagram.html#modify_duration">modify_duration</a>
+                    </li>
+               
+                   <li>
+                        <a href="../symbols/Diagram.html#modify_RS">modify_RS</a>
+                    </li>
+               
+                   <li>
+                        <a href="../symbols/Diagram.html#modify_whiteborder">modify_whiteborder</a>
+                    </li>
+               
+                   <li>
+                        <a href="../symbols/Diagram.html#new_copy_frame">new_copy_frame</a>
+                    </li>
+               
+                   <li>
+                        <a href="../symbols/Diagram.html#new_frame">new_frame</a>
+                    </li>
+               
+                   <li>
+                        <a href="../symbols/Diagram.html#next_frame">next_frame</a>
+                    </li>
+               
+                   <li>
+                        <a href="../symbols/Diagram.html#previous_frame">previous_frame</a>
+                    </li>
+               
+                   <li>
+                        <a href="../symbols/Diagram.html#print">print</a>
+                    </li>
+               
+                   <li>
+                        <a href="../symbols/Diagram.html#print_differences">print_differences</a>
+                    </li>
+               
+                   <li>
+                        <a href="../symbols/Diagram.html#remove_all_playfields">remove_all_playfields</a>
+                    </li>
+               
+                   <li>
+                        <a href="../symbols/Diagram.html#remove_current_frame">remove_current_frame</a>
+                    </li>
+               
+                   <li>
+                        <a href="../symbols/Diagram.html#remove_following_frames">remove_following_frames</a>
+                    </li>
+               
+                   <li>
+                        <a href="../symbols/Diagram.html#update_framecount">update_framecount</a>
+                    </li>
+               
+             </ul>
+           
+           <!-- end function summary -->
+
+           <!-- events summary -->
+           
+           
+           <!-- end events summary -->
+        </div>
+
+		<div id="content">
+<!-- ============================== class title ============================ -->
+			<h1 class="classTitle">
+				Class Diagram
+			</h1>
+
+<!-- ============================== class summary ========================== -->			
+			<p class="description">
+				
+				
+			
+				
+				
+				
+					<br /><i>Defined in: </i> <a href="../symbols/src/Tetris-Diagram-Generator-2_src_tedige-core.js.html">tedige-core.js</a>.
+				
+			</p>
+
+<!-- ============================== constructor details ==================== -->		
+			
+			<div class="details"><a name="constructor"> </a>
+				<div class="sectionTitle">
+					Class Detail
+				</div>
+				
+				<div class="fixedFont">
+						<b>Diagram</b>(Painter)
+				</div>
+				
+				<div class="description">
+					<p>Painter</p>
+
+<pre><code>Diagram stores &lt;frame&gt;s and manipulate them. It receives command from the html and gives order
+to the underlying frame or directly to the painter. It acts a bit like a model in a MVC model.
+
+&lt;pre&gt;
+&gt;                       +---------------------+
+&gt;                       V                     |
+&gt;    Canvas/html &lt;-- Painter &lt;-- Frame &lt;-- Diagram
+&gt;           |                              ^^^^^^^
+&gt;           |                               ^
+&gt;           +-------------------------------+
+&lt;/pre&gt;
+</code></pre>
+					
+				</div>
+				
+				
+				
+				
+					
+						<dl class="detailList">
+						<dt class="heading">Parameters:</dt>
+						
+							<dt>
+								 <b>Painter</b>
+								
+							</dt>
+								<dd>A reference to its associated painter.</dd>
+						
+						</dl>
+					
+					
+					
+					
+					
+					
+						<dl class="detailList">
+						<dt class="heading">Requires:</dt>
+						
+							<dd>Frame</dd>
+						
+							<dd>Painter</dd>
+						
+						</dl>
+					
+					
+
+			</div>
+			
+
+<!-- ============================== field details ========================== -->		
+			
+              <div class="details">
+				<div class="sectionTitle">
+					Field Detail
+				</div>
+				
+                  <div class="member">
+					<a name="current_frame"> </a>
+					<div class="fixedFont">
+                      <div class="modifiers">
+                      </div>
+					
+					
+					<b>current_frame</b>
+					
+					</div>
+					<div class="description">
+						<p>A integer  that represent the current working frame</p>
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+                  </div>
+				
+                  <div class="member">
+					<a name="frames"> </a>
+					<div class="fixedFont">
+                      <div class="modifiers">
+                      </div>
+					
+					
+					<b>frames</b>
+					
+					</div>
+					<div class="description">
+						<p>An array containing Frames.</p>
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+                  </div>
+				
+                  <div class="member">
+					<a name="-myself"> </a>
+					<div class="fixedFont">
+                      <div class="modifiers">&lt;inner&gt; 
+                      </div>
+					
+					
+					<b>myself</b>
+					
+					</div>
+					<div class="description">
+						<p>A variable referencing the class, used to exploit closure stuff in other methods</p>
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+                  </div>
+				
+                  <div class="member">
+					<a name="painter"> </a>
+					<div class="fixedFont">
+                      <div class="modifiers">
+                      </div>
+					
+					
+					<b>painter</b>
+					
+					</div>
+					<div class="description">
+						<p>A reference to the diagram's associated painter</p>
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+                  </div>
+				
+                  <div class="member">
+					<a name="playing"> </a>
+					<div class="fixedFont">
+                      <div class="modifiers">
+                      </div>
+					
+					
+					<b>playing</b>
+					
+					</div>
+					<div class="description">
+						<p>A boolean that tells if the current frame is playing or not when the play/pause button is pressed</p>
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+                  </div>
+				
+              </div>
+			
+
+<!-- ============================== method details ========================= -->		
+			
+              <div class="details">
+				<div class="sectionTitle">
+					Method Detail
+				</div>
+				
+                  <div class="member">
+					<a name="first_frame"> </a>
+					<div class="fixedFont">
+                      <div class="modifiers">
+                      </div>
+					
+					<b>first_frame</b>()
+					
+					</div>
+					<div class="description">
+						<p>Switches the current frame to the first one, displays it.</p>
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+                  </div>
+				
+                  <div class="member">
+					<a name="flate_decode"> </a>
+					<div class="fixedFont">
+                      <div class="modifiers">
+                      </div>
+					<span class="light">{string}</span>
+					<b>flate_decode</b>(Input)
+					
+					</div>
+					<div class="description">
+						<p>Decode a string with deflate</p>
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/Tetris-Diagram-Generator-2_src_tedige-editor.js.html">tedige-editor.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>Input</b>
+									
+								</dt>
+								<dd>string</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{string}</span> Output decoded string</dd>
+							
+							</dl>
+						
+						
+						
+
+                  </div>
+				
+                  <div class="member">
+					<a name="flate_encode"> </a>
+					<div class="fixedFont">
+                      <div class="modifiers">
+                      </div>
+					<span class="light">{string}</span>
+					<b>flate_encode</b>(Input)
+					
+					</div>
+					<div class="description">
+						<p>Encode a string with deflate</p>
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/Tetris-Diagram-Generator-2_src_tedige-editor.js.html">tedige-editor.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>Input</b>
+									
+								</dt>
+								<dd>string</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{string}</span> Output encoded string</dd>
+							
+							</dl>
+						
+						
+						
+
+                  </div>
+				
+                  <div class="member">
+					<a name="getGIF"> </a>
+					<div class="fixedFont">
+                      <div class="modifiers">
+                      </div>
+					
+					<b>getGIF</b>()
+					
+					</div>
+					<div class="description">
+						<p>Generate a gif from the diagram data</p>
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/Tetris-Diagram-Generator-2_src_tedige-editor.js.html">tedige-editor.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+                  </div>
+				
+                  <div class="member">
+					<a name="goto_frame"> </a>
+					<div class="fixedFont">
+                      <div class="modifiers">
+                      </div>
+					
+					<b>goto_frame</b>(frame_number)
+					
+					</div>
+					<div class="description">
+						<p>Erase everything, paint what's on the given frame number</p>
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{number}</span> <b>frame_number</b>
+									
+								</dt>
+								<dd>Indicate</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+                  </div>
+				
+                  <div class="member">
+					<a name="init"> </a>
+					<div class="fixedFont">
+                      <div class="modifiers">
+                      </div>
+					
+					<b>init</b>()
+					
+					</div>
+					<div class="description">
+						<p>Initialize the frames array.</p>
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+                  </div>
+				
+                  <div class="member">
+					<a name="last_frame"> </a>
+					<div class="fixedFont">
+                      <div class="modifiers">
+                      </div>
+					
+					<b>last_frame</b>()
+					
+					</div>
+					<div class="description">
+						<p>Switches the current frame to the last one, displays it.</p>
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+                  </div>
+				
+                  <div class="member">
+					<a name="load"> </a>
+					<div class="fixedFont">
+                      <div class="modifiers">
+                      </div>
+					
+					<b>load</b>(str)
+					
+					</div>
+					<div class="description">
+						<p>Load the encoded string given in parameter into the diagram</p>
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>str</b>
+									
+								</dt>
+								<dd>A string encoded with the format described below</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+                  </div>
+				
+                  <div class="member">
+					<a name="modify_border"> </a>
+					<div class="fixedFont">
+                      <div class="modifiers">
+                      </div>
+					
+					<b>modify_border</b>(kind)
+					
+					</div>
+					<div class="description">
+						<p>Changes the border style of the diagram.</p>
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/Tetris-Diagram-Generator-2_src_tedige-editor.js.html">tedige-editor.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>kind</b>
+									
+								</dt>
+								<dd>Desired border type. Currently supported:
+		'master' (gray-bluish), 'easy' (green) and 'death' (red). Defaults to master if
+		none is selected</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+                  </div>
+				
+                  <div class="member">
+					<a name="modify_duration"> </a>
+					<div class="fixedFont">
+                      <div class="modifiers">
+                      </div>
+					
+					<b>modify_duration</b>(Desired)
+					
+					</div>
+					<div class="description">
+						<p>Change the duration of each frame of a diagram</p>
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/Tetris-Diagram-Generator-2_src_tedige-editor.js.html">tedige-editor.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{number}</span> <b>Desired</b>
+									
+								</dt>
+								<dd>new duration</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+                  </div>
+				
+                  <div class="member">
+					<a name="modify_RS"> </a>
+					<div class="fixedFont">
+                      <div class="modifiers">
+                      </div>
+					
+					<b>modify_RS</b>(system)
+					
+					</div>
+					<div class="description">
+						<p>Change the rotation system for the whole diagram</p>
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/Tetris-Diagram-Generator-2_src_tedige-editor.js.html">tedige-editor.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>system</b>
+									
+								</dt>
+								<dd>Desired rotation system. Possible value: 'ARS', 'SRS'</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+                  </div>
+				
+                  <div class="member">
+					<a name="modify_whiteborder"> </a>
+					<div class="fixedFont">
+                      <div class="modifiers">
+                      </div>
+					
+					<b>modify_whiteborder</b>(Whiteborder)
+					
+					</div>
+					<div class="description">
+						<p>Change the state of the white border for every frame</p>
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/Tetris-Diagram-Generator-2_src_tedige-editor.js.html">tedige-editor.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{boolean}</span> <b>Whiteborder</b>
+									
+								</dt>
+								<dd>status</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+                  </div>
+				
+                  <div class="member">
+					<a name="new_copy_frame"> </a>
+					<div class="fixedFont">
+                      <div class="modifiers">
+                      </div>
+					
+					<b>new_copy_frame</b>()
+					
+					</div>
+					<div class="description">
+						<p>Makes a new frame based on the current frame</p>
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+                  </div>
+				
+                  <div class="member">
+					<a name="new_frame"> </a>
+					<div class="fixedFont">
+                      <div class="modifiers">
+                      </div>
+					
+					<b>new_frame</b>()
+					
+					</div>
+					<div class="description">
+						<p>Adds a new frame after the current one and displays it.
+        <pre></p>
+
+<blockquote>
+  <p>[Sophie] {Elisa} [Therese] [Claire]
+                     ^
+                 [Jeanne]
+     =>
+     Sophie Elisa Jeanne Therese Claire
+          </pre></p>
+</blockquote>
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+                  </div>
+				
+                  <div class="member">
+					<a name="next_frame"> </a>
+					<div class="fixedFont">
+                      <div class="modifiers">
+                      </div>
+					
+					<b>next_frame</b>()
+					
+					</div>
+					<div class="description">
+						<p>Switches the current frame to the next one, displays it.</p>
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+                  </div>
+				
+                  <div class="member">
+					<a name="previous_frame"> </a>
+					<div class="fixedFont">
+                      <div class="modifiers">
+                      </div>
+					
+					<b>previous_frame</b>()
+					
+					</div>
+					<div class="description">
+						<p>Switches the previous frame to the previous one, displays it.</p>
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+                  </div>
+				
+                  <div class="member">
+					<a name="print"> </a>
+					<div class="fixedFont">
+                      <div class="modifiers">
+                      </div>
+					<span class="light">{string}</span>
+					<b>print</b>()
+					
+					</div>
+					<div class="description">
+						<p>Print the diagram</p>
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{string}</span> A string encoded in TeDiGe format</dd>
+							
+							</dl>
+						
+						
+						
+
+                  </div>
+				
+                  <div class="member">
+					<a name="print_differences"> </a>
+					<div class="fixedFont">
+                      <div class="modifiers">
+                      </div>
+					<span class="light">{string}</span>
+					<b>print_differences</b>(reference_frame, final_frame)
+					
+					</div>
+					<div class="description">
+						<p>Return the differences between two frames in a formatted string. WARNING: if you modify
+        that, please also modify Frame.print</p>
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{number}</span> <b>reference_frame</b>
+									
+								</dt>
+								<dd>Reference frame number</dd>
+							
+								<dt>
+									<span class="light fixedFont">{number}</span> <b>final_frame</b>
+									
+								</dt>
+								<dd>Final frame number</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{string}</span> A string encoded in TeDiGe format</dd>
+							
+							</dl>
+						
+						
+						
+
+                  </div>
+				
+                  <div class="member">
+					<a name="remove_all_playfields"> </a>
+					<div class="fixedFont">
+                      <div class="modifiers">
+                      </div>
+					
+					<b>remove_all_playfields</b>()
+					
+					</div>
+					<div class="description">
+						<p>Nukes everything !</p>
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+                  </div>
+				
+                  <div class="member">
+					<a name="remove_current_frame"> </a>
+					<div class="fixedFont">
+                      <div class="modifiers">
+                      </div>
+					
+					<b>remove_current_frame</b>()
+					
+					</div>
+					<div class="description">
+						<p>Remove the current frame from existence</p>
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+                  </div>
+				
+                  <div class="member">
+					<a name="remove_following_frames"> </a>
+					<div class="fixedFont">
+                      <div class="modifiers">
+                      </div>
+					
+					<b>remove_following_frames</b>()
+					
+					</div>
+					<div class="description">
+						<p>Remove every frame after the current one. Analogous to 'remove following' in fumen.</p>
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+                  </div>
+				
+                  <div class="member">
+					<a name="update_framecount"> </a>
+					<div class="fixedFont">
+                      <div class="modifiers">
+                      </div>
+					
+					<b>update_framecount</b>()
+					
+					</div>
+					<div class="description">
+						<p>Update the displayed frame index.</p>
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+                  </div>
+				
+              </div>
+			
+			
+<!-- ============================== event details ========================= -->		
+			
+			<hr />
+		</div>
+
+		
+<!-- ============================== footer ================================= -->
+		<div class="fineprint" style="clear:both;text-align:center">
+			
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Sun Nov 11 2012 20:34:48 GMT+0100 (CET)
+		</div>
+	</body>
+</html>

@@ -1,4 +1,5 @@
-﻿/** Draw a single palette decoration
+﻿/** @preserve TeDiGe-2 - Editor code, used in the editor page - https://github.com/PetitPrince/TeDiGe-2/  */
+/** Draw a single palette decoration
 
 	@function
 	@param {string} kind Define the color of the block to be drawn. Possible values: (SZLJTOIG)
@@ -87,7 +88,7 @@ function drawPaletteCell(type,orientation,RS,blockSize,sprite){
 	var Canvas = $('#editor-palette-'+type+orientation);
 	var ctx = Canvas[0].getContext('2d');
 	var matrix = getMatrix(type, orientation, RS);
-	Canvas.attr('width',Canvas.width());
+	$.data(Canvas,'width',Canvas.width()); // data is faster than Canvas.attr('width',Canvas.width()); http://jsperf.com/jquery-data-vs-attr/22
 
 	var color,spriteOffset;
 	switch(RS){
@@ -219,6 +220,44 @@ function drawPaletteDeco(blockSize,sprite){
 	}
 }
 
+
+	/** Get the jQuery object of the export canvas.*/
+	Painter.prototype.CanvasExport;
+	/** Get the 2d context of the related canvas*/
+	Painter.prototype.ContextExport;
+
+		/** Export the current frame into a png image. TODO: move this to tedige-editor.js
+	*/
+	Painter.prototype.exportImage = function(){
+		this.ContextExport.clearRect(0,0,this.CanvasWidth,this.CanvasHeight);
+		this.CanvasExport.attr('width',this.CanvasExport.width());
+		var buffer = document.createElement('canvas');
+		buffer.width = this.CanvasWidth;
+		buffer.height = this.CanvasHeight;
+
+		this.ContextExport.drawImage(this.CanvasBorder[0],0,0);
+		this.ContextExport.drawImage(this.CanvasBackground[0],0,0);
+		var imgData_PF = this.ContextPF.getImageData(0,0,this.CanvasWidth,this.CanvasHeight);
+		var tmp = 0;
+		for(var i=0, istop = imgData_PF.data.length ; i<istop ; i+=4)
+		{
+			imgData_PF.data[i+3]=parseInt(255*0.65,10); // get 0.65 opacity,
+			tmp = imgData_PF.data[i] + imgData_PF.data[i+1] + imgData_PF.data[i+2];
+
+			if(!tmp)
+			{
+				imgData_PF.data[i+3]= 0; // if black pixel -> transparent
+			}
+			tmp = 0;
+
+		}
+		buffer.getContext('2d').putImageData(imgData_PF,0,0);
+		this.ContextExport.drawImage(buffer,0,0);
+		this.ContextExport.drawImage(this.CanvasActive[0],0,0);
+		this.ContextExport.drawImage(this.CanvasWhiteborder[0],0,0);
+		this.ContextExport.drawImage(this.CanvasDeco[0],0,0);
+	};
+
 /* ------------------------------------------- */
 /* -- Frame:: Frames-wide properties change -- */
 /* ------------------------------------------- */
@@ -313,24 +352,6 @@ Diagram.prototype.getGIF = function(){
 /* -- Modifications (basic) -- */
 /* --------------------------- */
 
-/** Modify a block in the inactive layer.
-
-	@param {number} x Horizontal coordinate
-	@param {number} y Vertical coordinate
-	@param {string} type Piece type. Possible value: SZLJTOIG and E (empty)
-*/
-Frame.prototype.modify = function(x,y,type){
-	if (type == 'E')
-	{
-		this.playfield[x][y][0] = '';
-	}
-	else
-	{
-		this.playfield[x][y][0] = type;
-	}
-		//this.painter.drawBrowserBlock(x,y,type,this.RS,this.id,'inactive'); // I hope putting this here won't have any nasty side-effect
-};
-
 /** Remove a block at the given coordinate.
 
 	@param {number} x Horizontal coordinate
@@ -357,18 +378,6 @@ Frame.prototype.removeDeco = function(x,y){
 	this.playfield[x][y][1] = '';
 };
 
-
-
-/** Modify the decoration layer.
-
-	@param {number} x Horizontal coordinate
-	@param {number} y Vertical coordinate
-	@param {string} type Type of the decoration
-*/
-Frame.prototype.modify_decoration = function(x,y,type){
-	this.playfield[x][y][1] = type;
-};
-
 /** Modify the next pieces.
 
 		@param {number} position Define which position will be modified. 0 is hold, 1 is the next1 piece, 2 is the next2 piece, ...
@@ -390,55 +399,6 @@ Frame.prototype.modify_AP_opacity = function(level){
 	  this.addPiece(this.activePiecePositionX,this.activePiecePositionY,this.activePieceType,this.activePieceOrientation,'Flash',false);
 	}
 
-};
-
-/** Erase and delete one layer.
-
-	@param {string} mode Define which layer will be cleared. Possible value: 'inactive','active' or 'all'*/
-Frame.prototype.clear = function(mode){
-	switch(mode)
-	{
-		case 'inactive':
-			this.painter.eraseLayer('inactive');
-			for(var i = 0, istop = this.width; i < istop; i++) {
-				for(var j = 0, jstop = this.height; j < jstop; j++) {
-						this.playfield[i][j][0] = '';
-					}
-			}
-			break;
-		case 'active':
-			this.painter.eraseLayer('active');
-			this.activePieceType = '';
-			this.activePieceOrientation = '';
-			this.activePiecePositionX = '';
-			this.activePiecePositionY = '';
-			break;
-		case 'decoration':
-			this.painter.eraseLayer('decoration');
-			for(var i = 0, istop = this.width; i < istop; i++) {
-				for(var j = 0, jstop = this.height; j < jstop; j++) {
-						this.playfield[i][j][1] = '';
-					}
-			}
-
-			break;
-		case 'all':
-			this.painter.eraseLayer('inactive');
-			this.painter.eraseLayer('active');
-			this.painter.eraseLayer('decoration');
-			for(var i = 0, istop = this.width; i < istop; i++) {
-				for(var j = 0, jstop = this.height; j < jstop; j++) {
-						this.playfield[i][j][0] = '';
-						this.playfield[i][j][1] = '';
-					}
-			}
-			this.activePieceType = '';
-			this.activePieceOrientation = '';
-			this.activePiecePositionX = '';
-			this.activePiecePositionY = '';
-			this.comment = '';
-		break;
-	}
 };
 
 /**Changes the rotation system and call a redraw.
@@ -485,37 +445,6 @@ Frame.prototype.modify_whiteborder = function(new_border){
 
 };
 
-/** Change the control appearance
-
-	@param {string} direction Define in which position the joystick is. Possible value: 'all', 'u', 'r', 'l', 'd', 'ul', 'ur', 'dl', 'dr'
-	@param {string} state Define which color to draw. Possible value: 'rest', 'pressed' or 'holded'
-*/
-Frame.prototype.modify_control = function(direction,state){
-	this.joystick_state = state;
-	this.joystick_direction = direction;
-	this.painter.drawJoystick(this.joystick_direction,this.joystick_state);
-};
-
-/** Change the chosen button appearance
-
-	@param {string} button Define which button to draw. Possible value: 'A', 'B', 'C', 'D' for now.
-	@param {string} state Define in which color the button is drawn. Possible value: 'rest', 'pressed' or 'holded'.
-*/
-Frame.prototype.modify_button = function(button,state){
-	var index = '';
-	switch(button)
-	{
-		case 'A': index = 0; break;
-		case 'B': index = 1; break;
-		case 'C': index = 2; break;
-		case 'D': index = 3; break;
-		//case 'E': index = 4; break;
-		//case 'F': index = 5; break;
-	}
-	this.button_state[index] = state;
-	this.painter.drawButton(button,state);
-};
-
 /* ----------------------------- */
 /* -- Modifications (advanced)-- */
 /* ----------------------------- */
@@ -552,121 +481,6 @@ Frame.prototype.recursive_fill = function(x,y, replaced, replacer) {
 	if (x-1 >= 0)
 		{this.recursive_fill(x-1, y, replaced, replacer);}
 };
-
-/** 'Macro' method that modifies several times a given layer according to the tetramino shape given in parameter.
-
-	@param {number} x Horizontal coordinate
-	@param {number} y Vertical coordinate
-	@param {string} type Define the color of the block to be added. Possible values: (SZLJTOIG)
-	@param {string} orientation Orientation of the tetramino; Possible values: 'i', 'cw', 'ccw' or 'u'
-	@param {string} mode Define which layer will be modified. Possible value: 'inactive','active',
-					'garbage','preview','decoration-preview','decoration','erase','preview-eraser','Flash'
-	@param {boolean}} drop Is the method is in drop mode ?
-*/
-Frame.prototype.addPiece = function(x,y,type,orientation,mode,drop){
-	var matrix = getMatrix(type, orientation, this.RS);
-	var still_droping = true;
-	var counter = 0;
-	while(drop & still_droping ){
-		counter = 0;
-		for(var i = 0; i < 4; i++) {
-			for(var j = 0; j < 4; j++) {
-				if (matrix[i][j] &&
-					this.is_in(parseInt(x-1+j,10),parseInt(y+i,10)) &&
-					!(this.playfield[parseInt(x-1+j,10)][parseInt(y+i,10)][0])
-					)
-				{
-					counter++;
-				}
-			}
-		}
-		if (counter != 4) {
-			still_droping = false;
-		}
-		else
-		{
-			y++;
-		}
-	}
-
-	if (mode == 'inactive' || mode == 'garbage') {
-		this.painter.CanvasPreview.attr('width',this.painter.CanvasPreview.width()); //erase the preview layer
-	}
-	if (mode == 'active') {
-		this.activePieceType = type;
-		this.activePieceOrientation = orientation;
-		this.activePiecePositionX = x;
-		this.activePiecePositionY = y;
-		this.painter.CanvasActive.attr('width',this.painter.CanvasPreview.width()); //erase the active layer
-		this.painter.drawBrowserBlock(parseInt(x,10),parseInt(y,10),type,this.RS,this.id,'resetactive'); // TODO: potential bug ? (used erroneously parseInt(x+i) and parseInt(y+j) before...)
-	}
-
-	if (mode == 'decoration-preview')
-	{
-		this.painter.drawDeco(x,y,type,'preview');
-	}
-	else if (mode =='decoration'){
-		this.modify_decoration(x,y,type);
-		this.painter.drawDeco(x,y,type,'decoration');
-		this.painter.highlight(x,y);
-	}
-	else
-	{
-		for(var i = 0; i < 4; i++) {
-			for(var j = 0; j < 4; j++) {
-
-				//if (matrix[i][j] && this.is_in(parseInt(x-1+j,10),parseInt(y-1+i,10))) {
-				if (matrix[i][j] && this.piece_is_in(x,y,type,orientation)) {
-					switch(mode)
-					{
-						case 'inactive':
-							this.modify(parseInt(x-1+j,10),parseInt(y-1+i,10),type);
-							this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,'inactive');
-							if (this.whiteborder)
-							{
-								this.painter.drawLocalWhiteBorder(this.playfield,x-1+j,y-1+i);
-							}
-
-							this.painter.highlight(x-1+j,y-1+i);
-						break;
-						case 'garbage':
-							this.modify(parseInt(x-1+j,10),parseInt(y-1+i,10),'G');
-							this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),'G',this.RS,'inactive');
-							if (this.whiteborder)
-							{
-								this.painter.drawLocalWhiteBorder(this.playfield,x-1+j,y-1+i);
-							}
-
-							this.painter.highlight(x-1+j,y-1+i);
-						break;
-						case 'preview':
-							this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,'preview');
-						break;
-						case 'active':
-							this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,'active');
-							this.painter.highlight(x-1+j,y-1+i);
-							this.painter.drawBrowserBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,this.id,'active'); // erase this line to disable the browser thing
-						break;
-						case 'erase':
-							this.removeBlock(parseInt(x-1+j,10),parseInt(y-1+i,10));
-							this.painter.highlight(x-1+j,y-1+i);
-							this.painter.drawBrowserBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),'E',this.RS,this.id,'inactive'); // erase this line to disable the browser thing
-						break;
-						case 'preview-eraser':
-							this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),'G',this.RS,'preview');
-						break;
-						case 'Flash':
-							this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,'flash');
-							this.painter.highlight(x-1+j,y-1+i);
-							this.painter.drawBrowserBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,this.id,'active'); // erase this line to disable the browser thing
-						break;
-					}
-				}
-			}
-		}
-	}
-
-}; //end drawpiece
 
 Frame.prototype.stack_lines = function(){
 	var row_empty = true;
@@ -747,10 +561,7 @@ Frame.prototype.lockActivePiece = function(){
 	if(this.activePiecePositionX)
 	{
 		this.paintActivePiece();
-		this.activePieceType = '';
-		this.activePieceOrientation = '';
-		this.activePiecePositionX = '';
-		this.activePiecePositionY = '';
+		this.clear('active');
 		this.activePieceOpacity = 1.0;
 		this.painter.eraseLayer('active');
 	}
@@ -905,6 +716,10 @@ $(document).ready(function(){
 		}
 	},10);
 
+	/** Get the jQuery object of the export canvas.*/
+	aPainter.CanvasExport = $('#pf-export');
+	/** Get the 2d context of the related canvas*/
+	aPainter.ContextExport = aPainter.CanvasExport[0].getContext('2d');
 
 
 	/* ------------------------------------------------------------------------- */
@@ -1045,13 +860,10 @@ $(document).ready(function(){
 								if(aDiag.frames[aDiag.current_frame].lookup(pfX,pfY)) // erase on occucupied case here
 								{
 									aDiag.frames[aDiag.current_frame].addPiece(parseInt(pfX-1,10),pfY,type,orientation,'erase',TOOL_DROP);
-									console.log('ierase');
 								}
 								else
 								{
 								aDiag.frames[aDiag.current_frame].addPiece(parseInt(pfX-1,10),pfY,type,orientation,mode,TOOL_DROP);
-
-									console.log('iwrite :'+type);
 								}
 							}
 							else
@@ -1059,11 +871,9 @@ $(document).ready(function(){
 								if(aDiag.frames[aDiag.current_frame].lookup(pfX,pfY))  // erase on occucupied case here
 								{
 									aDiag.frames[aDiag.current_frame].addPiece(pfX,pfY,type,orientation,'erase',TOOL_DROP);
-									console.log('erase');
 								}
 								else
 								{
-									console.log('write');
 								aDiag.frames[aDiag.current_frame].addPiece(pfX,pfY,type,orientation,mode,TOOL_DROP);
 								}
 							}
@@ -1134,6 +944,7 @@ $(document).ready(function(){
 				//center
 				aDiag.painter.resetJoystick();
 				aDiag.frames[aDiag.current_frame].modify_control('c','rest');
+				aPainter.drawJoystick('c','rest');
 				return;
 			}
 
@@ -1176,6 +987,7 @@ $(document).ready(function(){
 			{
 				aDiag.painter.resetJoystick();
 				aDiag.frames[aDiag.current_frame].modify_control(direction,'pressed');
+				aPainter.drawJoystick(direction,'pressed');
 			}
 			else
 			{
@@ -1184,14 +996,18 @@ $(document).ready(function(){
 				case 'rest':
 					aDiag.painter.resetJoystick();
 					aDiag.frames[aDiag.current_frame].modify_control(direction,'pressed');
+					aPainter.drawJoystick(direction,'pressed');
+
 				break;
 				case 'pressed':
 					aDiag.painter.resetJoystick();
 					aDiag.frames[aDiag.current_frame].modify_control(direction,'holded');
+					aPainter.drawJoystick(direction,'holded');
 				break;
 				case 'holded':
 					aDiag.painter.resetJoystick();
 					aDiag.frames[aDiag.current_frame].modify_control(direction,'rest');
+					aPainter.drawJoystick(direction,'rest');
 				break;
 				default: break;
 				}
@@ -1262,12 +1078,15 @@ $(document).ready(function(){
 			{
 				case 'pressed':
 					aDiag.frames[aDiag.current_frame].modify_button(button,'holded');
+					aPainter.drawButton(button,'holded');
 					break;
 				case 'holded':
 					aDiag.frames[aDiag.current_frame].modify_button(button,'rest');
+					aPainter.drawButton(button,'rest');
 					break;
 				case 'rest':
 					aDiag.frames[aDiag.current_frame].modify_button(button,'pressed');
+					aPainter.drawButton(button,'pressed');
 					break;
 			}
 		}//end buttons
@@ -1389,22 +1208,47 @@ $(document).ready(function(){
 	/*--- Active piece buttons ---*/
 
 	$('#cmd_move_up').click(function(){
+		if($('#pf-auto-action-frame-increment:checked').val())
+		{
+			$('#pf-cmd_clone').click();
+		}
 		aDiag.frames[aDiag.current_frame].moveActivePiece('up');
+		
 	});
 	$('#cmd_move_down').click(function(){
+		if($('#pf-auto-action-frame-increment:checked').val())
+		{
+			$('#pf-cmd_clone').click();
+		}
 		aDiag.frames[aDiag.current_frame].moveActivePiece('down');
 	});
 	$('#cmd_move_left').click(function(){
+		if($('#pf-auto-action-frame-increment:checked').val())
+		{
+			$('#pf-cmd_clone').click();
+		}
 		aDiag.frames[aDiag.current_frame].moveActivePiece('left');
 	});
 	$('#cmd_move_right').click(function(){
+		if($('#pf-auto-action-frame-increment:checked').val())
+		{
+			$('#pf-cmd_clone').click();
+		}
 		aDiag.frames[aDiag.current_frame].moveActivePiece('right');
 	});
 
 	$('#cmd_ccw').click(function(){
+		if($('#pf-auto-action-frame-increment:checked').val())
+		{
+			$('#pf-cmd_clone').click();
+		}
 		aDiag.frames[aDiag.current_frame].rotateActivePiece('ccw');
 	});
 	$('#cmd_cw').click(function(){
+		if($('#pf-auto-action-frame-increment:checked').val())
+		{
+			$('#pf-cmd_clone').click();
+		}
 		aDiag.frames[aDiag.current_frame].rotateActivePiece('cw');
 	});
 
@@ -1418,7 +1262,6 @@ $(document).ready(function(){
 			$('#cmd_reset_timer').click();
 		}
 		
-		// TODO:  hook on reset timer
 	});
 	$('#cmd_drop').click(function(){
 		aDiag.frames[aDiag.current_frame].dropActivePiece();
@@ -1448,7 +1291,6 @@ $(document).ready(function(){
 		$cmd_opacity_lock.removeClass('pressed');
 		$cmd_opacity_flash.removeClass('pressed');
 	}
-	// todo: what happens to the button when we change the frame ?
 	function opacity_auto_highlight(){
 		switch($('#pf-active-opacity').val()){
 		case '1.0':
@@ -1506,6 +1348,14 @@ $(document).ready(function(){
 	});
 
 	var TIMER, TIMER_MODE,IS_TIMING = false;
+	$('#cmd_reset_timer').click(function(){
+		IS_TIMING = true;
+		TIMER = 1;
+		$('#indic').html(parseInt(TIMER_MODEL[$('#timer-select').val()].lock-TIMER,10)+' frames left until lock');
+		$('#cmd_timer_tick').attr('style','');
+		$('#cmd_reset_timer').attr('style','');
+		$('#hr_tick').attr('style','');
+	});
 
 	$('#cmd_startstop_timer').click(function(){
 		
@@ -1514,6 +1364,7 @@ $(document).ready(function(){
 			$(this).attr('value','Start timer');
 			IS_TIMING = false;
 			$('#indic').html('');
+			$('#cmd_reset_timer').attr('style','display:none');
 			$('#cmd_timer_tick').attr('style','display:none');
 			$('#hr_tick').attr('style','display:none;');
 		}
@@ -1524,32 +1375,29 @@ $(document).ready(function(){
 			TIMER = 1;
 			$('#indic').html(parseInt(TIMER_MODEL[$('#timer-select').val()].lock-TIMER,10)+' frames left until lock');
 			$('#cmd_timer_tick').attr('style','');
+			$('#cmd_reset_timer').attr('style','');
 			$('#hr_tick').attr('style','');
 		}
 		
 	});
 
 	function timer_tick(){
-		console.log(TIMER);
 		TIMER++;
 		$('#indic').html(parseInt(TIMER_MODEL[$('#timer-select').val()].lock-TIMER,10)+' frames left until lock');
 		if(TIMER <= TIMER_MODEL[$('#timer-select').val()].separation1) // 12
 		{
 			$('#cmd_opacity_none').click();
-		console.log('v0');
 		}
 		if (TIMER <= TIMER_MODEL[$('#timer-select').val()].separation2 &&
 			TIMER > TIMER_MODEL[$('#timer-select').val()].separation1) //18
 		{
 			$('#cmd_opacity_3').click();
-		console.log('v1');
 		}
 		if (TIMER <= TIMER_MODEL[$('#timer-select').val()].separation3 &&
 			TIMER > TIMER_MODEL[$('#timer-select').val()].separation1 &&
 			TIMER > TIMER_MODEL[$('#timer-select').val()].separation2) //24
 		{
 			$('#cmd_opacity_2').click();
-		console.log('v2');
 		}
 		if (TIMER <= TIMER_MODEL[$('#timer-select').val()].separation4 &&
 			TIMER > TIMER_MODEL[$('#timer-select').val()].separation1 &&
@@ -1557,7 +1405,6 @@ $(document).ready(function(){
 			TIMER > TIMER_MODEL[$('#timer-select').val()].separation3) // 30
 		{
 			$('#cmd_opacity_1').click();
-		console.log('v3');
 		}
 		if(TIMER  == parseInt(TIMER_MODEL[$('#timer-select').val()].separation4)) // 30
 		{
@@ -1596,7 +1443,7 @@ $(document).ready(function(){
 			ARE: 25,
 			lock: 30,
 			separation1: 12,
-			seperation2: 18,
+			separation2: 18,
 			separation3: 24,
 			separation4: 30
 		},
@@ -1604,7 +1451,7 @@ $(document).ready(function(){
 			ARE: 16,
 			lock: 30,
 			separation1: 12,
-			seperation2: 18,
+			separation2: 18,
 			separation3: 24,
 			separation4: 30
 		},
@@ -1612,7 +1459,7 @@ $(document).ready(function(){
 			ARE: 12,
 			lock: 30,
 			separation1: 12,
-			seperation2: 18,
+			separation2: 18,
 			separation3: 24,
 			separation4: 30
 		},
@@ -1620,7 +1467,7 @@ $(document).ready(function(){
 			ARE: 12,
 			lock: 17,
 			separation1: 6,
-			seperation2: 10,
+			separation2: 10,
 			separation3: 14,
 			separation4: 17
 		},
@@ -1628,7 +1475,7 @@ $(document).ready(function(){
 			ARE: 6,
 			lock: 17,
 			separation1: 6,
-			seperation2: 10,
+			separation2: 10,
 			separation3: 14,
 			separation4: 17
 		},
@@ -1636,7 +1483,7 @@ $(document).ready(function(){
 			ARE: 5,
 			lock: 15,
 			separation1: 6,
-			seperation2: 10,
+			separation2: 10,
 			separation3: 13,
 			separation4: 15
 		},
@@ -1644,7 +1491,7 @@ $(document).ready(function(){
 			ARE: 4,
 			lock: 15,
 			separation1: 6,
-			seperation2: 10,
+			separation2: 10,
 			separation3: 13,
 			separation4: 15
 		},
@@ -1652,7 +1499,7 @@ $(document).ready(function(){
 			ARE: 16,
 			lock: 30,
 			separation1: 12,
-			seperation2: 18,
+			separation2: 18,
 			separation3: 24,
 			separation4: 30
 		},
@@ -1660,7 +1507,7 @@ $(document).ready(function(){
 			ARE: 12,
 			lock: 26,
 			separation1: 10,
-			seperation2: 16,
+			separation2: 16,
 			separation3: 21,
 			separation4: 26
 		},
@@ -1668,7 +1515,7 @@ $(document).ready(function(){
 			ARE: 12,
 			lock: 22,
 			separation1: 9,
-			seperation2: 14,
+			separation2: 14,
 			separation3: 18,
 			separation4: 22
 		},
@@ -1676,7 +1523,7 @@ $(document).ready(function(){
 			ARE: 6,
 			lock: 18,
 			separation1: 8,
-			seperation2: 12,
+			separation2: 12,
 			separation3: 15,
 			separation4: 18
 		},
@@ -1684,7 +1531,7 @@ $(document).ready(function(){
 			ARE: 5,
 			lock: 15,
 			separation1: 6,
-			seperation2: 9,
+			separation2: 9,
 			separation3: 12,
 			separation4: 15
 		},
@@ -1692,7 +1539,7 @@ $(document).ready(function(){
 			ARE: 4,
 			lock: 15,
 			separation1: 6,
-			seperation2: 9,
+			separation2: 9,
 			separation3: 12,
 			separation4: 15
 		},
@@ -1700,7 +1547,7 @@ $(document).ready(function(){
 			ARE: 10,
 			lock: 18,
 			separation1: 8,
-			seperation2: 12,
+			separation2: 12,
 			separation3: 15,
 			separation4: 18
 		},
@@ -1708,7 +1555,7 @@ $(document).ready(function(){
 			ARE: 10,
 			lock: 17,
 			separation1: 7,
-			seperation2: 11,
+			separation2: 11,
 			separation3: 14,
 			separation4: 17
 		},
@@ -1716,7 +1563,7 @@ $(document).ready(function(){
 			ARE: 4,
 			lock: 15,
 			separation1: 6,
-			seperation2: 9,
+			separation2: 9,
 			separation3: 12,
 			separation4: 15
 		},
@@ -1724,7 +1571,7 @@ $(document).ready(function(){
 			ARE: 4,
 			lock: 13,
 			separation1: 6,
-			seperation2: 9,
+			separation2: 9,
 			separation3: 11,
 			separation4: 13
 		},
@@ -1732,7 +1579,7 @@ $(document).ready(function(){
 			ARE: 4,
 			lock: 12,
 			separation1: 6,
-			seperation2: 8,
+			separation2: 8,
 			separation3: 10,
 			separation4: 12
 		},
@@ -1740,7 +1587,7 @@ $(document).ready(function(){
 			ARE: 4,
 			lock: 10,
 			separation1: 4,
-			seperation2: 6,
+			separation2: 6,
 			separation3: 8,
 			separation4: 10
 		},
@@ -1748,7 +1595,7 @@ $(document).ready(function(){
 			ARE: 4,
 			lock: 8,
 			separation1: 4,
-			seperation2: 6,
+			separation2: 6,
 			separation3: 7,
 			separation4: 8
 		},
@@ -1756,7 +1603,7 @@ $(document).ready(function(){
 			ARE: 1, // 0 in reality
 			lock: 30,
 			separation1: 10,
-			seperation2: 17,
+			separation2: 17,
 			separation3: 25,
 			separation4: 30
 		}
@@ -1832,12 +1679,17 @@ $(document).ready(function(){
 		$('#pf-duration').val('60').blur();
 	});
 	$('#duration-remaining').click(function(){
-		// TODO: implement this
-		//$('#pf-duration').val('60').blur();
+	var one = TIMER_MODEL[$('#timer-select').val()].separation1 - TIMER;
+	var two = TIMER_MODEL[$('#timer-select').val()].separation2 - TIMER;
+	var three = TIMER_MODEL[$('#timer-select').val()].separation3 - TIMER;
+	var four = TIMER_MODEL[$('#timer-select').val()].separation4 - TIMER;
+
+	var time_remaining = Math.min((one > 0) ? one : 1000 ,(two > 0) ? two : 1000,(three > 0) ? three : 1000, (four > 0) ? four : 1000);
+	aDiag.modify_duration(time_remaining);
 	});
 	$('#change-all-duration').click(function(){
 		aDiag.modify_duration(parseInt($('#pf-duration').val(),10));
-		console.log(parseInt($('#pf-duration').val(),10));
+		//console.log(parseInt($('#pf-duration').val(),10));
 	});
 
 	/*--- Diagram buttons ---*/
@@ -1890,7 +1742,8 @@ $(document).ready(function(){
 
 	$('#fumen_import').click(function(){
 
-	var encstr = $('#import').val();
+	var fumenstring = $('#import').val();
+	var encstr = fumenstring.slice(fumenstring.indexOf('@')); // look for the thing that's after the version metadata
 	//'7ebhiipqbxqb5qbiqbqqbyqb6qbjqbrqbzqb7qbkqb?sqb0qb8qblqbtqb1qb9qbmqbuqb2qb+qbnqbvqb3qb/qb';// full rotation
 	//var encstr = '7eYKHWOA0BeTASIjRASIyQEF2BAABmBUcBviBLjBWe?BAwNyAU9sJEFb0HEvT98AwSVTASY6dD2488AwA2JEnoo2AD?MeGEzXpTASICKEFbEcEP5BAAMQBOGBrRBtXBqHBpPBEOBv4?A9JBJPBnDBO+ALABdHBFgBdgBlfBAAA';
 	//var encstr ='/dD3hbH3ibI3gbH3hbI3gbC3pbAoUxAso2TAySzTAS?ITeDZ2vvAuno2A5H5TASY6dD2488AQ+74Dzoo2Azo2TASo/?QEOAAAA7eEh9OEAlsyfCAAAbKBVJBSFBNdE3kbC3mbC3mbC?3mbC3icAwNEA6HXyD7eVtOqyAFreRAyp+5APGVTAyp78Axn?A6AFr+5AxnA6AFreRAyp7CEFStJEFreRAypeRAyZAAAlecF?ectHBtocFocNyc13cdiBt3cl3cF3cNBd1mBjYBZzcBcBGZB?aYBUycchBAAA";
@@ -2182,7 +2035,7 @@ $(document).ready(function(){
 	//aDiag.painter.drawLocalWhitePixel(aDiag.frames[aDiag.current_frame].playfield,5,6)
 
 	$('#pf-cmd_playpause').click(function(){
-	console.log('tick');
+	//console.log('tick');
 		var i = aDiag.current_frame;
 		var len = aDiag.frames.length;
 		if(aDiag.playing)
@@ -2197,7 +2050,7 @@ $(document).ready(function(){
 		var counter = 0;
 		function render(){
 			// TODO: does not escape properly when we press pause
-			console.log('rendering... @'+i+' - '+counter);
+			//console.log('rendering... @'+i+' - '+counter);
 
 			if (i < len && aDiag.playing)
 				{
@@ -2292,6 +2145,7 @@ $(document).ready(function(){
 
 	var $tetraminopanel = $('#tetramino-panel');
 	var $decorationspanel = $('#panel-decorations');
+	var $tools = $('#tools');
 
 	//var $actionspanel = $("#panel-actions");
 
@@ -2309,80 +2163,22 @@ $(document).ready(function(){
 			{$tetraminopanel.fadeOut(200);}
 	}
 
-	/*
-	$tabactions.click(function(){
-		$secondaryutilities.removeClass().addClass('border-action');
-		$propertiespanel.fadeOut(200);
-		$actionspanel.delay(200).fadeIn();
-	});
-	*/
-
-
-	/*
-	function setpanelfalse(){
-		DECORATION_PANEL = false;
-		TETRAMINO_PANEL = false;
-	}
-
-	function settoolfalse(){
-		TOOL_DROP = false;
-		TOOL_FILL = false;
-		TOOL_RECTANGULAR = false;
-		TOOL_PENCIL = false;
-		TOOL_ERASER = false;
-		$drop.removeClass('pressed');
-		$fill.removeClass('pressed');
-		$pencil.removeClass('pressed');
-		$eraser.removeClass('pressed');
-	}
-
-	function primary_hideallpanelexcept(currentpanel){
-		if(currentpanel != 'deco')
-			{$decorationspanel.fadeOut();}
-		if(currentpanel != 'pieceselection')
-			{$pieceselection.fadeOut();}
-		if(currentpanel != 'tools')
-			{$tools.fadeOut();}
-		if(currentpanel != 'actions')
-			{$actionspanel.fadeOut();}
-		if(currentpanel != 'properties')
-			{$propertiespanel.fadeOut();}
-	}
-
-
 	$tabdeco.click(function(){
-		primary_hideallpanelexcept('deco');
+		primary_hideallpanelexcept('decorationspanel');
 		setpanelfalse();
 		DECORATION_PANEL = true;
-		$utilities.removeClass().addClass('border-deco');
-		$decorationspanel.fadeIn();
+		$decorationspanel.delay(200).fadeIn();
+		$mainutilities.removeClass().addClass('border-deco');
 	});
 
 	$tabtetramino.mousedown(function(){
-		primary_hideallpanelexcept('pieceselection');
+		primary_hideallpanelexcept('tetraminopanel');
 		setpanelfalse();
 		TETRAMINO_PANEL = true;
-		$utilities.removeClass().addClass('border-active');
-		$pieceselection.fadeIn();
-		$tools.fadeIn();
-		$tools.fadeIn().find('.tools-button').fadeIn();
+		$tetraminopanel.delay(200).fadeIn();
+		$mainutilities.removeClass().addClass('border-tetramino');
 	});
-
-	$tabproperties.mousedown(function(){
-		primary_hideallpanelexcept('properties');
-		setpanelfalse();
-		$propertiespanel.fadeIn();
-		$utilities.removeClass().addClass('border-properties');
-
-	});
-
-	$tabactions.mousedown(function(){
-		primary_hideallpanelexcept('actions');
-		settoolfalse();
-		$actionspanel.fadeIn();
-	});
-
-	*/
+	
 	function settoolfalse(){
 		TOOL_DROP = false;
 		TOOL_FILL = false;
@@ -2490,10 +2286,14 @@ $(document).ready(function(){
 
 	$('#export-image-frame-button').click(function(){
 		aDiag.painter.exportImage();
+		$('#export-gif').attr('style','display: none');
+		$('#pf-export').attr('style','display: block');
 	});
 
 	$('#export-image-diagram-button').click(function(){
 		aDiag.getGIF();
+		$('#export-gif').attr('style','display: block');
+		$('#pf-export').attr('style','display: none');
 	});
 
 
@@ -2508,15 +2308,15 @@ $(document).ready(function(){
 		var destination = $(this).attr('id');
 		if($('input[name=export-type]:checked').val() == 'All')
 		{
-			//export_string = 'all-'+aDiag.flate_encode(aDiag.print()); // compressed
-			export_string = 'all-'+aDiag.print(); // not compressed
+			export_string = 'all-'+aDiag.flate_encode(aDiag.print()); // compressed
+			//export_string = 'all-'+aDiag.print(); // not compressed
 			// export_string = aDiag.print();
 		}
 
 		if($('input[name=export-type]:checked').val() == 'Current')
 		{
-			//export_string = 'current-'+aDiag.flate_encode(aDiag.frames[aDiag.current_frame].print()); // compressed
-			export_string = 'current-'+aDiag.frames[aDiag.current_frame].print(); // not compressed
+			export_string = 'current-'+aDiag.flate_encode(aDiag.frames[aDiag.current_frame].print()); // compressed
+			//export_string = 'current-'+aDiag.frames[aDiag.current_frame].print(); // not compressed
 		}
 		switch(destination)
 		{
@@ -2581,14 +2381,14 @@ $(document).ready(function(){
 		switch(littlestr[1])
 		{
 			case 'all':
-				//aDiag.load(aDiag.flate_decode(littlestr[2])); // compressed
-				aDiag.load(littlestr[2]); // not compressed
+				aDiag.load(aDiag.flate_decode(littlestr[2])); // compressed
+				//aDiag.load(littlestr[2]); // not compressed
 				aDiag.frames[aDiag.current_frame].draw();
 			break;
 
 			case 'current':
-				//aDiag.frames[aDiag.current_frame].load(aDiag.flate_decode(littlestr[2]));	 // compressed
-				aDiag.frames[aDiag.current_frame].load(littlestr[2]); //not compressed
+				aDiag.frames[aDiag.current_frame].load(aDiag.flate_decode(littlestr[2]));	 // compressed
+				//aDiag.frames[aDiag.current_frame].load(littlestr[2]); //not compressed
 				aDiag.frames[aDiag.current_frame].draw();
 			break;
 		}
@@ -2634,6 +2434,13 @@ $(document).ready(function(){
 	});
 	*/
 
+	
+	$(window).keydown(function(event){
+		if(event.keyCode == 37) // left arrow
+			{$('#pf-cmd_prev').click();}
+		if(event.keyCode == 39) // right arrow
+			{$('#pf-cmd_next').click();}
+	});
 	$('#foobartest').click(function(){
 		console.log(aDiag);
 		console.log(aDiag.frames[aDiag.current_frame]);
@@ -2657,7 +2464,7 @@ $(document).ready(function(){
 			ARE: 30,
 			lock: 30,
 			separation1: 10,
-			seperation2: 6,
+			separation2: 6,
 			separation3: 6,
 			separation4: 6
 			// 10+6+6+6 = 28; 28 + 1 + 2 = 31
@@ -2666,7 +2473,7 @@ $(document).ready(function(){
 			ARE: 25,
 			lock: 30,
 			separation1: 10,
-			seperation2: 6,
+			separation2: 6,
 			separation3: 6,
 			separation4: 6
 		},
@@ -2674,7 +2481,7 @@ $(document).ready(function(){
 			ARE: 16,
 			lock: 30,
 			separation1: 10,
-			seperation2: 6,
+			separation2: 6,
 			separation3: 6,
 			separation4: 6
 		},
@@ -2682,7 +2489,7 @@ $(document).ready(function(){
 			ARE: 12,
 			lock: 30,
 			separation1: 10,
-			seperation2: 6,
+			separation2: 6,
 			separation3: 6,
 			separation4: 6
 		},
@@ -2690,7 +2497,7 @@ $(document).ready(function(){
 			ARE: 12,
 			lock: 17,
 			separation1: 6,
-			seperation2: 4,
+			separation2: 4,
 			separation3: 4,
 			separation4: 3
 			// 5 + 4 + 3 + 3 = 14
@@ -2699,7 +2506,7 @@ $(document).ready(function(){
 			ARE: 6,
 			lock: 17,
 			separation1: 6,
-			seperation2: 4,
+			separation2: 4,
 			separation3: 4,
 			separation4: 3
 			// 5 + 4 + 3 + 3 = 14
@@ -2708,7 +2515,7 @@ $(document).ready(function(){
 			ARE: 5,
 			lock: 15,
 			separation1: 5,
-			seperation2: 4,
+			separation2: 4,
 			separation3: 4,
 			separation4: 3
 			// 4 + 4 + 3 + 3 = 14
@@ -2717,7 +2524,7 @@ $(document).ready(function(){
 			ARE: 4,
 			lock: 15,
 			separation1: 5,
-			seperation2: 4,
+			separation2: 4,
 			separation3: 4,
 			separation4: 3
 			// 4 + 4 + 3 + 3 = 14
@@ -2726,7 +2533,7 @@ $(document).ready(function(){
 			ARE: 16,
 			lock: 30,
 			separation1: 10,
-			seperation2: 6,
+			separation2: 6,
 			separation3: 6,
 			separation4: 6
 		},
@@ -2734,7 +2541,7 @@ $(document).ready(function(){
 			ARE: 12,
 			lock: 26,
 			separation1: 9,
-			seperation2: 6,
+			separation2: 6,
 			separation3: 6,
 			separation4: 5
 		},
@@ -2742,7 +2549,7 @@ $(document).ready(function(){
 			ARE: 12,
 			lock: 22,
 			separation1: 7,
-			seperation2: 5,
+			separation2: 5,
 			separation3: 4,
 			separation4: 4
 		},
@@ -2750,7 +2557,7 @@ $(document).ready(function(){
 			ARE: 6,
 			lock: 18,
 			separation1: 6,
-			seperation2: 4,
+			separation2: 4,
 			separation3: 4,
 			separation4: 4
 		},
@@ -2758,7 +2565,7 @@ $(document).ready(function(){
 			ARE: 5,
 			lock: 15,
 			separation1: 5,
-			seperation2: 3,
+			separation2: 3,
 			separation3: 3,
 			separation4: 3
 		},
@@ -2766,7 +2573,7 @@ $(document).ready(function(){
 			ARE: 4,
 			lock: 15,
 			separation1: 5,
-			seperation2: 3,
+			separation2: 3,
 			separation3: 3,
 			separation4: 3
 		},
@@ -2774,7 +2581,7 @@ $(document).ready(function(){
 			ARE: 10,
 			lock: 18,
 			separation1: 6,
-			seperation2: 4,
+			separation2: 4,
 			separation3: 4,
 			separation4: 4
 		},
@@ -2782,7 +2589,7 @@ $(document).ready(function(){
 			ARE: 10,
 			lock: 17,
 			separation1: 6,
-			seperation2: 4,
+			separation2: 4,
 			separation3: 4,
 			separation4: 3
 		},
@@ -2790,7 +2597,7 @@ $(document).ready(function(){
 			ARE: 4,
 			lock: 15,
 			separation1: 5,
-			seperation2: 3,
+			separation2: 3,
 			separation3: 3,
 			separation4: 3
 		},
@@ -2798,7 +2605,7 @@ $(document).ready(function(){
 			ARE: 4,
 			lock: 13,
 			separation1: 4,
-			seperation2: 3,
+			separation2: 3,
 			separation3: 3,
 			separation4: 3
 		},
@@ -2806,7 +2613,7 @@ $(document).ready(function(){
 			ARE: 4,
 			lock: 12,
 			separation1: 4,
-			seperation2: 3,
+			separation2: 3,
 			separation3: 3,
 			separation4: 2
 		},
@@ -2814,7 +2621,7 @@ $(document).ready(function(){
 			ARE: 4,
 			lock: 10,
 			separation1: 4,
-			seperation2: 2,
+			separation2: 2,
 			separation3: 2,
 			separation4: 2
 		},
@@ -2822,7 +2629,7 @@ $(document).ready(function(){
 			ARE: 4,
 			lock: 8,
 			separation1: 4,
-			seperation2: 2,
+			separation2: 2,
 			separation3: 1,
 			separation4: 1
 		},
@@ -2830,7 +2637,7 @@ $(document).ready(function(){
 			ARE: 1, // 0 in reality
 			lock: 30,
 			separation1: 10,
-			seperation2: 7,
+			separation2: 7,
 			separation3: 8,
 			separation4: 6
 		}

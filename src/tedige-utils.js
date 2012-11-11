@@ -1,3 +1,4 @@
+/** @preserve TeDiGe - Utilities code, taken from various sources - https://github.com/PetitPrince/TeDiGe-2/  */
 /* Jquery utilites
 Content 
 	- js-deflate: https://github.com/dankogai/js-deflate

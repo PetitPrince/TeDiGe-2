@@ -3,11 +3,11 @@
 	<meta charset="utf-8">
 	<title>TeDiGe-2 editor</title>
 	<script src="jquery.js"></script>
-	<script src="tedige-utils.js"></script>
-	<script src="tedige-core.js"></script>
-	<script src="tedige-editor.js"></script>
+	<script src="src/tedige-utils.js"></script>
+	<script src="src/tedige-core.js"></script>
+	<script src="src/tedige-editor.js"></script>
 
-	<link rel="stylesheet" href="editor.css">
+	<link rel="stylesheet" href="tedige-editor.css" />
 	<style type="text/css">
 	/* Waiting for a proper placeholder support in every browser....*/
 	#console textarea::-webkit-input-placeholder {
@@ -394,7 +394,7 @@
 	<div id="secondary-utilites">
 			<div id="secondary-col1">
 			<h3>Active piece</h3>
-				<span style="//display:none">Opacity: <input type="text" value="1.0" id="pf-active-opacity" style="width: 3em" /></span>
+				<span style="display:none">Opacity: <input type="text" value="1.0" id="pf-active-opacity" style="width: 3em" /></span>
 				<table>
 					<tbody>
 						<tr>
@@ -454,7 +454,7 @@
 					<option value="Shirase12001299">Shirase - 1200-1299</option>
 				</select>
 				<input type="button" value="Start timer" id="cmd_startstop_timer"  class="half-button" />
-				<input type="button" value="Reset" id="cmd_reset_timer"  class="half-button"/>
+				<input type="button" value="Reset" id="cmd_reset_timer" style="display:none"class="half-button"/>
 			</div>
 			<div id="secondary-col2" class="actions">
 				<h3>Frame</h3>
@@ -504,7 +504,7 @@
 			</div>
 			<div id="secondary-col4">
 				<h3>Diagram</h3>
-				<input type="checkbox"/> Auto next frame with each action
+				<input id="pf-auto-action-frame-increment" type="checkbox"/> Auto next frame with each action
 				<hr />
 				<input id="pf-cmd_new" value="Add frame +" type="button" class="full-button"/><br />
 				<input id="pf-cmd_clone" value="Clone frame ⎘" type="button" class="full-button"/><br />
@@ -517,42 +517,44 @@
 				<input id="cmd_timer_tick" value="Manually tick the timer" type="button" class="full-button" style="display:none"/><br />
 			</div>
 	</div>
+	<div style="width: 580px">
+		<div id="image-export" style="float:right">
+			<canvas id="pf-export"		width="97" height="177" style="display:none"></canvas>
+			<img id="export-gif" src="" style="display:none" />
+		</div>	
+		
+		<div id="console">
+			<div class="consolediv">
+				Export
+				<textarea id="export" class="console-textarea" readonly="readonly" placeholder="Get your TeDiGe code from here."></textarea>
+			</div>
+			<div class="consolediv">
+				Import
+				<textarea id="import" class="console-textarea" placeholder="Place your TeDiGe code here. You can even keep the [tedige] tags if you're extra-lazy !"></textarea> 
+			</div>
 	
-	<div id="console">
-		<div class="consolediv">
-			Export
-			<textarea id="export" class="console-textarea" readonly="readonly" placeholder="Get your TeDiGe code from here."></textarea>
-		</div>
-		<div class="consolediv">
-			Import
-			<textarea id="import" class="console-textarea" placeholder="Place your TeDiGe code here. You can even keep the [tedige] tags if you're extra-lazy !"></textarea> 
-		</div>
-
-		<div id="import-export-wrapper">																		 
-			<input name="export-type" value="All" type="radio" checked="checked"> All
-			<input name="export-type" value="Current" type="radio"> Current
-			<br />
-			Export: <input class="export-button" id="export-forum-button" type="button" value="Forum">
-			<input class="export-button" id="export-editor-button" type="button" value="Editor">
-			<input class="export-button" id="export-viewer-button" type="button" value="Viewer">
-			<br />
-			Import:
-			<input type="button" id="fumen_import" value="Fumen" />
-			<input id="import-button" type="button" value="TeDiGe Code">
-			<br />
-			Image:
-			<input id="export-image-frame-button" type="button" value="Export frame as image">
-			<input id="export-image-diagram-button" type="button" value="Export this diagram as gif">
+			<div id="import-export-wrapper">																		 
+				<input name="export-type" value="All" type="radio" checked="checked"> All
+				<input name="export-type" value="Current" type="radio"> Current
+				<br />
+				Export: <input class="export-button" id="export-forum-button" type="button" value="Forum">
+				<input class="export-button" id="export-editor-button" type="button" value="Editor">
+				<input class="export-button" id="export-viewer-button" type="button" value="Viewer">
+				<br />
+				Import:
+				<input type="button" id="fumen_import" value="Fumen" />
+				<input id="import-button" type="button" value="TeDiGe Code">
+				<br />
+				Image:
+				<input id="export-image-frame-button" type="button" value="Export frame as image">
+				<input id="export-image-diagram-button" type="button" value="Export this diagram as gif">
+			</div>
 		</div>
 	</div>
-
 </div>
 
-<input type="button" id="foobartest" value="Test" style="width:4em;height:4em; position:absolute; top:50px;left:600px" />
-<canvas id="pf-export"		width="97" height="177" style="z-index:999; background:gray;"></canvas>
-<img id="export-gif" />
 <div id="links">
-	<p><a href="http://www.tetrisconcept.net" title="Tetrisconcept">Tetrisconcept</a> | <a href="http://www.harddrop.com" title="Harddrop">Harddrop</a> | powered by <a href="http://jquery.com/">jQuery</a></p>
+	<p><a href="http://www.tetrisconcept.net" title="Tetrisconcept">Tetrisconcept</a> | <a href="http://www.harddrop.com" title="Harddrop">Harddrop</a> | <a href="https://github.com/PetitPrince/TeDiGe-2/">TeDiGe-2</a> is powered by <a href="http://jquery.com/">jQuery</a></p>
 </div>
 
 </body>

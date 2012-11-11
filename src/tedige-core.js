@@ -1,13 +1,5 @@
-/*
-
-File: Tedige - a tetris diagram Generator*/
-/* ToDo
-
-I~Ibdbebfbgbhcedfeefdfefffgfh~Sgdgdgegfggghhdhfhhidihjdjh_+I~Tadaeafbfbhcdcecfcgch~Ebdbebgdffefggdgegfgggh~Gedeeefegehfdfffh~Sheifjfjg_
-I~Oasatbsbtisitjsjt~Ibdbdbebfbgbhcedfeefdfefffgfh~Zbpbpbqcocpdmdnelem~Sflflfmgdgegfggghgmgnhdhfhhhohpidihipiqjdjh_+I~Tadaeafbfbhcdcecfcgch~Lajakbjcj~Ebdbebgbpbqcocpdfdmdnelemfefgflfmgdgegfggghgmgnhohpipiq~Gedeeefegehfdfffh~Sheifjfjg~Jhjijjjjk_
---> Should give ME followed by YES
-*/
-
+/** @preserve TeDiGe-2 - Core file, used everywhere - https://github.com/PetitPrince/TeDiGe-2/  */
+  
 /** Painter
 
 	Painter interact with the canvases and the html page. It binds
@@ -32,7 +24,7 @@ I~Oasatbsbtisitjsjt~Ibdbdbebfbgbhcedfeefdfefffgfh~Zbpbpbqcocpdmdnelem~Sflflfmgdg
 	@requires Diagram
 
 */
-function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
+function Painter(CanvasIDString) {
 	/*
 		Default canvas size (same as fumen) :
 		- height: 193px
@@ -43,14 +35,14 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 	/** A variable referencing the class, used to exploit closure stuff in other methods*/
 	var myself = this;
 
-	// Default parameter method taken from: http://stackoverflow.com/questions/894860/how-do-i-make-a-default-value-for-a-parameter-to-a-javascript-function
+	// Default parameter method could be taken from: http://stackoverflow.com/questions/894860/how-do-i-make-a-default-value-for-a-parameter-to-a-javascript-function
 
 	/** Height of the Canvas in px.*/
-	this.CanvasHeight = typeof CanvasHeight !== 'undefined' ? CanvasHeight : 177;
+	this.CanvasHeight = 177;
 	/** Width of the Canvas in px.*/
-	this.CanvasWidth = typeof CanvasHeight !== 'undefined' ? CanvasHeight : 97;
+	this.CanvasWidth = 97;
 	/**Size of a block element in px.*/
-	this.blockSize = typeof blockSize !== 'undefined' ? blockSize : 8;
+	this.blockSize = 8;
 
 	this.IDString = CanvasIDString;
 	/* ------------------------------- */
@@ -115,11 +107,6 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 	/** Get the 2d context of the related canvas*/
 	this.ContextControl = this.CanvasControl[0].getContext('2d');
 
-	/** Get the jQuery object of the export canvas.*/
-	this.CanvasExport = $('#pf-export');
-	/** Get the 2d context of the related canvas*/
-	this.ContextExport = this.CanvasExport[0].getContext('2d');
-
 	/* --------------------------------- */
 	/* --- Canvas-related properties --- */
 	/* --------------------------------- */
@@ -138,7 +125,7 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 	/** Sets the position of the controls (joystick, buttons) relative to the page*/
 	this.CntrlOriginY = this.CanvasControl.offset().top;
 
-
+	this.CanvasControlheight = this.CanvasControl.height();
 	/** An image object that contains the blocks' sprite*/
 	this.sprite = '';
 	/**An image object that contains the blocks' sprite, mini version*/
@@ -181,32 +168,34 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 		switch (layer)
 		{
 			case 'decoration':
-				Canvas = this.CanvasDeco;
+				Context = this.ContextDeco;
 				break;
 			case 'inactive':
-				Canvas = this.CanvasPF;
+				Context = this.ContextPF;
 				break;
 			case 'preview':
-				Canvas = this.CanvasPreview;
+				Context = this.ContextPreview;
 				break;
 			case 'active':
-				Canvas = this.CanvasActive;
+				Context = this.ContextActive;
 				break;
 			case 'nexthold':
-				Canvas = this.CanvasNextHold;
+				Context = this.ContextNextHold;
 				break;
 			case 'whiteborder':
-				Canvas = this.CanvasWhiteborder;
+				Context = this.ContextWhiteborder;
 				break;
 			case 'all':
-				Canvas = this.CanvasPF;
-				this.CanvasDeco.attr('width', this.CanvasDeco.width());
-				this.CanvasPreview.attr('width', this.CanvasPreview.width());
-				this.CanvasActive.attr('width', this.CanvasActive.width());
-				this.CanvasNextHold.attr('width', this.CanvasNextHold.width());
+				Context = this.ContextPF;
+				
+				this.ContextDeco.clearRect(0,0,this.CanvasWidth,this.CanvasHeight);
+				this.ContextPreview.clearRect(0,0,this.CanvasWidth,this.CanvasHeight);
+				this.ContextActive.clearRect(0,0,this.CanvasWidth,this.CanvasHeight);
+				this.ContextNextHold.clearRect(0,0,this.CanvasWidth,this.CanvasHeight);
+				this.ContextWhiteborder.clearRect(0,0,this.CanvasWidth,this.CanvasHeight);
 				break;
 		}
-		Canvas.attr('width', Canvas.width());
+		Context.clearRect(0,0,this.CanvasWidth,this.CanvasHeight);
 	};
 
 	/** Erase a 'block' area at the designated coordinate.
@@ -261,7 +250,7 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 	this.drawProgressbar = function(CurrentFrame,TotalFrame){
 		if(CurrentFrame <= TotalFrame && CurrentFrame > 0) // filter out invalid input
 		{
-			this.CanvasProgressbar.attr('width',this.CanvasProgressbar.width());
+			this.ContextProgressbar.clearRect(0,0,this.CanvasWidth,this.CanvasHeight);
 			this.ContextProgressbar.beginPath();
 			this.ContextProgressbar.rect(0,0,parseInt((CurrentFrame/TotalFrame)*100,10),24);
 			this.ContextProgressbar.fillStyle= 'gray';
@@ -543,6 +532,8 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 		'master' (gray-bluish), 'easy' (green) and 'death' (red). Defaults to master if
 		none is selected
 	*/
+	
+	
 	this.drawBorder = function(kind){
 		var color1 = '#afafaf';
 		var color2 = '#46545f';
@@ -1241,7 +1232,6 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 		@param {string} state Define which color to draw. Possible value: 'rest', 'pressed' or 'holded'
 	*/
 	this.drawJoystick = function(direction,state){
-		var height = this.CanvasControl.height();
 		if (direction == 'all')
 		{
 			myself.drawJoystick('u','rest');
@@ -1259,58 +1249,58 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 			{
 				case 'u':
 					this.ContextControl.beginPath();
-					this.ContextControl.moveTo(height/3, height/3);
-					this.ContextControl.lineTo(2*height/3,height/3);
-					this.ContextControl.lineTo(height/2,0);
+					this.ContextControl.moveTo(this.CanvasControlheight/3, this.CanvasControlheight/3);
+					this.ContextControl.lineTo(2*this.CanvasControlheight/3,this.CanvasControlheight/3);
+					this.ContextControl.lineTo(this.CanvasControlheight/2,0);
 					this.ContextControl.closePath();
 					break;
 				case 'r':
 					this.ContextControl.beginPath();
-					this.ContextControl.moveTo(2*height/3, height/3);
-					this.ContextControl.lineTo(2*height/3,2*height/3);
-					this.ContextControl.lineTo(height,height/2);
+					this.ContextControl.moveTo(2*this.CanvasControlheight/3, this.CanvasControlheight/3);
+					this.ContextControl.lineTo(2*this.CanvasControlheight/3,2*this.CanvasControlheight/3);
+					this.ContextControl.lineTo(this.CanvasControlheight,this.CanvasControlheight/2);
 					this.ContextControl.closePath();
 					break;
 				case 'd':
 					this.ContextControl.beginPath();
-					this.ContextControl.moveTo(2*height/3,2*height/3);
-					this.ContextControl.lineTo(height/3,2*height/3);
-					this.ContextControl.lineTo(height/2,height);
+					this.ContextControl.moveTo(2*this.CanvasControlheight/3,2*this.CanvasControlheight/3);
+					this.ContextControl.lineTo(this.CanvasControlheight/3,2*this.CanvasControlheight/3);
+					this.ContextControl.lineTo(this.CanvasControlheight/2,this.CanvasControlheight);
 					this.ContextControl.closePath();
 					break;
 				case 'l':
 					this.ContextControl.beginPath();
-					this.ContextControl.moveTo(height/3,2*height/3);
-					this.ContextControl.lineTo(height/3,height/3);
-					this.ContextControl.lineTo(0,height/2);
+					this.ContextControl.moveTo(this.CanvasControlheight/3,2*this.CanvasControlheight/3);
+					this.ContextControl.lineTo(this.CanvasControlheight/3,this.CanvasControlheight/3);
+					this.ContextControl.lineTo(0,this.CanvasControlheight/2);
 					this.ContextControl.closePath();
 					break;
 				case 'ul':
 					this.ContextControl.beginPath();
-					this.ContextControl.moveTo(0+height/8,0+height/8);
-					this.ContextControl.lineTo(height/4+height/8,0+height/8);
-					this.ContextControl.lineTo(0+height/8,height/4+height/8);
+					this.ContextControl.moveTo(0+this.CanvasControlheight/8,0+this.CanvasControlheight/8);
+					this.ContextControl.lineTo(this.CanvasControlheight/4+this.CanvasControlheight/8,0+this.CanvasControlheight/8);
+					this.ContextControl.lineTo(0+this.CanvasControlheight/8,this.CanvasControlheight/4+this.CanvasControlheight/8);
 					this.ContextControl.closePath();
 					break;
 				case 'ur':
 					this.ContextControl.beginPath();
-					this.ContextControl.moveTo(height-height/8,height/8);
-					this.ContextControl.lineTo(height-height/8,height/4+height/8);
-					this.ContextControl.lineTo(height-height/4-height/8,0+height/8);
+					this.ContextControl.moveTo(this.CanvasControlheight-this.CanvasControlheight/8,this.CanvasControlheight/8);
+					this.ContextControl.lineTo(this.CanvasControlheight-this.CanvasControlheight/8,this.CanvasControlheight/4+this.CanvasControlheight/8);
+					this.ContextControl.lineTo(this.CanvasControlheight-this.CanvasControlheight/4-this.CanvasControlheight/8,0+this.CanvasControlheight/8);
 					this.ContextControl.closePath();
 					break;
 				case 'dr':
 					this.ContextControl.beginPath();
-					this.ContextControl.moveTo(height-height/8,height-height/8);
-					this.ContextControl.lineTo(height-height/8,height-height/4-height/8);
-					this.ContextControl.lineTo(height-height/4-height/8,height-height/8);
+					this.ContextControl.moveTo(this.CanvasControlheight-this.CanvasControlheight/8,this.CanvasControlheight-this.CanvasControlheight/8);
+					this.ContextControl.lineTo(this.CanvasControlheight-this.CanvasControlheight/8,this.CanvasControlheight-this.CanvasControlheight/4-this.CanvasControlheight/8);
+					this.ContextControl.lineTo(this.CanvasControlheight-this.CanvasControlheight/4-this.CanvasControlheight/8,this.CanvasControlheight-this.CanvasControlheight/8);
 					this.ContextControl.closePath();
 					break;
 				case 'dl':
 					this.ContextControl.beginPath();
-					this.ContextControl.moveTo(0+height/8,height-height/8);
-					this.ContextControl.lineTo(0+height/8,height-height/4-height/8);
-					this.ContextControl.lineTo(height/4+height/8,height-height/8);
+					this.ContextControl.moveTo(0+this.CanvasControlheight/8,this.CanvasControlheight-this.CanvasControlheight/8);
+					this.ContextControl.lineTo(0+this.CanvasControlheight/8,this.CanvasControlheight-this.CanvasControlheight/4-this.CanvasControlheight/8);
+					this.ContextControl.lineTo(this.CanvasControlheight/4+this.CanvasControlheight/8,this.CanvasControlheight-this.CanvasControlheight/8);
 					this.ContextControl.closePath();
 					break;
 			}
@@ -1526,40 +1516,11 @@ function Painter(CanvasIDString, CanvasHeight, CanvasWidth, blockSize) {
 	*/
 	this.deletePreviewTable = function(id,position){
 		//console.log(id);
-		console.log('position: '+position);
+		//console.log('position: '+position);
 		//$('#browser #preview-container > td:nth-child('+parseInt(position+1)+')').remove();
 		$('#browser #preview-container > td:nth-child('+parseInt(position+1,10)+')').remove();
 	};
 
-	/** Export the current frame into a png image. TODO: move this to tedige-editor.js
-	*/
-	this.exportImage = function(){
-		this.CanvasExport.attr('width',this.CanvasExport.width());
-		var buffer = document.createElement('canvas');
-		buffer.width = this.CanvasWidth;
-		buffer.height = this.CanvasHeight;
-
-		this.ContextExport.drawImage(this.CanvasBorder[0],0,0);
-		var imgData_PF = this.ContextPF.getImageData(0,0,this.CanvasWidth,this.CanvasHeight);
-		var tmp = 0;
-		for(var i=0, istop = imgData_PF.data.length ; i<istop ; i+=4)
-		{
-			imgData_PF.data[i+3]=parseInt(255*0.65,10); // get 0.65 opacity,
-			tmp = imgData_PF.data[i] + imgData_PF.data[i+1] + imgData_PF.data[i+2];
-
-			if(!tmp)
-			{
-				imgData_PF.data[i+3]= 0; // if black pixel -> transparent
-			}
-			tmp = 0;
-
-		}
-		buffer.getContext('2d').putImageData(imgData_PF,0,0);
-		this.ContextExport.drawImage(buffer,0,0);
-		this.ContextExport.drawImage(this.CanvasActive[0],0,0);
-		this.ContextExport.drawImage(this.CanvasWhiteborder[0],0,0);
-		this.ContextExport.drawImage(this.CanvasDeco[0],0,0);
-	};
 } // end painter -------------------------------------------------------------------------------
 
 
@@ -1668,10 +1629,10 @@ function Diagram(painter){
 	/** Remove every frame after the current one. Analogous to 'remove following' in fumen.
 	*/
 	this.remove_following_frames = function(){
-		console.log('in');
+		//console.log('in');
 		this.frames.splice(this.current_frame+1);
 		this.frames[this.current_frame].draw();
-		console.log('out');
+		//console.log('out');
 
 	/* TODO PRIORITY NOT FUNCTIONAL FOR NOW
 		var i = this.current_frame;
@@ -1709,7 +1670,6 @@ function Diagram(painter){
 		this.update_framecount();
 	};
 
-
 	/* ---------------- */
 	/* -- Navigation -- */
 	/* ---------------- */
@@ -1721,7 +1681,16 @@ function Diagram(painter){
 	this.goto_frame = function(frame_number){
 		this.painter.eraseLayer('all');
 		this.current_frame = frame_number;
-		this.frames[this.current_frame].draw();
+		if(frame_number == 0) // assumption: only the first frame hold the border information
+		{
+			this.frames[this.current_frame].draw();
+		}
+		else{
+			var exception = { border: true};
+			this.frames[this.current_frame].draw(exception);
+		}
+		
+		
 		this.update_framecount();
 	};
 
@@ -1821,6 +1790,11 @@ function Diagram(painter){
 				output += tmp+this.frames[final_frame].activePieceOrientation+'_';
 				tmp = '';
 			}
+			else
+			{
+				// E = empty
+				output += 'A~E_';
+			}		
 		}
 
 		// ## Inactive blocks & deco
@@ -2032,7 +2006,7 @@ function Diagram(painter){
 		if(this.frames[final_frame].joystick_direction != this.frames[reference_frame].joystick_direction ||
 		   this.frames[final_frame].joystick_state != this.frames[reference_frame].joystick_state)
 		{
-			switch(this.frames[final_frame].joystick_direction)
+			switch(this.frames[final_frame].joystick_state)
 			{
 				case 'rest':
 					tmp += 'r';
@@ -2044,7 +2018,7 @@ function Diagram(painter){
 					tmp += 'h';
 					break;
 			}
-			switch(this.frames[final_frame].joystick_state)
+			switch(this.frames[final_frame].joystick_direction)
 			{
 				case 'u':
 					tmp += '8';
@@ -2056,7 +2030,7 @@ function Diagram(painter){
 					tmp += '2';
 					break;
 				case 'l':
-					tmp += '6';
+					tmp += '4';
 					break;
 				case 'c':
 					tmp += '5';
@@ -2130,7 +2104,7 @@ function Diagram(painter){
 
 	};// end print_differences
 
-	/** Load the encoded string given in parameter into the diagram TODO: MOVE TO TEDIGE-EDITOR.JS
+	/** Load the encoded string given in parameter into the diagram
 
 		@param {string} str A string encoded with the format described below
 	*/
@@ -2144,7 +2118,6 @@ function Diagram(painter){
 
 		this.frames[0].load(stringframe[0],'blank'); // load the first frame
 		for(var i = 1, istop = stringframe.length; i < istop; i++) { // load the subsequent frame, if they exist
-			this.painter.eraseLayer('all');
 			this.new_copy_frame();
 			this.frames[i].load(stringframe[i],'differences'); // load the first frame
 		}
@@ -2352,16 +2325,16 @@ function Frame(painter){
 			this.painter.drawNextHold(i,this.nexthold[i],this.RS);
 		}
 
-		if (!(exception && exception.hasOwnProperty(border))) // // http://stackoverflow.com/questions/6075458/performance-differences-between-jquery-inarray-vs-object-hasownproperty
+		if (!(exception && exception['border'])) // // http://stackoverflow.com/questions/6075458/performance-differences-between-jquery-inarray-vs-object-hasownproperty
 		{
-			//this.painter.drawBorder(this.border); // temporary deactivation for performance ; TODO: externalize the border drawing
+			this.painter.drawBorder(this.border);
 		}
-		if (!(exception && exception.hasOwnProperty(joystick)))
+		if (!(exception && exception['joystick']))
 		{
 			this.painter.resetJoystick();
 			this.painter.drawJoystick(this.joystick_direction,this.joystick_state);
 		}
-		if (!(exception && exception.hasOwnProperty(buttons)))
+		if (!(exception && exception['buttons']))
 		{
 			this.painter.drawButton('A',this.button_state[0]);
 			this.painter.drawButton('B',this.button_state[1]);
@@ -2462,7 +2435,7 @@ function Frame(painter){
 				tmp += '2';
 				break;
 			case 'l':
-				tmp += '6';
+				tmp += '4';
 				break;
 			case 'c':
 				tmp += '5';
@@ -2702,10 +2675,21 @@ function Frame(painter){
 				switch(subproperties[0])
 				{
 				case 'A': // active piece
-						this.activePieceType = subproperties[1].charAt(0);
-						this.activePieceOrientation = subproperties[1].slice(3);
-						this.activePiecePositionX = alphanumconvert(subproperties[1].charAt(1));
-						this.activePiecePositionY = alphanumconvert(subproperties[1].charAt(2));
+						if(subproperties[1].charAt(0) !== 'E')
+						{
+							this.activePieceType = subproperties[1].charAt(0);
+							this.activePieceOrientation = subproperties[1].slice(3);
+							this.activePiecePositionX = alphanumconvert(subproperties[1].charAt(1));
+							this.activePiecePositionY = alphanumconvert(subproperties[1].charAt(2));
+						}
+						else
+						{
+							this.activePieceType = '';
+							this.activePieceOrientation = '';
+							this.activePiecePositionX = '';
+							this.activePiecePositionY = '';
+						}
+						
 					break;
 
 				case 'I': // inactive piece
@@ -2819,7 +2803,7 @@ function Frame(painter){
 						case '2':
 							tmp2 = 'd';
 							break;
-						case '6':
+						case '4':
 							tmp2 = 'l';
 							break;
 						case '7':
@@ -2880,8 +2864,227 @@ function Frame(painter){
 		}//end for
 	};//end load
 
+	/** Erase and delete one layer.
+	
+		@param {string} mode Define which layer will be cleared. Possible value: 'inactive','active' or 'all'*/
+	this.clear = function(mode){
+		switch(mode)
+		{
+			case 'inactive':
+				this.painter.eraseLayer('inactive');
+				for(var i = 0, istop = this.width; i < istop; i++) {
+					for(var j = 0, jstop = this.height; j < jstop; j++) {
+							this.playfield[i][j][0] = '';
+						}
+				}
+				break;
+			case 'active':
+				this.painter.eraseLayer('active');
+				this.activePieceType = '';
+				this.activePieceOrientation = '';
+				this.activePiecePositionX = '';
+				this.activePiecePositionY = '';
+				break;
+			case 'decoration':
+				this.painter.eraseLayer('decoration');
+				for(var i = 0, istop = this.width; i < istop; i++) {
+					for(var j = 0, jstop = this.height; j < jstop; j++) {
+							this.playfield[i][j][1] = '';
+						}
+				}
+	
+				break;
+			case 'all':
+				this.painter.eraseLayer('inactive');
+				this.painter.eraseLayer('active');
+				this.painter.eraseLayer('decoration');
+				for(var i = 0, istop = this.width; i < istop; i++) {
+					for(var j = 0, jstop = this.height; j < jstop; j++) {
+							this.playfield[i][j][0] = '';
+							this.playfield[i][j][1] = '';
+						}
+				}
+				this.activePieceType = '';
+				this.activePieceOrientation = '';
+				this.activePiecePositionX = '';
+				this.activePiecePositionY = '';
+				this.comment = '';
+			break;
+		}
+	};
 
+	/** 'Macro' method that modifies several times a given layer according to the tetramino shape given in parameter.
+	
+		@param {number} x Horizontal coordinate
+		@param {number} y Vertical coordinate
+		@param {string} type Define the color of the block to be added. Possible values: (SZLJTOIG)
+		@param {string} orientation Orientation of the tetramino; Possible values: 'i', 'cw', 'ccw' or 'u'
+		@param {string} mode Define which layer will be modified. Possible value: 'inactive','active',
+						'garbage','preview','decoration-preview','decoration','erase','preview-eraser','Flash'
+		@param {boolean}} drop Is the method is in drop mode ?
+	*/
+	this.addPiece = function(x,y,type,orientation,mode,drop){
+		var matrix = getMatrix(type, orientation, this.RS);
+		var still_droping = true;
+		var counter = 0;
+		while(drop & still_droping ){
+			counter = 0;
+			for(var i = 0; i < 4; i++) {
+				for(var j = 0; j < 4; j++) {
+					if (matrix[i][j] &&
+						this.is_in(parseInt(x-1+j,10),parseInt(y+i,10)) &&
+						!(this.playfield[parseInt(x-1+j,10)][parseInt(y+i,10)][0])
+						)
+					{
+						counter++;
+					}
+				}
+			}
+			if (counter != 4) {
+				still_droping = false;
+			}
+			else
+			{
+				y++;
+			}
+		}
+	
+		if (mode == 'inactive' || mode == 'garbage') {
+			this.painter.CanvasPreview.attr('width',this.painter.CanvasPreview.width()); //erase the preview layer
+		}
+		if (mode == 'active') {
+			this.activePieceType = type;
+			this.activePieceOrientation = orientation;
+			this.activePiecePositionX = x;
+			this.activePiecePositionY = y;
+			this.painter.CanvasActive.attr('width',this.painter.CanvasPreview.width()); //erase the active layer
+			this.painter.drawBrowserBlock(parseInt(x,10),parseInt(y,10),type,this.RS,this.id,'resetactive'); // TODO: potential bug ? (used erroneously parseInt(x+i) and parseInt(y+j) before...)
+		}
+	
+		if (mode == 'decoration-preview')
+		{
+			this.painter.drawDeco(x,y,type,'preview');
+		}
+		else if (mode =='decoration'){
+			this.modify_decoration(x,y,type);
+			this.painter.drawDeco(x,y,type,'decoration');
+			this.painter.highlight(x,y);
+		}
+		else
+		{
+			for(var i = 0; i < 4; i++) {
+				for(var j = 0; j < 4; j++) {
+	
+					//if (matrix[i][j] && this.is_in(parseInt(x-1+j,10),parseInt(y-1+i,10))) {
+					if (matrix[i][j] && this.piece_is_in(x,y,type,orientation)) {
+						switch(mode)
+						{
+							case 'inactive':
+								this.modify(parseInt(x-1+j,10),parseInt(y-1+i,10),type);
+								this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,'inactive');
+								if (this.whiteborder)
+								{
+									this.painter.drawLocalWhiteBorder(this.playfield,x-1+j,y-1+i);
+								}
+	
+								this.painter.highlight(x-1+j,y-1+i);
+							break;
+							case 'garbage':
+								this.modify(parseInt(x-1+j,10),parseInt(y-1+i,10),'G');
+								this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),'G',this.RS,'inactive');
+								if (this.whiteborder)
+								{
+									this.painter.drawLocalWhiteBorder(this.playfield,x-1+j,y-1+i);
+								}
+	
+								this.painter.highlight(x-1+j,y-1+i);
+							break;
+							case 'preview':
+								this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,'preview');
+							break;
+							case 'active':
+								this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,'active');
+								this.painter.highlight(x-1+j,y-1+i);
+								this.painter.drawBrowserBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,this.id,'active'); // erase this line to disable the browser thing
+							break;
+							case 'erase':
+								this.removeBlock(parseInt(x-1+j,10),parseInt(y-1+i,10));
+								this.painter.highlight(x-1+j,y-1+i);
+								this.painter.drawBrowserBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),'E',this.RS,this.id,'inactive'); // erase this line to disable the browser thing
+							break;
+							case 'preview-eraser':
+								this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),'G',this.RS,'preview');
+							break;
+							case 'Flash':
+								this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,'flash');
+								this.painter.highlight(x-1+j,y-1+i);
+								this.painter.drawBrowserBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,this.id,'active'); // erase this line to disable the browser thing
+							break;
+						}
+					}
+				}
+			}
+		}
+	
+	}; //end drawpiece
+	
 
+	/** Modify a block in the inactive layer.
+
+		@param {number} x Horizontal coordinate
+		@param {number} y Vertical coordinate
+		@param {string} type Piece type. Possible value: SZLJTOIG and E (empty)
+	*/
+	this.modify = function(x,y,type){
+		if (type == 'E')
+		{
+			this.playfield[x][y][0] = '';
+		}
+		else
+		{
+			this.playfield[x][y][0] = type;
+		}
+			//this.painter.drawBrowserBlock(x,y,type,this.RS,this.id,'inactive'); // I hope putting this here won't have any nasty side-effect
+	};	
+	
+	/** Modify the decoration layer.
+	
+		@param {number} x Horizontal coordinate
+		@param {number} y Vertical coordinate
+		@param {string} type Type of the decoration
+	*/
+	Frame.prototype.modify_decoration = function(x,y,type){
+		this.playfield[x][y][1] = type;
+	};
+	
+	/** Change the control appearance
+	
+		@param {string} direction Define in which position the joystick is. Possible value: 'all', 'u', 'r', 'l', 'd', 'ul', 'ur', 'dl', 'dr'
+		@param {string} state Define which color to draw. Possible value: 'rest', 'pressed' or 'holded'
+	*/
+	this.modify_control = function(direction,state){
+		this.joystick_state = state;
+		this.joystick_direction = direction;
+	};
+	
+	/** Change the chosen button appearance
+	
+		@param {string} button Define which button to draw. Possible value: 'A', 'B', 'C', 'D' for now.
+		@param {string} state Define in which color the button is drawn. Possible value: 'rest', 'pressed' or 'holded'.
+	*/
+	this.modify_button = function(button,state){
+		var index = '';
+		switch(button)
+		{
+			case 'A': index = 0; break;
+			case 'B': index = 1; break;
+			case 'C': index = 2; break;
+			case 'D': index = 3; break;
+			//case 'E': index = 4; break;
+			//case 'F': index = 5; break;
+		}
+		this.button_state[index] = state;
+	};	
 }//end frame
 
 /* Rotation definition*/
