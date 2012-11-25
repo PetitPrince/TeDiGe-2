@@ -80,7 +80,7 @@ function drawPaletteDecoCell(kind,blockSize,sprite){
 	@function
 	@param {string} type Piece type. Possible value: SZLJTOIG
 	@param {string} orientation Piece orientation. Possible value:  i cw ccw u
-	@param {string} RS Define the style of the block. Possible value: 'ARS, 'SRS'
+	@param {string} RS Define the style of the block. Possible value: 'ARS, 'SRS','GB'
 	@param {number} blockSize Size of a typical block
 	@param sprite Sprite object
 */
@@ -164,6 +164,42 @@ function drawPaletteCell(type,orientation,RS,blockSize,sprite){
 					break;
 			}
 		break;
+		case 'GB':
+			switch(type){
+				case 'I':
+					color = GB.I.color;
+					spriteOffset = GB.I.offset;
+					break;
+				case 'T':
+					color = GB.T.color;
+					spriteOffset = GB.T.offset;
+					break;
+				case 'L':
+					color = GB.L.color;
+					spriteOffset = GB.L.offset;
+					break;
+				case 'J':
+					color = GB.J.color;
+					spriteOffset = GB.J.offset;
+					break;
+				case 'S':
+					color = GB.S.color;
+					spriteOffset = GB.S.offset;
+					break;
+				case 'Z':
+					color = GB.Z.color;
+					spriteOffset = GB.Z.offset;
+					break;
+				case 'O':
+					color = GB.O.color;
+					spriteOffset = GB.O.offset;
+					break;
+				case 'G':
+					color = GB.G.color;
+					spriteOffset = GB.G.offset;
+					break;
+			}
+		break;
 		}
 
 	for (var i = 0; i < 4; i++) {
@@ -228,7 +264,7 @@ function drawPaletteDeco(blockSize,sprite){
 
 		/** Export the current frame into a png image. TODO: move this to tedige-editor.js
 	*/
-	Painter.prototype.exportImage = function(){
+	Painter.prototype.exportImage = function(mode){
 		this.ContextExport.clearRect(0,0,this.CanvasWidth,this.CanvasHeight);
 		this.CanvasExport.attr('width',this.CanvasExport.width());
 		var buffer = document.createElement('canvas');
@@ -256,6 +292,18 @@ function drawPaletteDeco(blockSize,sprite){
 		this.ContextExport.drawImage(this.CanvasActive[0],0,0);
 		this.ContextExport.drawImage(this.CanvasWhiteborder[0],0,0);
 		this.ContextExport.drawImage(this.CanvasDeco[0],0,0);
+
+		if(mode == "play")
+		{
+			this.ContextExport.beginPath();
+			this.ContextExport.moveTo(32,60);
+			this.ContextExport.lineTo(75,84);
+			this.ContextExport.lineTo(32,110);
+			this.ContextExport.fillStyle = "rgba(255,255,255,0.66)";
+			this.ContextExport.closePath();
+			this.ContextExport.fill();
+		}
+		
 	};
 
 /* ------------------------------------------- */
@@ -2285,7 +2333,14 @@ $(document).ready(function(){
 
 
 	$('#export-image-frame-button').click(function(){
-		aDiag.painter.exportImage();
+		if ($('#export-image-play-sign').is(':checked'))
+		{
+			aDiag.painter.exportImage('play');
+		}
+		else{
+			aDiag.painter.exportImage();
+		}
+
 		$('#export-gif').attr('style','display: none');
 		$('#pf-export').attr('style','display: block');
 	});
@@ -2310,6 +2365,7 @@ $(document).ready(function(){
 		{
 			export_string = 'all-'+aDiag.flate_encode(aDiag.print()); // compressed
 			//export_string = 'all-'+aDiag.print(); // not compressed
+			console.log('all-'+aDiag.print());
 			// export_string = aDiag.print();
 		}
 

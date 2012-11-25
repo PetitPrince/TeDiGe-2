@@ -641,7 +641,7 @@ function Painter(CanvasIDString) {
 		@param {string} RS Define the style of the block. Possible value: 'ARS, 'SRS'
 	*/
 	this.drawNextHold = function(position,type,RS){
-		matrix = getMatrix(type, 'i', RS); // TODO: make that rotation system idenpendant ?
+		matrix = getMatrix(type, 'i', RS);
 
 		switch(position){
 		case 0:
@@ -840,7 +840,7 @@ function Painter(CanvasIDString) {
 		@param {number} x Horizontal coordinate
 		@param {number} y Vertical coordinate
 		@param {string} type Define the color of the block to be drawn. Possible values: (SZLJTOIG)
-		@param {string} RS Define the style of the block. Possible values: ARS, SRS
+		@param {string} RS Define the style of the block. Possible values: ARS, SRS, GB
 		@param {number} id Define the id of the playfield in which the block is drawn
 		@param {string} context Define on which layer the block will be drawn. Possible values: 'inactive', 'resetactive', 'active'
 	*/
@@ -919,6 +919,42 @@ function Painter(CanvasIDString) {
 						break;
 				}
 			break;
+			case 'GB':
+				switch(type){
+					case 'I':
+						color = GB.I.color;
+						spriteOffset = GB.I.offset;
+						break;
+					case 'T':
+						color = GB.T.color;
+						spriteOffset = GB.T.offset;
+						break;
+					case 'L':
+						color = GB.L.color;
+						spriteOffset = GB.L.offset;
+						break;
+					case 'J':
+						color = GB.J.color;
+						spriteOffset = GB.J.offset;
+						break;
+					case 'S':
+						color = GB.S.color;
+						spriteOffset = GB.S.offset;
+						break;
+					case 'Z':
+						color = GB.Z.color;
+						spriteOffset = GB.Z.offset;
+						break;
+					case 'O':
+						color = GB.O.color;
+						spriteOffset = GB.O.offset;
+						break;
+					case 'G':
+						color = GB.G.color;
+						spriteOffset = GB.G.offset;
+						break;
+				}
+			break;		
 		}
 		if (context == 'inactive')
 		{
@@ -1086,6 +1122,42 @@ function Painter(CanvasIDString) {
 							break;
 					}
 				break;
+				case 'GB':
+					switch(type){
+						case 'I':
+							color = GB.I.color;
+							spriteOffset = GB.I.offset;
+							break;
+						case 'T':
+							color = GB.T.color;
+							spriteOffset = GB.T.offset;
+							break;
+						case 'L':
+							color = GB.L.color;
+							spriteOffset = GB.L.offset;
+							break;
+						case 'J':
+							color = GB.J.color;
+							spriteOffset = GB.J.offset;
+							break;
+						case 'S':
+							color = GB.S.color;
+							spriteOffset = GB.S.offset;
+							break;
+						case 'Z':
+							color = GB.Z.color;
+							spriteOffset = GB.Z.offset;
+							break;
+						case 'O':
+							color = GB.O.color;
+							spriteOffset = GB.O.offset;
+							break;
+						case 'G':
+							color = GB.G.color;
+							spriteOffset = GB.G.offset;
+							break;
+					}
+				break;
 			}
 
 			if (context == 'flash')
@@ -1099,6 +1171,11 @@ function Painter(CanvasIDString) {
 				{
 					color = SRS.Flash.color;
 					spriteOffset = SRS.Flash.offset;
+				}
+				if (RS == 'GB')
+				{
+					color = GB.Flash.color;
+					spriteOffset = GB.Flash.offset;
 				}
 
 
@@ -3543,6 +3620,223 @@ var SRS = {
 	}
 };
 
+/** Definition of the Nintendo Rotation System, Gameboy flavor*/
+var GB = {
+	I: {
+		color : 'yellowgreen',
+		offset:[6,9],
+		i:			[[0,0,0,0],
+					 [0,0,0,0],
+					 [1,1,1,1],
+					 [0,0,0,0]],
+
+		cw:			[[0,1,0,0],
+					 [0,1,0,0],
+					 [0,1,0,0],
+					 [0,1,0,0]],
+
+		u:			[[0,0,0,0],
+					 [0,0,0,0],
+					 [1,1,1,1],
+					 [0,0,0,0]],
+
+		ccw:		[[0,1,0,0],
+					 [0,1,0,0],
+					 [0,1,0,0],
+					 [0,1,0,0]],
+		singleton:	[[0,0,0,0],
+				 [0,1,0,0],
+				 [0,0,0,0],
+				 [0,0,0,0]]
+
+
+	},
+	J: {
+		color : 'yellowgreen',
+		offset:[1,9],
+		i:			[[0,0,0,0],
+					 [1,1,1,0],
+					 [0,0,1,0],
+					 [0,0,0,0]],
+
+		cw:			[[0,1,0,0],
+					 [0,1,0,0],
+					 [1,1,0,0],
+					 [0,0,0,0]],
+
+		u:			[[1,0,0,0],
+					 [1,1,1,0],
+					 [0,0,0,0],
+					 [0,0,0,0]],
+
+		ccw:		[[0,1,1,0],
+					 [0,1,0,0],
+					 [0,1,0,0],
+					 [0,0,0,0]],
+
+		singleton:	[[0,0,0,0],
+				 [0,1,0,0],
+				 [0,0,0,0],
+				 [0,0,0,0]]
+
+	},
+	L: {
+		color : 'yellowgreen',
+		offset:[3,9],
+		i:			[[0,0,0,0],
+					 [1,1,1,0],
+					 [1,0,0,0],
+					 [0,0,0,0]],
+
+		cw:			[[1,1,0,0],
+					 [0,1,0,0],
+					 [0,1,0,0],
+					 [0,0,0,0]],
+
+
+		u:			[[0,0,1,0],
+					 [1,1,1,0],
+					 [0,0,0,0],
+					 [0,0,0,0]],
+
+		ccw:		[[0,1,0,0],
+					 [0,1,0,0],
+					 [0,1,1,0],
+					 [0,0,0,0]],
+
+		singleton:	[[0,0,0,0],
+				 [0,1,0,0],
+				 [0,0,0,0],
+				 [0,0,0,0]]
+
+	},
+	O: {
+		color : 'yellowgreen',
+		offset:[4,9],
+		i:			[[0,0,0,0],
+					 [0,1,1,0],
+					 [0,1,1,0],
+					 [0,0,0,0]],
+		cw:			[[0,0,0,0],
+					 [0,1,1,0],
+					 [0,1,1,0],
+					 [0,0,0,0]],
+		u:			[[0,0,0,0],
+					 [0,1,1,0],
+					 [0,1,1,0],
+					 [0,0,0,0]],
+		ccw:		[[0,0,0,0],
+					 [0,1,1,0],
+					 [0,1,1,0],
+					 [0,0,0,0]],
+		singleton:	[[0,0,0,0],
+				 [0,1,0,0],
+				 [0,0,0,0],
+				 [0,0,0,0]]
+
+		},
+	S: {
+		color : 'yellowgreen',
+		offset:[5,9],
+		i:			[[0,0,0,0],
+					 [0,1,1,0],
+					 [1,1,0,0],
+					 [0,0,0,0]],
+
+		cw:			[[1,0,0,0],
+					 [1,1,0,0],
+					 [0,1,0,0],
+					 [0,0,0,0]],
+
+		u:			[[0,0,0,0],
+					 [0,1,1,0],
+					 [1,1,0,0],
+					 [0,0,0,0]],
+
+		ccw:		[[1,0,0,0],
+					 [1,1,0,0],
+					 [0,1,0,0],
+					 [0,0,0,0]],
+		singleton:	[[0,0,0,0],
+				 [0,1,0,0],
+				 [0,0,0,0],
+				 [0,0,0,0]]
+
+	},
+	T: {
+		color : 'yellowgreen',
+		offset:[8,9],
+		i:			[[0,0,0,0],
+					 [1,1,1,0],
+					 [0,1,0,0],
+					 [0,0,0,0]],
+
+		cw:		[[0,1,0,0],
+					 [1,1,0,0],
+					 [0,1,0,0],
+					 [0,0,0,0]],
+
+		u:			[[0,1,0,0],
+					 [1,1,1,0],
+					 [0,0,0,0],
+					 [0,0,0,0]],
+
+		ccw:		[[0,1,0,0],
+					 [0,1,1,0],
+					 [0,1,0,0],
+					 [0,0,0,0]],
+		singleton:	[[0,0,0,0],
+				 [0,1,0,0],
+				 [0,0,0,0],
+				 [0,0,0,0]]
+
+	},
+	Z: {
+		color : 'yellowgreen',
+		offset:[2,9],
+		i:			[[0,0,0,0],
+					 [1,1,0,0],
+					 [0,1,1,0],
+					 [0,0,0,0]],
+
+		cw:			[[0,0,1,0],
+					 [0,1,1,0],
+					 [0,1,0,0],
+					 [0,0,0,0]],
+
+		u:			[[0,0,0,0],
+					 [1,1,0,0],
+					 [0,1,1,0],
+					 [0,0,0,0]],
+
+		ccw:		[[0,1,0,0],
+					 [1,1,0,0],
+					 [1,0,0,0],
+					 [0,0,0,0]],
+		singleton:	[[0,0,0,0],
+				 [0,1,0,0],
+				 [0,0,0,0],
+				 [0,0,0,0]]
+
+	},
+	G: {
+		color : 'gray',
+		offset: [0,9],
+		singleton:	[[0,0,0,0],
+				 [0,1,0,0],
+				 [0,0,0,0],
+				 [0,0,0,0]]
+	},
+	Flash: {
+		color : 'lightgray',
+		offset: [0,9],
+		singleton:	[[0,0,0,0],
+				 [0,1,0,0],
+				 [0,0,0,0],
+				 [0,0,0,0]]
+	}
+};
+
 /** Definition of the decorations*/
 var decoration ={
 	n1: {s: [0,0], e: [1,1]},
@@ -3840,6 +4134,91 @@ function getMatrix(type,orientation, RS){
 						break;
 				} // end type
 			break; // end srs
+			case 'GB':
+				switch(type)
+				{
+					case 'I':
+						switch(orientation)
+							{
+								case 'i':	matrix = GB.I.i;  break;
+								case 'cw':	matrix = GB.I.cw;  break;
+								case 'ccw':	matrix = GB.I.ccw;  break;
+								case 'u':	matrix = GB.I.u;  break;
+								case 'singleton':	matrix = GB.I.singleton;  break;
+							}
+						break;
+					case 'T':
+						switch(orientation)
+							{
+								case 'i':	matrix = GB.T.i;  break;
+								case 'cw':	matrix = GB.T.cw;  break;
+								case 'ccw':	matrix = GB.T.ccw;  break;
+								case 'u':	matrix = GB.T.u;  break;
+								case 'singleton':	matrix = GB.T.singleton;  break;
+							}
+						break;
+					case 'L':
+						switch(orientation)
+							{
+								case 'i':	matrix = GB.L.i;  break;
+								case 'cw':	matrix = GB.L.cw;  break;
+								case 'ccw':	matrix = GB.L.ccw;  break;
+								case 'u':	matrix = GB.L.u;  break;
+								case 'singleton':	matrix = GB.L.singleton;  break;
+							}
+						break;
+					case 'J':
+						switch(orientation)
+							{
+								case 'i':	matrix = GB.J.i;  break;
+								case 'cw':	matrix = GB.J.cw;  break;
+								case 'ccw':	matrix = GB.J.ccw;  break;
+								case 'u':	matrix = GB.J.u;  break;
+								case 'singleton':	matrix = GB.J.singleton;  break;
+							}
+						break;
+					case 'S':
+						switch(orientation)
+							{
+								case 'i':	matrix = GB.S.i;  break;
+								case 'cw':	matrix = GB.S.cw;  break;
+								case 'ccw':	matrix = GB.S.ccw;  break;
+								case 'u':	matrix = GB.S.u;  break;
+								case 'singleton':	matrix = GB.S.singleton;  break;
+							}
+						break;
+					case 'Z':
+						switch(orientation)
+							{
+								case 'i':	matrix = GB.Z.i;  break;
+								case 'cw':	matrix = GB.Z.cw;  break;
+								case 'ccw':	matrix = GB.Z.ccw;  break;
+								case 'u':	matrix = GB.Z.u;  break;
+								case 'singleton':	matrix = GB.Z.singleton;  break;
+							}
+						break;
+					case 'O':
+						switch(orientation)
+							{
+								case 'i':	matrix = GB.O.i;  break;
+								case 'cw':	matrix = GB.O.cw;  break;
+								case 'ccw':	matrix = GB.O.ccw;  break;
+								case 'u':	matrix = GB.O.u;  break;
+								case 'singleton':	matrix = GB.O.singleton;  break;
+							}
+						break;
+					case 'G':
+						switch(orientation)
+							{
+								case 'i':	matrix = GB.G.i;  break;
+								case 'cw':	matrix = GB.G.cw;  break;
+								case 'ccw':	matrix = GB.G.ccw;  break;
+								case 'u':	matrix = GB.G.u;  break;
+								case 'singleton':	matrix = GB.G.singleton;  break;
+							}
+						break;
+				} // end type
+			break; // end GB
 		}// end rs
 		return matrix;
 
