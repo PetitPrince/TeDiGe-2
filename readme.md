@@ -1,6 +1,6 @@
 TeDiGe-2
 ========
-TeDiGe-2 is an online Tetris Diagram Generator.  A bit like [fumen](http://fumen.zui.jp/), a bit like [tage](http://tage.emaame.com/), except the comments are written in english (... sort of) instead of Japanese. It makes heavy use of the <Canvas> element.
+TeDiGe-2 is an online Tetris Diagram Generator.  A bit like [fumen](http://fumen.zui.jp/), a bit like [tage](http://tage.emaame.com/), except the comments are written in english (... sort of) instead of Japanese. It makes heavy use of the < Canvas > element.
 
 Examples / Demo
 ----------------
