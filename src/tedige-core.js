@@ -2392,6 +2392,10 @@ function Frame(painter){
 					if (matrix[i][j])
 					{
 						this.painter.drawBlock(parseInt(this.activePiecePositionX-1+j,10),parseInt(this.activePiecePositionY-1+i,10),this.activePieceType,this.RS,'active');
+							if(this.activePieceOpacity == 'Flash')
+							{
+								this.painter.drawBlock(parseInt(this.activePiecePositionX-1+j,10),parseInt(this.activePiecePositionY-1+i,10),this.activePieceType,this.RS,'flash');
+							}
 					}
 				}
 			}
@@ -2425,12 +2429,7 @@ function Frame(painter){
 		this.painter.drawOpacity(this.activePieceOpacity); // ditto
 
 		this.painter.changeActiveOpacity(this.activePieceOpacity);
-		if(this.activePieceOpacity == 'Flash')
-		{
-			this.addPiece(this.activePiecePositionX,this.activePiecePositionY,this.activePieceType,this.activePieceOrientation,'Flash',false);
-			// TODO remove addPiece dependancy
-		}
-
+		
 		this.painter.eraseLayer('whiteborder');
 		if (this.whiteborder)
 		{
@@ -3091,11 +3090,6 @@ function Frame(painter){
 							break;
 							case 'preview-eraser':
 								this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),'G',this.RS,'preview');
-							break;
-							case 'Flash':
-								this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,'flash');
-								this.painter.highlight(x-1+j,y-1+i);
-								this.painter.drawBrowserBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,this.id,'active'); // erase this line to disable the browser thing
 							break;
 						}
 					}
