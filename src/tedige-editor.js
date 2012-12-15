@@ -631,7 +631,6 @@ Frame.prototype.dropActivePiece = function(){
 	@param {string} direction Direction in which the piece move. Possible value:'left', 'right', 'up', 'down'
 	*/
 Frame.prototype.moveActivePiece = function(direction){
-	console.log(this.activePiecePositionX >= 0);
 	if(this.activePiecePositionX >= 0)
 	{
 		var posX = this.activePiecePositionX;
@@ -1916,7 +1915,7 @@ $(document).ready(function(){
 		aDiag.new_frame(); // add a new frame for each playfield
 
 		// rotation system
-		if (ct)
+		if (ct == 1)
 		{
 		  aDiag.frames[z].RS = 'SRS';
 		}
@@ -1942,8 +1941,9 @@ $(document).ready(function(){
 			{
 			aDiag.frames[z].activePieceOrientation = oconvert(ap[3*z+1],ct,aDiag.frames[z].activePieceType);
 			var activePositions = pconvert(ap[3*z+2],aDiag.frames[z].activePieceOrientation,ct);
-			aDiag.frames[z].activePiecePositionX = activePositions[0];
-			aDiag.frames[z].activePiecePositionY = activePositions[1];
+			
+			aDiag.frames[z].activePiecePositionX = parseInt(parseInt(activePositions[0])+parseInt(fumenoffsetx(aDiag.frames[z].activePieceType,aDiag.frames[z].activePieceOrientation,aDiag.frames[z].RS)));
+			aDiag.frames[z].activePiecePositionY = parseInt(parseInt(activePositions[1])+parseInt(fumenoffsety(aDiag.frames[z].activePieceType,aDiag.frames[z].activePieceOrientation,aDiag.frames[z].RS)));
 			}
 
 		// comments
@@ -2063,8 +2063,79 @@ $(document).ready(function(){
 			break;
 		}
 	}
-
+	
 	return output;
+	}
+	function fumenoffsetx(piecetype,pieceorientation){
+		var output = "0";
+		if(aDiag.frames[z].RS == "ARS")
+		{
+		switch(piecetype)
+			{
+			case "I":
+				switch(pieceorientation)
+				{
+					case "cw": output = "-1"; break;
+					case "ccw": output = "-1"; break;
+				}
+			}
+		}
+		else{ //if srs
+		switch(piecetype)
+			{
+			case "Z":
+				switch(pieceorientation)
+				{
+					case "ccw": output = "1"; break;
+				}
+			
+			case "I":
+				switch(pieceorientation)
+				{
+					case "cw": output = "-1"; break;
+				}
+			}
+		
+		}
+		return output;
+	}
+	
+	function fumenoffsety(piecetype,pieceorientation){
+		var output = "0";
+		if(aDiag.frames[z].RS == "ARS")
+		{
+			switch(piecetype)
+				{
+				case "J":
+					switch(pieceorientation)
+					{
+						case "u": output = "-1"; break;
+					}
+				case "T":
+					switch(pieceorientation)
+					{
+						case "u": output = "-1"; break;
+					}
+				case "L":
+					switch(pieceorientation)
+					{
+						case "u": output = "-1"; break;
+					}
+				}
+		}
+		else{
+			switch(piecetype)
+				{
+				case "Z":
+					switch(pieceorientation)
+					{
+						case "i": output = "1"; break;
+					}
+
+				}
+		
+		}
+		return output;
 	}
 
 	});

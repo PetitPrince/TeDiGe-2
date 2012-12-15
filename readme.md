@@ -4,7 +4,7 @@ TeDiGe-2 is an online Tetris Diagram Generator.  A bit like [fumen](http://fumen
 
 Examples / Demo
 ----------------
-See [this](http://petitprince.github.com/TeDiGe-2/examples.html) for a practical example. For how to use the editor, see [this wiki page](https://github.com/PetitPrince/TeDiGe-2/wiki/User-manual).
+See [this](http://petitprince.github.com/TeDiGe-2/example.html) for a practical example. For how to use the editor, see [this wiki page](https://github.com/PetitPrince/TeDiGe-2/wiki/User-manual).
 
 Usage
 ------
