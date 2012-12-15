@@ -631,7 +631,8 @@ Frame.prototype.dropActivePiece = function(){
 	@param {string} direction Direction in which the piece move. Possible value:'left', 'right', 'up', 'down'
 	*/
 Frame.prototype.moveActivePiece = function(direction){
-	if(this.activePiecePositionX)
+	console.log(this.activePiecePositionX >= 0);
+	if(this.activePiecePositionX >= 0)
 	{
 		var posX = this.activePiecePositionX;
 		var posY = this.activePiecePositionY;

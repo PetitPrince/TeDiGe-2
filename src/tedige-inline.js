@@ -81,8 +81,8 @@ return decodeURIComponent(escape(RawDeflate.inflate($.base64.decode(str))));
 
 				if(painters[newID].ready) {
 					clearInterval(initiator);
-					var titlesearch = $("#"+newID).attr('title');
-					if(titlesearch) // load if there's something in the title
+					var titlesearch = $("#"+newID).data('tedigecode');
+					if(titlesearch) // load if there's something in the tedige-string attribute (for instance <div id="nana" class="tedige-playfield-wrapper" data-tedige-string="{tedige code here}"></div>)
 					{
 					var littlestr = titlesearch.split("-");
 						switch(littlestr[1])

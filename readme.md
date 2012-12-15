@@ -37,15 +37,15 @@ In your header place
 
 Doing so will convert any div in your page that look like
 
-    <div id="UNIQUE_ID" class="tedige-playfield-wrapper" title="TEDIGE_CODE"></div>
+    <div id="UNIQUE_ID" class="tedige-playfield-wrapper" data-tedigecode="TEDIGE_CODE"></div>
 
 into the corresponding nicely formatted canvas.
 UNIQUE_ID is, you guessed it, an unique ID, and TEDIGE_CODE is a mumbo-jumbo of a string generated
-by the editor. See example.html for a practical example.
+by the editor. Please note the usage of the custom attribute data-tedigecode. See example.html for some practical example.
 
 You can edit viewer.css to style the diagram at your convenience. The canonical html code is:
 
-    <div id="UNIQUE_ID" class="tedige-playfield-wrapper" title="TEDIGE_CODE">
+    <div id="UNIQUE_ID" class="tedige-playfield-wrapper" data-tedigecode="TEDIGE_CODE">
     	<div class="left-pane">';
     		<div class="nexthold-container">';
     			<canvas id="'+UNIQUE_ID+'-nexthold-background"	width="97" height="32" style="z-index:0;"></canvas>';
@@ -90,7 +90,7 @@ Alternatively, you can use an iframe like you did with fumen
 
     <iframe width="230" scrolling="no" height="335" frameborder="0" src="PATH_TO_VIEWER.HTML?FUMEN_CODE"></iframe>
 
-But iframes generally sucks and can lead to security issues.
+But iframes generally sucks and can lead to security issues. Don't use it if you can.
 
 Documentation
 ---------------
@@ -106,4 +106,5 @@ TeDiGe-2 uses [uglify-js2](https://github.com/mishoo/UglifyJS2) to compress its 
 License
 --------
 TeDiGe-2 is under Creative Commons 3 Attribution (CC3 BY) ![CC3 BY Logo](http://i.creativecommons.org/l/by/3.0/ch/88x31.png "CC3 BY Logo")
-Also, TeDiGe-2 is not affiliated nor endorsed by the Tetris Company (except if they happend to fork it :D). Yes, I know I use your trademark, but don't sue me, it would be stupid.
+
+Also, TeDiGe-2 is not affiliated nor endorsed by the Tetris Company (except if they happend to fork it :D). Yes, I know I use your trademark, but don't sue me, it would be stupid and counterproductive.
