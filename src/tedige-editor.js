@@ -88,8 +88,7 @@ function drawPaletteCell(type,orientation,RS,blockSize,sprite){
 	var Canvas = $('#editor-palette-'+type+orientation);
 	var ctx = Canvas[0].getContext('2d');
 	var matrix = getMatrix(type, orientation, RS);
-	$.data(Canvas,'width',Canvas.width()); // data is faster than Canvas.attr('width',Canvas.width()); http://jsperf.com/jquery-data-vs-attr/22
-
+	Canvas.attr('width',Canvas.width());
 	var color,spriteOffset;
 	switch(RS){
 		case 'ARS':
@@ -631,7 +630,7 @@ Frame.prototype.dropActivePiece = function(){
 	@param {string} direction Direction in which the piece move. Possible value:'left', 'right', 'up', 'down'
 	*/
 Frame.prototype.moveActivePiece = function(direction){
-	if(this.activePiecePositionX >= 0)
+	if((this.activePieceType == "I" && this.activePiecePositionX >= -1) || this.activePiecePositionX >= 0)
 	{
 		var posX = this.activePiecePositionX;
 		var posY = this.activePiecePositionY;
@@ -652,7 +651,18 @@ Frame.prototype.moveActivePiece = function(direction){
 		}
 		if (this.piece_is_in(posX,posY,this.activePieceType,this.activePieceOrientation))
 		{
-		this.addPiece(posX,posY,this.activePieceType,this.activePieceOrientation,'active',false);
+			if($('#checkbox-collision').is(':checked'))
+			{
+				if(!(this.is_piece_colliding(posX,posY,this.activePieceType,this.activePieceOrientation)))
+				{
+					this.addPiece(posX,posY,this.activePieceType,this.activePieceOrientation,'active',false);
+				}
+			}
+			else
+			{
+				this.addPiece(posX,posY,this.activePieceType,this.activePieceOrientation,'active',false);
+			}
+			
 		}
 	}
 };
@@ -662,7 +672,9 @@ Frame.prototype.moveActivePiece = function(direction){
 	@param {string} direction Direction in which the piece rotate. Possible value:'cw', 'ccw'
 	*/
 Frame.prototype.rotateActivePiece = function(direction){
-var ori = this.activePieceOrientation;
+
+	// this could use a serious rewrite
+	var ori = this.activePieceOrientation;
 
 	switch(direction)
 	{
@@ -702,14 +714,292 @@ var ori = this.activePieceOrientation;
 		break;
 
 	}
-	if (this.piece_is_in(this.activePiecePositionX,this.activePiecePositionY,this.activePieceType,ori))
-	{
-	  this.addPiece(this.activePiecePositionX,this.activePiecePositionY,this.activePieceType,ori,'active',false);
+	
+	function ARS_wallkick(self){
+		if(!(self.is_piece_colliding(parseInt(self.activePiecePositionX+1),self.activePiecePositionY,self.activePieceType,ori)))
+			{self.addPiece(parseInt(self.activePiecePositionX+1),self.activePiecePositionY,self.activePieceType,ori,'active',false);}
+		else if(!(self.is_piece_colliding(parseInt(self.activePiecePositionX-1),self.activePiecePositionY,self.activePieceType,ori)))
+			{self.addPiece(parseInt(self.activePiecePositionX-1),self.activePiecePositionY,self.activePieceType,ori,'active',false);}
 	}
+
+	function SRS_wallkick(self,initialOrientation,direction,isI){
+		var offset2,offset3,offset4,offset5;
+		// the table's y-coordinate are opposite of those from the wiki because tedige assume positive y is downwards whereas the wiki uses positive y as downwards
+		if(isI)
+		{
+		switch(direction)
+			{
+				case 'cw':
+					switch(initialOrientation)
+					{
+						case 'i':
+							offset2 = [-2,0];
+							offset3 = [1,0];
+							offset4 = [-2,1];
+							offset5 = [1,-2];
+						break;
+						case 'cw':
+							offset2 = [-1,0];
+							offset3 = [2,0];
+							offset4 = [-1,-2];
+							offset5 = [2,1];
+						break;
+						case 'u':
+							offset2 = [2,0];
+							offset3 = [-1,0];
+							offset4 = [2,-1];
+							offset5 = [-1,2];
+						break;
+						case 'ccw':
+							offset2 = [1,0];
+							offset3 = [-2,0];
+							offset4 = [1,2];
+							offset5 = [-2,-1];
+						break;
+					}
+				break;
+	
+				case 'ccw':
+					switch(initialOrientation)
+					{
+						case 'i':
+							offset2 = [-1,0];
+							offset3 = [2,0];
+							offset4 = [-1,-2];
+							offset5 = [2,-1];
+						break;
+						case 'cw':
+							offset2 = [2,0];
+							offset3 = [-1,0];
+							offset4 = [2,-1];
+							offset5 = [-1,2];
+						break;
+						case 'u':
+							offset2 = [1,0];
+							offset3 = [-2,0];
+							offset4 = [1,2];
+							offset5 = [-2,-1];
+						break;
+						case 'ccw':
+							offset2 = [-2,0];
+							offset3 = [1,0];
+							offset4 = [-2,1];
+							offset5 = [1,-2];
+						break;
+					}
+				break;	
+			}
+
+		}
+		else{
+		switch(direction)
+			{
+				case 'cw':
+					switch(initialOrientation)
+					{
+						case 'i':
+							offset2 = [-1,0];
+							offset3 = [-1,-1];
+							offset4 = [0,2];
+							offset5 = [-1,2];
+						break;
+						case 'cw':
+							offset2 = [1,0];
+							offset3 = [1,1];
+							offset4 = [0,-2];
+							offset5 = [1,-2];
+						break;
+						case 'u':
+							offset2 = [1,0];
+							offset3 = [1,-1];
+							offset4 = [0,2];
+							offset5 = [1,2];
+						break;
+						case 'ccw':
+							offset2 = [-1,0];
+							offset3 = [-1,1];
+							offset4 = [0,-2];
+							offset5 = [-1,-2];
+						break;
+					}
+				break;
+	
+				case 'ccw':
+					switch(initialOrientation)
+					{
+						case 'i':
+							offset2 = [1,0];
+							offset3 = [1,-1];
+							offset4 = [0,2];
+							offset5 = [1,2];
+						break;
+						case 'cw':
+							offset2 = [1,0];
+							offset3 = [1,1];
+							offset4 = [0,-2];
+							offset5 = [1,-2];
+						break;
+						case 'u':
+							offset2 = [-1,0];
+							offset3 = [-1,-1];
+							offset4 = [0,2];
+							offset5 = [-1,2];
+						break;
+						case 'ccw':
+							offset2 = [-1,0];
+							offset3 = [-1,1];
+							offset4 = [0,-2];
+							offset5 = [-1,-2];
+						break;
+					}
+				break;	
+			}
+
+		}
+		
+		if(!(self.is_piece_colliding(parseInt(self.activePiecePositionX+offset2[0]),parseInt(self.activePiecePositionY+offset2[1]),self.activePieceType,ori)))
+		{
+			self.addPiece(parseInt(self.activePiecePositionX+offset2[0]),parseInt(self.activePiecePositionY+offset2[1]),self.activePieceType,ori,'active',false);
+		}
+		else if(!(self.is_piece_colliding(parseInt(self.activePiecePositionX+offset3[0]),parseInt(self.activePiecePositionY+offset3[1]),self.activePieceType,ori)))
+		{
+			self.addPiece(parseInt(self.activePiecePositionX+offset3[0]),parseInt(self.activePiecePositionY+offset3[1]),self.activePieceType,ori,'active',false);
+		}
+		else if(!(self.is_piece_colliding(parseInt(self.activePiecePositionX+offset4[0]),parseInt(self.activePiecePositionY+offset4[1]),self.activePieceType,ori)))
+		{
+			self.addPiece(parseInt(self.activePiecePositionX+offset4[0]),parseInt(self.activePiecePositionY+offset4[1]),self.activePieceType,ori,'active',false);
+		}
+		else if(!(self.is_piece_colliding(parseInt(self.activePiecePositionX+offset5[0]),parseInt(self.activePiecePositionY+offset5[1]),self.activePieceType,ori)))
+		{
+			self.addPiece(parseInt(self.activePiecePositionX+offset5[0]),parseInt(self.activePiecePositionY+offset5[1]),self.activePieceType,ori,'active',false);
+		}
+	}
+	
+	if($('#checkbox-collision').is(':checked'))
+	{
+		if((this.is_piece_colliding(this.activePiecePositionX,this.activePiecePositionY,this.activePieceType,ori))) // is the new position is not colliding with something
+		{
+			if($('#checkbox-wallkick').is(':checked'))
+				{
+				switch(this.RS)
+				{
+					case 'ARS': // ARS wallkick, TGM2 flavor (no floorkick, no I kick)
+						switch(this.activePieceType)
+						{
+							case "J":
+								if(this.activePieceOrientation == 'i')
+								{
+									if(this.playfield[parseInt(this.activePiecePositionX-1+1,10)][parseInt(this.activePiecePositionY-1+2,10)] || 
+									this.playfield[parseInt(this.activePiecePositionX-1+2,10)][parseInt(this.activePiecePositionY-1+0,10)])
+									{
+										ARS_wallkick(this.sself);
+									}					
+									else if(this.playfield[parseInt(this.activePiecePositionX-1+1,10)][parseInt(this.activePiecePositionY-1+1,10)] || 
+											this.playfield[parseInt(this.activePiecePositionX-1+1,10)][parseInt(this.activePiecePositionY-1+0,10)])
+									{
+										// do nothing
+									}
+									else{
+										ARS_wallkick(this.sself);
+									}
+								}
+								else if(this.activePieceOrientation == 'u')
+								{
+									if(this.playfield[parseInt(this.activePiecePositionX-1+1,10)][parseInt(this.activePiecePositionY-1+2,10)] || 
+									this.playfield[parseInt(this.activePiecePositionX-1+1,10)][parseInt(this.activePiecePositionY-1+0,10)])
+									{
+										// do nothing
+									}
+									else{
+										ARS_wallkick(this.sself);
+									}
+								}
+								else{
+								ARS_wallkick(this.sself);
+								}
+							break;
+			
+							case "L":
+								if(this.activePieceOrientation == 'i')
+								{
+									if(this.playfield[parseInt(this.activePiecePositionX-1+1,10)][parseInt(this.activePiecePositionY-1+2,10)] || 
+									this.playfield[parseInt(this.activePiecePositionX-1+0,10)][parseInt(this.activePiecePositionY-1+0,10)])
+									{
+										ARS_wallkick(this.sself);
+									}					
+									else if(this.playfield[parseInt(this.activePiecePositionX-1+1,10)][parseInt(this.activePiecePositionY-1+1,10)] || 
+									this.playfield[parseInt(this.activePiecePositionX-1+1,10)][parseInt(this.activePiecePositionY-1+0,10)])
+									{
+										// do nothing
+									}
+									else{
+										ARS_wallkick(this.sself);
+									}
+								}
+								else if(this.activePieceOrientation == 'u')
+								{
+									if(this.playfield[parseInt(this.activePiecePositionX-1+1,10)][parseInt(this.activePiecePositionY-1+2,10)] || 
+									this.playfield[parseInt(this.activePiecePositionX-1+1,10)][parseInt(this.activePiecePositionY-1+0,10)])
+									{
+										// do nothing
+									}
+									else{
+										ARS_wallkick(this.sself);
+									}
+								}
+								else{
+								ARS_wallkick(this.sself);
+								}
+							break;
+			
+							case "T":
+							console.log('in t');
+								if(this.activePieceOrientation == 'u' || this.activePieceOrientation == 'i')
+								{
+									if(this.playfield[parseInt(this.activePiecePositionX-1+1,10)][parseInt(this.activePiecePositionY-1+0,10)])
+									{
+										// do nothing
+									}
+									else{
+										ARS_wallkick(this.sself);
+									}
+								}					
+								else{
+									ARS_wallkick(this.sself);
+								}
+								
+							break;
+			
+								
+							default:
+							ARS_wallkick(this.sself);
+							break;
+						}
+					break;
+					
+					case 'SRS':
+						if(this.activePieceType == 'I')
+						{
+							SRS_wallkick(this.sself,this.activePieceOrientation, direction,true);
+						}
+						else{
+							SRS_wallkick(this.sself,this.activePieceOrientation, direction,false);						
+						}
+					
+					break;
+				}
+			}
+		}
+		else{ // if everything is normal
+			this.addPiece(this.activePiecePositionX,this.activePiecePositionY,this.activePieceType,ori,'active',false);
+		}
+	}
+	else
+	{
+		this.addPiece(this.activePiecePositionX,this.activePiecePositionY,this.activePieceType,ori,'active',false);
+	}
+
 };
-
-
-
 
 $(document).ready(function(){
 	/* ------------------------------------------------------------------------- */
@@ -1255,7 +1545,7 @@ $(document).ready(function(){
 
 	/*--- Active piece buttons ---*/
 
-	$('#cmd_move_up').click(function(){
+	$('#cmd_move_up').mousedown(function(){
 		if($('#pf-auto-action-frame-increment:checked').val())
 		{
 			$('#pf-cmd_clone').click();
@@ -1263,21 +1553,21 @@ $(document).ready(function(){
 		aDiag.frames[aDiag.current_frame].moveActivePiece('up');
 		
 	});
-	$('#cmd_move_down').click(function(){
+	$('#cmd_move_down').mousedown(function(){
 		if($('#pf-auto-action-frame-increment:checked').val())
 		{
 			$('#pf-cmd_clone').click();
 		}
 		aDiag.frames[aDiag.current_frame].moveActivePiece('down');
 	});
-	$('#cmd_move_left').click(function(){
+	$('#cmd_move_left').mousedown(function(){
 		if($('#pf-auto-action-frame-increment:checked').val())
 		{
 			$('#pf-cmd_clone').click();
 		}
 		aDiag.frames[aDiag.current_frame].moveActivePiece('left');
 	});
-	$('#cmd_move_right').click(function(){
+	$('#cmd_move_right').mousedown(function(){
 		if($('#pf-auto-action-frame-increment:checked').val())
 		{
 			$('#pf-cmd_clone').click();
@@ -1285,14 +1575,14 @@ $(document).ready(function(){
 		aDiag.frames[aDiag.current_frame].moveActivePiece('right');
 	});
 
-	$('#cmd_ccw').click(function(){
+	$('#cmd_ccw').mousedown(function(){
 		if($('#pf-auto-action-frame-increment:checked').val())
 		{
 			$('#pf-cmd_clone').click();
 		}
 		aDiag.frames[aDiag.current_frame].rotateActivePiece('ccw');
 	});
-	$('#cmd_cw').click(function(){
+	$('#cmd_cw').mousedown(function(){
 		if($('#pf-auto-action-frame-increment:checked').val())
 		{
 			$('#pf-cmd_clone').click();
@@ -1300,10 +1590,10 @@ $(document).ready(function(){
 		aDiag.frames[aDiag.current_frame].rotateActivePiece('cw');
 	});
 
-	$('#cmd_paint').click(function(){
+	$('#cmd_paint').mousedown(function(){
 		aDiag.frames[aDiag.current_frame].paintActivePiece();
 	});
-	$('#cmd_lock').click(function(){
+	$('#cmd_lock').mousedown(function(){
 		aDiag.frames[aDiag.current_frame].lockActivePiece();
 		if(IS_TIMING)
 		{
@@ -1311,7 +1601,7 @@ $(document).ready(function(){
 		}
 		
 	});
-	$('#cmd_drop').click(function(){
+	$('#cmd_drop').mousedown(function(){
 		aDiag.frames[aDiag.current_frame].dropActivePiece();
 	});
 	
@@ -1709,6 +1999,8 @@ $(document).ready(function(){
 
 	$('#rs-select').change(function(){
 		aDiag.frames[aDiag.current_frame].modify_RS($('#rs-select').val());
+		drawPalette($('#rs-select').val(),8,aPainter.sprite);
+
 	});
 	$('#change-all-rs').click(function(){
 		aDiag.modify_RS($('#rs-select').val());
@@ -1795,6 +2087,13 @@ $(document).ready(function(){
 	//'7ebhiipqbxqb5qbiqbqqbyqb6qbjqbrqbzqb7qbkqb?sqb0qb8qblqbtqb1qb9qbmqbuqb2qb+qbnqbvqb3qb/qb';// full rotation
 	//var encstr = '7eYKHWOA0BeTASIjRASIyQEF2BAABmBUcBviBLjBWe?BAwNyAU9sJEFb0HEvT98AwSVTASY6dD2488AwA2JEnoo2AD?MeGEzXpTASICKEFbEcEP5BAAMQBOGBrRBtXBqHBpPBEOBv4?A9JBJPBnDBO+ALABdHBFgBdgBlfBAAA';
 	//var encstr ='/dD3hbH3ibI3gbH3hbI3gbC3pbAoUxAso2TAySzTAS?ITeDZ2vvAuno2A5H5TASY6dD2488AQ+74Dzoo2Azo2TASo/?QEOAAAA7eEh9OEAlsyfCAAAbKBVJBSFBNdE3kbC3mbC3mbC?3mbC3icAwNEA6HXyD7eVtOqyAFreRAyp+5APGVTAyp78Axn?A6AFr+5AxnA6AFreRAyp7CEFStJEFreRAypeRAyZAAAlecF?ectHBtocFocNyc13cdiBt3cl3cF3cNBd1mBjYBZzcBcBGZB?aYBUycchBAAA";
+	
+	// srs in a box
+	//v110@JcF3jbA3jbA3jbA3jbA3jbA3jbA3jbA3jbA3jbF3Zd?B4i7eCJAcRAcZAcOcAAnbA3AAnbA3AAnbA3AAkbD3AAjbFA?ZdCAc7eWKAcSAcaAcDAcLAcTAcbAcEAcMAcUAccAcFAcNAc?VAcdAcGAcOAcWAceAcHAcPAcXAcfAc
+
+	// ars in a box
+	//v110@JcF3jbA3jbA3jbA3jbA3jbA3jbA3jbA3jbA3jbF3Zd?BAc7eCJAcRAcZAcOcAAnbA3AAnbA3AAnbA3AAkbD3AAjbFA?ZdCAc7eWKAcSAcaAcDAcLAcTAcbAcEAcMAcUAccAcFAcNAc?VAcdAcGAcOAcWAceAcHAcPAcXAcfAc
+	
 	//First, run some actual fumen code, 'cause I (PP) am not a CS genius. Thanks myndzi for the hints about how it works
 	// I stripped some useless (for my purposes) part of the code. Gomenasai Mihys-san !
 	enclim=32768;

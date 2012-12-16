@@ -2231,7 +2231,7 @@ function Frame(painter){
 	GLOBAL_FRAME_COUNTER++;
 	/** A variable referencing the class, used to exploit closure stuff in other methods*/
 	var myself = this;
-
+	this.sself = this;
 	/** An unique ID*/
 	this.id = GLOBAL_FRAME_COUNTER;
 
@@ -2988,7 +2988,45 @@ function Frame(painter){
 			break;
 		}
 	};
+	/** Checks if a given piece is colliding with some blocks or walls.
+	
+		@param {number} x Horizontal coordinate
+		@param {number} y Vertical coordinate
+		@param {string} type Define the color of the block to be added. Possible values: (SZLJTOIG)
+		@param {string} orientation Orientation of the tetramino; Possible values: 'i', 'cw', 'ccw' or 'u'
+	*/
 
+	this.is_piece_colliding = function(x,y,type,orientation){
+		var matrix = getMatrix(type, orientation, this.RS);
+		var tmp = "", tmp2 = "";
+		
+		for(var i = 0; i < 4; i++) {
+			for(var j = 0; j < 4; j++) {
+			
+				if(matrix[i][j])
+				{
+					// this.painter.drawBlock(parseInt(parseInt(x-1+j,10),10),parseInt(parseInt(y-1+i,10),10),'O','ARS','preview','false');
+				}
+				
+				if(matrix[i][j] && !this.is_in(parseInt(x-1+j,10),parseInt(y-1+i,10)))
+				{
+				 // this.painter.drawBlock(parseInt(parseInt(x-1+j,10),10),parseInt(parseInt(y-1+i,10),10),'S','ARS','preview','false');
+					return true;
+				}
+				
+				
+				if(matrix[i][j] // for each piece's block...
+				&& this.is_in(parseInt(x-1+j,10),parseInt(y-1+i,10)) //... check that they are in the playfield ...
+				&& this.playfield[parseInt(x-1+j,10)][parseInt(y+i-1,10)][0]) // and check if there's no collision with an existing piece
+				{
+					// this.painter.drawBlock(parseInt(parseInt(x-1+j,10),10),parseInt(parseInt(y-1+i,10),10),'I','ARS','preview','false');
+					return true;
+				}
+			}
+		}	
+		return false;
+	}
+	
 	/** 'Macro' method that modifies several times a given layer according to the tetramino shape given in parameter.
 	
 		@param {number} x Horizontal coordinate
@@ -2999,36 +3037,30 @@ function Frame(painter){
 						'garbage','preview','decoration-preview','decoration','erase','preview-eraser','Flash'
 		@param {boolean}} drop Is the method is in drop mode ?
 	*/
+	
 	this.addPiece = function(x,y,type,orientation,mode,drop){
 		var matrix = getMatrix(type, orientation, this.RS);
 		var still_droping = true;
 		var counter = 0;
 		while(drop & still_droping ){
 			counter = 0;
-			for(var i = 0; i < 4; i++) {
-				for(var j = 0; j < 4; j++) {
-					if (matrix[i][j] &&
-						this.is_in(parseInt(x-1+j,10),parseInt(y+i,10)) &&
-						!(this.playfield[parseInt(x-1+j,10)][parseInt(y+i,10)][0])
-						)
-					{
-						counter++;
-					}
-				}
-			}
-			if (counter != 4) {
+			
+			if(this.is_piece_colliding(parseInt(x),parseInt(y),type,orientation))
+			{
 				still_droping = false;
 			}
-			else
-			{
-				y++;
+			else{
+			y++;
 			}
 		}
-	
+		if(drop)
+			{y--;}
+		
 		if (mode == 'inactive' || mode == 'garbage') {
 			this.painter.CanvasPreview.attr('width',this.painter.CanvasPreview.width()); //erase the preview layer
 		}
 		if (mode == 'active') {
+
 			this.activePieceType = type;
 			this.activePieceOrientation = orientation;
 			this.activePiecePositionX = x;
