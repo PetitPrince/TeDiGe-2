@@ -354,7 +354,7 @@
 					<br />
 					<input type="checkbox" id="checkbox-active" style="display:inline" /> Active<input type="checkbox" id="checkbox-garbage" style="display:inline" /> Garbage
 					<br />
-					<input type="checkbox" id="checkbox-collision" style="display:inline" checked="checked" />Collision<input type="checkbox" id="checkbox-wallkick" style="display:inline" />Wallkick
+					<input type="checkbox" id="checkbox-collision" style="display:inline" checked="checked" />Collision<span id="wallkick-selector"><input type="checkbox" id="checkbox-wallkick" style="display:inline" />Wallkick</span>
 					<!-- <input type="button" style="display:none" id="cmd_clear_active" value="C"> <input type="button" id="cmd_clear_inactive" value="C"> -->
 				</div>
 			</div>
@@ -543,6 +543,7 @@
 				Export: <input class="export-button" id="export-forum-button" type="button" value="Forum">
 				<input class="export-button" id="export-editor-button" type="button" value="Editor">
 				<input class="export-button" id="export-viewer-button" type="button" value="Viewer">
+				<input class="export-button" id="export-custom-button" type="button" value="Custom">
 				<br />
 				Import:
 				<input type="button" id="fumen_import" value="Fumen" />
@@ -551,7 +552,9 @@
 				Image:
 				<input id="export-image-frame-button" type="button" value="Export frame as image">
 				<input id="export-image-diagram-button" type="button" value="Export this diagram as gif"><br />
-				<input id="export-image-play-sign" type="checkbox"/> Add "play" sign
+				<input id="export-image-play-sign" type="checkbox"/> Add "play" sign<br />
+				Custom export template: <input id="export-custom-string" value="" /> <br/>
+				<small>(%TEDIGE% will be replaced by the actual code)</small>
 
 			</div>
 		</div>

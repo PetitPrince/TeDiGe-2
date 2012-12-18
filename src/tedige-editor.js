@@ -2750,6 +2750,12 @@ $(document).ready(function(){
 			case 'export-forum-button':
 				$('#export').html('[tedige]v01-'+export_string+'[/tedige]').select();
 			break;
+			case 'export-custom-button':
+				var findtedige = /%TEDIGE%/; // find %TEDIGE%
+				var custom_tag = $('#export-custom-string').val();
+				custom_tag = custom_tag.replace(findtedige, 'v-01'+export_string);
+				$('#export').html(custom_tag).select();
+			break;
 			case 'export-editor-button':
 				$('#export').html(window.location.href.split('?')[0]+'?v01-'+export_string).select(); // the extra split is here to make sure you don't catch a leftover from a previous URL import.
 			break;
@@ -2790,13 +2796,14 @@ $(document).ready(function(){
 	$('#import-button').click(function(){
 		var bigstr = $('#import').val();
 
+		// find the position
 		resultforum = regforum.exec(bigstr); // todo: make that work ?
 		resultURL = regURL.exec(bigstr);
 		//console.log(resultforum.split('-'));
 		var littlestr;
 		if (resultURL)
 		{
-			littlestr = resultURL[0].split('-');
+			littlestr = resultURL[0].split('-'); //split till the end
 		}
 
 		if (resultforum)
