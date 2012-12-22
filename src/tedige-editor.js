@@ -1518,13 +1518,13 @@ $(document).ready(function(){
 
 	$('#pf-cmd_next').click(function(){
 		if(aDiag.current_frame < aDiag.frames.length - 1){
-		aDiag.next_frame();
-		opacity_highlight_remove();
-		opacity_auto_highlight();
+			aDiag.next_frame();
+			opacity_highlight_remove();
+			opacity_auto_highlight();
 		}
 		else
 		{
-		$('#pf-cmd_clone').click();
+			$('#pf-cmd_clone').click();
 		}
 	});
 
@@ -2077,7 +2077,7 @@ $(document).ready(function(){
 
 	$('#panel-decorations').click(function(){
 		$('#panel-decorations td').removeClass('pressed');
-		$('#panel-decorations input:checked').parent().parent().addClass('pressed');
+		$('#panel-decorations table input:checked').parent().parent().addClass('pressed');
 	});
 
 	$('#fumen_import').click(function(){
@@ -2678,6 +2678,19 @@ $(document).ready(function(){
 			TOOL_ERASER_DECO = true;
 			$eraserdeco.addClass('pressed');
 
+		}
+	});
+
+var $highlightdeco = $('#checkbox-highlight-decoration');
+	$highlightdeco.click(function(){
+		if ($highlightdeco.is(':checked')) {
+			$highlightdeco.attr('checked',true);
+			$('#pf-decoPin').fadeIn();
+		}
+		else
+		{
+			$highlightdeco.attr('checked',false);
+			$('#pf-decoPin').fadeOut();
 		}
 	});
 

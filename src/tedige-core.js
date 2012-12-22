@@ -1795,10 +1795,10 @@ function Diagram(painter){
 	/** Switches the current frame to the next one, displays it.
 	*/
 	this.next_frame = function(){
-				this.painter.eraseLayer('all');
-				this.current_frame++,
-				this.frames[this.current_frame].draw();
-				this.update_framecount();
+		this.painter.eraseLayer('all');
+		this.current_frame++,
+		this.frames[this.current_frame].draw();
+		this.update_framecount();
 	};
 
 	/** Switches the current frame to the last one, displays it.

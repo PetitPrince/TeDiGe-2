@@ -1802,10 +1802,10 @@
 <span class='line'>1795</span> </span><span class="WHIT">	</span><span class="COMM">/** Switches the current frame to the next one, displays it.
 <span class='line'>1796</span> 	*/</span><span class="WHIT">
 <span class='line'>1797</span> </span><span class="WHIT">	</span><span class="NAME">this.next_frame</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1798</span> </span><span class="WHIT">				</span><span class="NAME">this.painter.eraseLayer</span><span class="PUNC">(</span><span class="STRN">'all'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1799</span> </span><span class="WHIT">				</span><span class="NAME">this.current_frame</span><span class="PUNC">++</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1800</span> </span><span class="WHIT">				</span><span class="NAME">this.frames</span><span class="PUNC">[</span><span class="NAME">this.current_frame</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">draw</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1801</span> </span><span class="WHIT">				</span><span class="NAME">this.update_framecount</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1798</span> </span><span class="WHIT">		</span><span class="NAME">this.painter.eraseLayer</span><span class="PUNC">(</span><span class="STRN">'all'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1799</span> </span><span class="WHIT">		</span><span class="NAME">this.current_frame</span><span class="PUNC">++</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1800</span> </span><span class="WHIT">		</span><span class="NAME">this.frames</span><span class="PUNC">[</span><span class="NAME">this.current_frame</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">draw</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1801</span> </span><span class="WHIT">		</span><span class="NAME">this.update_framecount</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>1802</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>1803</span> 
 <span class='line'>1804</span> </span><span class="WHIT">	</span><span class="COMM">/** Switches the current frame to the last one, displays it.
