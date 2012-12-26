@@ -88,6 +88,7 @@ return decodeURIComponent(escape(RawDeflate.inflate($.base64.decode(str))));
 						switch(littlestr[1])
 						{
 							case "all":
+								console.log('console.log: '+diagrams[newID].flate_decode(littlestr[2]));
 								diagrams[newID].load(diagrams[newID].flate_decode(littlestr[2]));
 								diagrams[newID].frames[diagrams[newID].current_frame].draw();
 							break;

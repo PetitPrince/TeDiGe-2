@@ -1042,7 +1042,9 @@ $(document).ready(function(){
 				$('#import').val(URLsearch);
 				$('#import-button').click();
 			}
-			//aDiag.frames[0].addPiece(2,3,'L','i','inactive');
+			//aDiag.frames[0].addPiece(0,3,'I','cw','active',false);
+			//aDiag.frames[0].addPiece(2,11,'I','cw','inactive',false);
+			//console.log('done');
 			//aDiag.new_copy_frame();
 			//aDiag.frames[1].addPiece(7,8,'T','u','inactive');
 			//aDiag.frames[1].addPiece(5,6,'S','ccw','inactive');
@@ -2238,12 +2240,13 @@ $(document).ready(function(){
 			aDiag.frames[z].activePieceType = fconvert(ap[3*z+0]);
 			if (aDiag.frames[z].activePieceType)
 			{
-			aDiag.frames[z].activePieceOrientation = oconvert(ap[3*z+1],ct,aDiag.frames[z].activePieceType);
-			var activePositions = pconvert(ap[3*z+2],aDiag.frames[z].activePieceOrientation,ct);
-			
-			aDiag.frames[z].activePiecePositionX = parseInt(parseInt(activePositions[0])+parseInt(fumenoffsetx(aDiag.frames[z].activePieceType,aDiag.frames[z].activePieceOrientation,aDiag.frames[z].RS)));
-			aDiag.frames[z].activePiecePositionY = parseInt(parseInt(activePositions[1])+parseInt(fumenoffsety(aDiag.frames[z].activePieceType,aDiag.frames[z].activePieceOrientation,aDiag.frames[z].RS)));
-			}
+				aDiag.frames[z].activePieceOrientation = oconvert(ap[3*z+1],ct,aDiag.frames[z].activePieceType);
+				var activePositions = pconvert(ap[3*z+2],aDiag.frames[z].activePieceOrientation,ct);
+				
+				aDiag.frames[z].activePiecePositionX = parseInt(parseInt(activePositions[0])+parseInt(fumenoffsetx(aDiag.frames[z].activePieceType,aDiag.frames[z].activePieceOrientation,aDiag.frames[z].RS)));				
+				aDiag.frames[z].activePiecePositionY = parseInt(parseInt(activePositions[1])+parseInt(fumenoffsety(aDiag.frames[z].activePieceType,aDiag.frames[z].activePieceOrientation,aDiag.frames[z].RS)));
+				console.log(aDiag.frames[z].activePiecePositionX);
+				}
 
 		// comments
 		if(ac[z])

@@ -2655,7 +2655,7 @@ function Frame(painter){
 									candidate_case_deco[k].push(alphanumconvert(i)+alphanumconvert(j));
 									break; // <- that break is quite important otherwise it would continues forward, leading to nasty side effect
 							}
-							else if( k == parseFloat(candidate_case.length-1)) // Nope. Was it the last type tested ?
+							else if( k == parseFloat(candidate_case_deco.length-1)) // Nope. Was it the last type tested ?
 							{
 								// Yes -> create a new type
 								candidate_case_deco.push([]);
@@ -4327,6 +4327,12 @@ function alphanumconvert(input){
 		break;
 	case 't' :
 		output = 19;
+		break;
+	case 'z' :
+		output = -1;
+		break;
+	case -1 :
+		output = 'z';
 		break;
 	case 0 :
 		output = 'a';
