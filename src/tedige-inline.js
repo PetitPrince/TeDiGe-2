@@ -61,6 +61,9 @@ return decodeURIComponent(escape(RawDeflate.inflate($.base64.decode(str))));
 			insert[i++] = '			<input class="cmd_playpause" id="'+newID+'-cmd_playpause" value ="▷" type="button" style="width:2.5em" /><br />';
 			insert[i++] = '			<input class="check-loop" id="'+newID+'-loop"type="checkbox"> loop';
 			insert[i++] = '		</div>';
+			insert[i++] = '		<div class="links">';
+			insert[i++] = '			<a class="Link2Editor" href="">[Edit]</a>';
+			insert[i++] = '		</div>';
 			insert[i++] = '	</div>';
 			insert[i++] = '	<div id="under">';
 			insert[i++] = '		<textarea readonly="" id="'+newID+'-comment" class="comment"></textarea>';
@@ -84,11 +87,13 @@ return decodeURIComponent(escape(RawDeflate.inflate($.base64.decode(str))));
 					var titlesearch = $("#"+newID).data('tedigecode');
 					if(titlesearch) // load if there's something in the tedige-string attribute (for instance <div id="nana" class="tedige-playfield-wrapper" data-tedige-string="{tedige code here}"></div>)
 					{
+					console.log($("#"+newID).find('.Link2Editor'));
+					$("#"+newID).find('.Link2Editor').attr('href','http://petitprince.github.com/TeDiGe-2/editor.html'+titlesearch);
 					var littlestr = titlesearch.split("-");
 						switch(littlestr[1])
 						{
 							case "all":
-								console.log('console.log: '+diagrams[newID].flate_decode(littlestr[2]));
+								//console.log('console.log: '+diagrams[newID].flate_decode(littlestr[2]));
 								diagrams[newID].load(diagrams[newID].flate_decode(littlestr[2]));
 								diagrams[newID].frames[diagrams[newID].current_frame].draw();
 							break;

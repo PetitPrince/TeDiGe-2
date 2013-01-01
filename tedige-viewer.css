@@ -68,6 +68,11 @@ position: absolute;
 .cmd_first, .cmd_last{
 width:2.5em
 }
+
+.links{
+text-align: center;
+}
+
 textarea.comment{
 	color:white;
 	width:200px; 
