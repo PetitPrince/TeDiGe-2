@@ -269,9 +269,11 @@ function drawPaletteDeco(blockSize,sprite){
 		var buffer = document.createElement('canvas');
 		buffer.width = this.CanvasWidth;
 		buffer.height = this.CanvasHeight;
-
-		this.ContextExport.drawImage(this.CanvasBorder[0],0,0);
-		this.ContextExport.drawImage(this.CanvasBackground[0],0,0);
+		if (mode !='gif') 
+		{
+			this.ContextExport.drawImage(this.CanvasBorder[0],0,0);
+			this.ContextExport.drawImage(this.CanvasBackground[0],0,0);
+		}
 		var imgData_PF = this.ContextPF.getImageData(0,0,this.CanvasWidth,this.CanvasHeight);
 		var tmp = 0;
 		for(var i=0, istop = imgData_PF.data.length ; i<istop ; i+=4)
@@ -292,7 +294,7 @@ function drawPaletteDeco(blockSize,sprite){
 		this.ContextExport.drawImage(this.CanvasWhiteborder[0],0,0);
 		this.ContextExport.drawImage(this.CanvasDeco[0],0,0);
 
-		if(mode == "play")
+		if(mode == 'play')
 		{
 			this.ContextExport.beginPath();
 			this.ContextExport.moveTo(32,60);
@@ -380,6 +382,22 @@ return decodeURIComponent(escape(RawDeflate.inflate($.base64.decode(str))));
 Diagram.prototype.getGIF = function(){
 	var encoder = new GIFEncoder();
 	encoder.setRepeat(0); // sets an infinite loop
+	encoder.start();
+	encoder.setQuality(1); // 1: best; 10: default (okay but faster); over 20: meh
+	for(var i=0, istop = this.frames.length ; i<istop ;i++)
+	{
+		this.goto_frame(i);
+		encoder.setDelay(this.frames[i].duration*16.6666); // minimal delay is about 0.02s; setDelay expect millisec as parameters
+		this.painter.exportImage();
+		encoder.addFrame(this.painter.ContextExport);
+	}
+	encoder.finish();
+	var binary_gif = encoder.stream().getData();
+	document.getElementById('export-gif').src = 'data:image/gif;base64,'+$.base64.encode(encoder.stream().getData());
+};
+Diagram.prototype.getGIForig = function(){
+	var encoder = new GIFEncoder();
+	encoder.setRepeat(0); // sets an infinite loop
 	encoder.setDelay(500); // frame rate in ms... maybe I should try to patch this and get a variable rate ?
 	encoder.start();
 	encoder.setQuality(50);
@@ -393,7 +411,6 @@ Diagram.prototype.getGIF = function(){
 	var binary_gif = encoder.stream().getData();
 	document.getElementById('export-gif').src = 'data:image/gif;base64,'+$.base64.encode(encoder.stream().getData());
 };
-
 
 /* --------------------------- */
 /* -- Modifications (basic) -- */

@@ -88,7 +88,7 @@ return decodeURIComponent(escape(RawDeflate.inflate($.base64.decode(str))));
 					if(titlesearch) // load if there's something in the tedige-string attribute (for instance <div id="nana" class="tedige-playfield-wrapper" data-tedige-string="{tedige code here}"></div>)
 					{
 					console.log($("#"+newID).find('.Link2Editor'));
-					$("#"+newID).find('.Link2Editor').attr('href','http://petitprince.github.com/TeDiGe-2/editor.html'+titlesearch);
+					$("#"+newID).find('.Link2Editor').attr('href','http://petitprince.github.com/TeDiGe-2/editor.html?'+titlesearch);
 					var littlestr = titlesearch.split("-");
 						switch(littlestr[1])
 						{
