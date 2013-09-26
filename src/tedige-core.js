@@ -33,7 +33,7 @@ function Painter(CanvasIDString) {
 	*/
 
 	/** A variable referencing the class, used to exploit closure stuff in other methods*/
-	var myself = this;
+	this.myself = this;
 
 	// Default parameter method could be taken from: http://stackoverflow.com/questions/894860/how-do-i-make-a-default-value-for-a-parameter-to-a-javascript-function
 
@@ -135,8 +135,12 @@ function Painter(CanvasIDString) {
 
 	/** A boolean that sets if the painter object is ready to be painter, i.e. if the sprites have loaded*/
 	this.ready = false;
+
+} 
+
 	/** Loads the image into the sprite object*/
-	this.init = function () {
+	Painter.prototype.init = function () {
+		var mymyself = this.myself;
 		// Don't know if it's the correct way to preload the image...
 		// ARS.sprite = document.createElement('img'); // doesn't work in chrome ?!
 		// ARS.spritemini = document.createElement('img');
@@ -147,10 +151,10 @@ function Painter(CanvasIDString) {
 		this.sprite.src = 'res/palette-8px.png';
 		this.spritemini.src = 'res/palette-4px.png';
 		this.sprite.onload = function () {
-			myself.ready = true;
+			mymyself.ready = true;
 		};
 		this.sprite.onerror = function () {
-			myself.ready = true;
+			mymyself.ready = true;
 		};
 		this.drawJoystick('all', 'rest');
 		this.drawAllButtons('rest');
@@ -163,7 +167,7 @@ function Painter(CanvasIDString) {
 
 		@param {string} layer Define which layer will be erased. Possible value: 'inactive', 'active','preview', 'nexthold', 'whiteborder' or 'all'
 	*/
-	this.eraseLayer = function (layer) {
+	Painter.prototype.eraseLayer = function (layer) {
 		var Canvas;
 		switch (layer)
 		{
@@ -203,7 +207,7 @@ function Painter(CanvasIDString) {
 		@param {number} x x position, in block unit
 		@param {number} y y position, in block unit
 	*/
-	this.eraseBlock = function (x, y) {
+	Painter.prototype.eraseBlock = function (x, y) {
 		this.ContextPF.clearRect(this.PFOriginX+x*this.blockSize,this.PFOriginY+y*this.blockSize,this.blockSize,this.blockSize);
 	};
 
@@ -212,7 +216,7 @@ function Painter(CanvasIDString) {
 		@param {number} x x position, in block unit
 		@param {number} y y position, in block unit
 	*/
-	this.eraseDeco = function(x,y){
+	Painter.prototype.eraseDeco = function(x,y){
 		this.ContextDeco.clearRect(this.PFOriginX+x*this.blockSize,this.PFOriginY+y*this.blockSize,this.blockSize,this.blockSize);
 	};
 
@@ -220,7 +224,7 @@ function Painter(CanvasIDString) {
 
 		@param {string} str Value of the new comment
 	*/
-	this.drawComment = function(str){
+	Painter.prototype.drawComment = function(str){
 		$('#'+this.IDString+'-comment').val(str);
 	};
 
@@ -228,7 +232,7 @@ function Painter(CanvasIDString) {
 
 		@param {string} str Value of the new duration
 	*/
-	this.drawDuration = function(str){
+	Painter.prototype.drawDuration = function(str){
 		$('#'+this.IDString+'-duration').val(str);
 	// TODO: move this to tedige-editor.js
 	};
@@ -237,7 +241,7 @@ function Painter(CanvasIDString) {
 
 		@param {string} str Value of the new opacity
 	*/
-	this.drawOpacity = function(str){
+	Painter.prototype.drawOpacity = function(str){
 		$('#'+this.IDString+'-active-opacity').val(str);
 	// TODO: move this to tedige-editor.js
 	};
@@ -247,7 +251,7 @@ function Painter(CanvasIDString) {
 		@param {number} CurrentFrame Which frame are we on ?
 		@param {number} TotalFrame How many frame there are
 	*/
-	this.drawProgressbar = function(CurrentFrame,TotalFrame){
+	Painter.prototype.drawProgressbar = function(CurrentFrame,TotalFrame){
 		if(CurrentFrame <= TotalFrame && CurrentFrame > 0) // filter out invalid input
 		{
 			this.ContextProgressbar.clearRect(0,0,this.CanvasWidth,this.CanvasHeight);
@@ -263,7 +267,7 @@ function Painter(CanvasIDString) {
 
 		@param playfield The playfield on which to draw the white border
 	*/
-	this.drawWhiteBorder = function(playfield)
+	Painter.prototype.drawWhiteBorder = function(playfield)
 	{
 		// todo: do an 'anti white pixel' that clear instead of draw
 		// we iterate on the playfield, look in each case if there's something in it, then look at the neighbour for empty cases to paint some borders in these cases
@@ -283,7 +287,7 @@ function Painter(CanvasIDString) {
 		@param {number} x X coordinate, in block unit
 		@param {number} y Y coordinate, in block unit
 	*/
-	this.drawLocalWhiteBorder = function(playfield,x,y){
+	Painter.prototype.drawLocalWhiteBorder = function(playfield,x,y){
 		// Todo (procrastination level: 99999): I cannot get really good squary corners...
 		this.ContextWhiteborder.beginPath();
 
@@ -505,7 +509,7 @@ function Painter(CanvasIDString) {
 
 	/** Draw a block sized grid on the background layer, for no particular reason
 	*/
-	this.drawGrid = function(){
+	Painter.prototype.drawGrid = function(){
 		// todo: change if width/height variable
 		this.ContextBackground.beginPath();
 
@@ -534,9 +538,10 @@ function Painter(CanvasIDString) {
 	*/
 	
 	
-	this.drawBorder = function(kind){
+	Painter.prototype.drawBorder = function(kind){
 		var color1 = '#afafaf';
 		var color2 = '#46545f';
+		var mymyself = this.myself;
 
 		switch(kind)
 		{
@@ -588,11 +593,11 @@ function Painter(CanvasIDString) {
 		grd_vert_rev.addColorStop(1,color1);
 
 		function drawrectangle(x_begin,y_begin,width,height, fill){
-			myself.ContextBorder.beginPath();
-			myself.ContextBorder.rect(x_begin,y_begin,width,height);
-			myself.ContextBorder.fillStyle = fill;
-			myself.ContextBorder.fill();
-			myself.ContextBorder.closePath();
+			mymyself.ContextBorder.beginPath();
+			mymyself.ContextBorder.rect(x_begin,y_begin,width,height);
+			mymyself.ContextBorder.fillStyle = fill;
+			mymyself.ContextBorder.fill();
+			mymyself.ContextBorder.closePath();
 		}
 
 		//bg
@@ -640,7 +645,7 @@ function Painter(CanvasIDString) {
 		@param {string} type Type of the tetraminmo. Possible value: (SZLJTOIG)
 		@param {string} RS Define the style of the block. Possible value: 'ARS, 'SRS'
 	*/
-	this.drawNextHold = function(position,type,RS){
+	Painter.prototype.drawNextHold = function(position,type,RS){
 		matrix = getMatrix(type, 'i', RS);
 
 		switch(position){
@@ -714,7 +719,7 @@ function Painter(CanvasIDString) {
 
 		@param {(number|string)} level A number between 0 and 1 (alternatively, 'flash' can be used instead of '1.0').
 	*/
-	this.changeActiveOpacity = function(level){
+	Painter.prototype.changeActiveOpacity = function(level){
 		if (level == 'Flash' || level == 'flash')
 		{
 			this.CanvasActive.attr('style','z-index:4; opacity: 1.0');
@@ -732,7 +737,7 @@ function Painter(CanvasIDString) {
 		@param {string} kind Type of decoration.
 		@param {string} layer Target layer. Possible values : ('preview' 'eraser' or 'dec').
 	*/
-	this.drawDeco = function(x,y,kind,layer){
+	Painter.prototype.drawDeco = function(x,y,kind,layer){
 		if(!kind)
 		{
 			return;
@@ -844,42 +849,34 @@ function Painter(CanvasIDString) {
 		@param {number} id Define the id of the playfield in which the block is drawn
 		@param {string} context Define on which layer the block will be drawn. Possible values: 'inactive', 'resetactive', 'active'
 	*/
-	this.drawBrowserBlock = function(x,y,type,RS,id,context){
+	Painter.prototype.drawBrowserBlock = function(x,y,type,RS,id,context){
 		var color;
 		switch(RS){
 			case 'ARS':
 				switch(type){
 					case 'I':
 						color = ARS.I.color;
-						spriteOffset = ARS.I.offset;
 						break;
 					case 'T':
 						color = ARS.T.color;
-						spriteOffset = ARS.T.offset;
 						break;
 					case 'L':
 						color = ARS.L.color;
-						spriteOffset = ARS.L.offset;
 						break;
 					case 'J':
 						color = ARS.J.color;
-						spriteOffset = ARS.J.offset;
 						break;
 					case 'S':
 						color = ARS.S.color;
-						spriteOffset = ARS.S.offset;
 						break;
 					case 'Z':
 						color = ARS.Z.color;
-						spriteOffset = ARS.Z.offset;
 						break;
 					case 'O':
 						color = ARS.O.color;
-						spriteOffset = ARS.O.offset;
 						break;
 					case 'G':
 						color = ARS.G.color;
-						spriteOffset = ARS.G.offset;
 						break;
 				}
 			break;
@@ -887,35 +884,27 @@ function Painter(CanvasIDString) {
 				switch(type){
 					case 'I':
 						color = SRS.I.color;
-						spriteOffset = SRS.I.offset;
 						break;
 					case 'T':
 						color = SRS.T.color;
-						spriteOffset = SRS.T.offset;
 						break;
 					case 'L':
 						color = SRS.L.color;
-						spriteOffset = SRS.L.offset;
 						break;
 					case 'J':
 						color = SRS.J.color;
-						spriteOffset = SRS.J.offset;
 						break;
 					case 'S':
 						color = SRS.S.color;
-						spriteOffset = SRS.S.offset;
 						break;
 					case 'Z':
 						color = SRS.Z.color;
-						spriteOffset = SRS.Z.offset;
 						break;
 					case 'O':
 						color = SRS.O.color;
-						spriteOffset = SRS.O.offset;
 						break;
 					case 'G':
 						color = SRS.G.color;
-						spriteOffset = SRS.G.offset;
 						break;
 				}
 			break;
@@ -923,35 +912,27 @@ function Painter(CanvasIDString) {
 				switch(type){
 					case 'I':
 						color = GB.I.color;
-						spriteOffset = GB.I.offset;
 						break;
 					case 'T':
 						color = GB.T.color;
-						spriteOffset = GB.T.offset;
 						break;
 					case 'L':
 						color = GB.L.color;
-						spriteOffset = GB.L.offset;
 						break;
 					case 'J':
 						color = GB.J.color;
-						spriteOffset = GB.J.offset;
 						break;
 					case 'S':
 						color = GB.S.color;
-						spriteOffset = GB.S.offset;
 						break;
 					case 'Z':
 						color = GB.Z.color;
-						spriteOffset = GB.Z.offset;
 						break;
 					case 'O':
 						color = GB.O.color;
-						spriteOffset = GB.O.offset;
 						break;
 					case 'G':
 						color = GB.G.color;
-						spriteOffset = GB.G.offset;
 						break;
 				}
 			break;		
@@ -988,7 +969,7 @@ function Painter(CanvasIDString) {
 		@param {string} context Define on which layer the block will be drawn. Possible value: 'inactive', 'preview', 'active','flash','nexthold','nextholdmini'
 		@param {boolean} highlight Define wether to highlight the drawblock action or not.
 	*/
-	this.drawBlock = function(x,y,type,RS,context,highlight){
+	Painter.prototype.drawBlock = function(x,y,type,RS,context,highlight){
 		if(type){
 			var ctx;
 			var mini = false; // 'mini' could just as well be called 'hey i'm drawing in the nexthold canvas !' but it's a bit long
@@ -1222,7 +1203,7 @@ function Painter(CanvasIDString) {
 		@param {number} x Horizontal coordinate
 		@param {number} y Vertical coordinate
 	*/
-	this.highlight = function(x,y){
+	Painter.prototype.highlight = function(x,y){
 		var coordx = this.PFOriginX+((x+0.5)*this.blockSize);
 		var coordy = this.PFOriginY+((y+0.5)*this.blockSize);
 		var counter = 20;
@@ -1235,31 +1216,31 @@ function Painter(CanvasIDString) {
 					//myself.CanvasPreview.attr('width',myself.CanvasPreview.width());
 					//console.log(x-counter);
 					//console.log(counter);
-					myself.ContextPreview.beginPath();
-					myself.ContextPreview.strokeStyle = 'rgba(255,255,255,255)';
-					myself.ContextPreview.globalCompositeOperation = 'destination-out';
-					myself.ContextPreview.arc(coordx,coordy,counter+2,2*Math.PI,false);
-					myself.ContextPreview.arc(coordx,coordy,counter+1,2*Math.PI,false);
-					myself.ContextPreview.stroke();
-					myself.ContextPreview.closePath();
+					this.myself.ContextPreview.beginPath();
+					this.myself.ContextPreview.strokeStyle = 'rgba(255,255,255,255)';
+					this.myself.ContextPreview.globalCompositeOperation = 'destination-out';
+					this.myself.ContextPreview.arc(coordx,coordy,counter+2,2*Math.PI,false);
+					this.myself.ContextPreview.arc(coordx,coordy,counter+1,2*Math.PI,false);
+					this.myself.ContextPreview.stroke();
+					this.myself.ContextPreview.closePath();
 
-					myself.ContextPreview.beginPath();
-					myself.ContextPreview.arc(coordx,coordy,counter,2*Math.PI,false);
-					myself.ContextPreview.globalCompositeOperation = 'source-over';
-					myself.ContextPreview.strokeStyle = 'white';
-					myself.ContextPreview.stroke();
-					myself.ContextPreview.closePath();
+					this.myself.ContextPreview.beginPath();
+					this.myself.ContextPreview.arc(coordx,coordy,counter,2*Math.PI,false);
+					this.myself.ContextPreview.globalCompositeOperation = 'source-over';
+					this.myself.ContextPreview.strokeStyle = 'white';
+					this.myself.ContextPreview.stroke();
+					this.myself.ContextPreview.closePath();
 
 										counter-=1;
 				}
 				else{
-					myself.ContextPreview.beginPath();
-					myself.ContextPreview.strokeStyle = 'rgba(255,255,255,255)';
-					myself.ContextPreview.globalCompositeOperation = 'destination-out';
-					myself.ContextPreview.arc(coordx,coordy,counter+2,2*Math.PI,false);
-					myself.ContextPreview.arc(coordx,coordy,counter+1,2*Math.PI,false);
-					myself.ContextPreview.stroke();
-					myself.ContextPreview.closePath();
+					this.myself.ContextPreview.beginPath();
+					this.myself.ContextPreview.strokeStyle = 'rgba(255,255,255,255)';
+					this.myself.ContextPreview.globalCompositeOperation = 'destination-out';
+					this.myself.ContextPreview.arc(coordx,coordy,counter+2,2*Math.PI,false);
+					this.myself.ContextPreview.arc(coordx,coordy,counter+1,2*Math.PI,false);
+					this.myself.ContextPreview.stroke();
+					this.myself.ContextPreview.closePath();
 					//myself.CanvasPreview.attr('width',myself.CanvasPreview.width());
 				window.cancelAnimationFrame(myReq);
 				}
@@ -1297,7 +1278,7 @@ function Painter(CanvasIDString) {
 
 	/** Draw the joystick in rest position
 	*/
-	this.resetJoystick = function(){
+	Painter.prototype.resetJoystick = function(){
 		var height = this.CanvasControl.height();
 		this.ContextControl.clearRect(0,0,height,height);
 		this.drawJoystick('all','rest');
@@ -1308,17 +1289,17 @@ function Painter(CanvasIDString) {
 		@param {string} direction Define which joystick position to draw. Possible value: 'all', 'u', 'r', 'l', 'd', 'ul', 'ur', 'dl', 'dr'
 		@param {string} state Define which color to draw. Possible value: 'rest', 'pressed' or 'holded'
 	*/
-	this.drawJoystick = function(direction,state){
+	Painter.prototype.drawJoystick = function(direction,state){
 		if (direction == 'all')
 		{
-			myself.drawJoystick('u','rest');
-			myself.drawJoystick('r','rest');
-			myself.drawJoystick('l','rest');
-			myself.drawJoystick('d','rest');
-			myself.drawJoystick('ul','rest');
-			myself.drawJoystick('ur','rest');
-			myself.drawJoystick('dl','rest');
-			myself.drawJoystick('dr','rest');
+			this.myself.drawJoystick('u','rest');
+			this.myself.drawJoystick('r','rest');
+			this.myself.drawJoystick('l','rest');
+			this.myself.drawJoystick('d','rest');
+			this.myself.drawJoystick('ul','rest');
+			this.myself.drawJoystick('ur','rest');
+			this.myself.drawJoystick('dl','rest');
+			this.myself.drawJoystick('dr','rest');
 		}
 		else
 		{
@@ -1407,7 +1388,7 @@ function Painter(CanvasIDString) {
 		@param {string} state Define in which color the buttos are drawn. Possible value: 'rest', 'pressed' or 'holded'
 		@param {string} layout - (not used at the moment; TODO: allow alternative button layout)
 	*/
-	this.drawAllButtons = function(state,layout){
+	Painter.prototype.drawAllButtons = function(state,layout){
 		this.drawButton('A',state);
 		this.drawButton('B',state);
 		this.drawButton('C',state);
@@ -1423,7 +1404,7 @@ function Painter(CanvasIDString) {
 		@param {string} button Define which button to draw. Possible value: 'A', 'B', 'C', 'D' for now.
 		@param {string} state Define in which color the button is drawn. Possible value: 'rest', 'pressed' or 'holded'.
 	*/
-	this.drawButton = function(button,state){
+	Painter.prototype.drawButton = function(button,state){
 		var height = this.CanvasControl.height();
 		var radius = height/5;
 
@@ -1539,66 +1520,16 @@ function Painter(CanvasIDString) {
 		@param {number} cur Current frame number
 		@param {number} tot Total frame number
 	*/
-	this.frameCount = function(cur,tot){
+	Painter.prototype.frameCount = function(cur,tot){
 
 		$('#'+CanvasIDString+'-current-frame').attr('value',cur);
 		$('#'+CanvasIDString+'-total-frame').html(tot);
 
 	};
 
-	/** Generate the browser thingy from tages. TODO: NOT WORKING AT THE MOMENT
-		Also: WHY IS THIS ON THE MAIN FUMEN JS FILE AND NOT IN INTERFACE ??!
 
-		@param {number} id Frame id
-		@param {number} position where to draw (relative to the other playfields
-	*/
 
-	this.generateNewPreviewTable = function(id,position){
-
-	// insert at position instead of append
-		var output = '';
-		// TODO
-		// Okay I don't know why $('.preview-table').click() won't respond, so I use this instead. It's ugly and I know it :( .
-		var code1 = '$(this).parent().addClass("pressed");';
-		var code2 = 'console.log("fooooo")';
-		// onclick="'+code1+'" ondblclick="'+code2+'"
-		output += '<td "id="preview-block-'+this.IDString+'-'+id+'" class="preview-block"><table onclick="'+code1+'" ondblclick="'+code2+'" class="preview-table" id="'+this.IDString+'-'+id+'">';
-		for(var i=0;i<20;i++)
-		{
-			output += '<tr class="preview-row" id="'+this.IDString+'-'+id+'-row-'+i+'">';
-			for(var j=0;j<10;j++)
-			{
-				output += '<td class="preview-cell" id="'+this.IDString+'-'+id+'-row-'+i+'-col-'+j+'"><div class="active"><div class="inactive"></div></div></td>';
-			}
-
-		}
-
-		output +='</table><!--'+GLOBAL_FRAME_COUNTER+' --> <input type="checkbox" class="select"> <input type="button" value="✕" class="delete actions-button" /> </div></td>';
-
-		if (position)
-		{
-			$('#browser #preview-container > td:nth-child('+parseInt(position+1,10)+')').before(output);
-		}
-		else // insert nth child here !!!!
-		{
-			$('#browser #preview-container > td:nth-child('+parseInt(position+1,10)+')').before(output);
-		}
-
-	};
-
-	/** Delete a browser playfield table. TODO: NOT WORKING AT THE MOMENT
-
-		@param {number} id Frame id
-		@param {number} position
-	*/
-	this.deletePreviewTable = function(id,position){
-		//console.log(id);
-		//console.log('position: '+position);
-		//$('#browser #preview-container > td:nth-child('+parseInt(position+1)+')').remove();
-		$('#browser #preview-container > td:nth-child('+parseInt(position+1,10)+')').remove();
-	};
-
-} // end painter -------------------------------------------------------------------------------
+// end painter -------------------------------------------------------------------------------
 
 
 /** Painter
@@ -1633,20 +1564,8 @@ function Diagram(painter){
 	/** A boolean that tells if the current frame is playing or not when the play/pause button is pressed */
 	this.playing = false;
 
-	/** Initialize the frames array.
-	*/
-	this.init = function(){
-		// Draws the initial playfield (essentially a blank playfield)
-		this.frames.push(new Frame(this.painter));
-		//this.frames[0].clear();
-		// var myself = this;
-		// setTimeout(function(){myself.clear2()},1000) //<- this works, closure ftw !
-		this.painter.generateNewPreviewTable(this.frames[this.current_frame].id,this.current_frame);
-	};
 
-	/* ---------------- */
-	/* -- Management -- */
-	/* ---------------- */
+} 
 
 	/** Adds a new frame after the current one and displays it.
 		<pre>
@@ -1657,39 +1576,27 @@ function Diagram(painter){
 		>    Sophie Elisa Jeanne Therese Claire
 		</pre>
 	*/
-	this.new_frame = function(){
+	Diagram.prototype.new_frame = function(){
 		this.current_frame++;
 		this.painter.eraseLayer('all');
 		this.frames.splice(this.current_frame,0,new Frame(this.painter)); //inject a new frame after the current frame (modify at position current_frame, remove nothing, add new frame)
-		//this.painter.generateNewPreviewTable(this.frames[this.current_frame].id,this.current_frame);
 		this.update_framecount();
-	};
-
-	/** Makes a new frame based on the current frame
-	*/
-	this.new_copy_frame = function(){
-		//this.frames.push(jQuery.extend(true, {}, this.frames[this.current_frame])) // deep copy the current frame
-		var saved_frame = this.frames[this.current_frame].print();
-		this.new_frame();
-		this.frames[this.current_frame].load(saved_frame,'blank');
 	};
 
 	/** Remove the current frame from existence
 	*/
-	this.remove_current_frame = function(){
+	Diagram.remove_current_frame = function(){
 		if(this.frames.length > 1 )
 		{
 			if(this.current_frame-1 >= 0) // if the current frame is not the first one
 			{
 				this.current_frame--;  // redirect the current frame to the preceding one. Note that is deleting backwards (like the backspace key)... some may prefer a forward delete (like the del key)
-				//this.painter.deletePreviewTable([this.current_frame].id,this.current_frame+1);
 				this.frames.splice(this.current_frame+1,1);
 				this.painter.eraseLayer('all');
 				this.frames[this.current_frame].draw();
 			}
 			else
 			{
-				//this.painter.deletePreviewTable(this.frames[this.current_frame].id,this.current_frame);
 				this.frames.splice(this.current_frame,1);
 				this.painter.eraseLayer('all');
 				this.frames[this.current_frame].draw();
@@ -1702,10 +1609,32 @@ function Diagram(painter){
 			this.frames[this.current_frame].clear('all');
 		}
 	};
+	/** Initialize the frames array.
+	*/
+	Diagram.prototype.init = function(){
+		// Draws the initial playfield (essentially a blank playfield)
+		this.frames.push(new Frame(this.painter));
+		//this.frames[0].clear();
+		// var myself = this;
+		// setTimeout(function(){myself.clear2()},1000) //<- this works, closure ftw !
+	};
+
+	/* ---------------- */
+	/* -- Management -- */
+	/* ---------------- */
+
+	/** Makes a new frame based on the current frame
+	*/
+	Diagram.prototype.new_copy_frame = function(){
+		//this.frames.push(jQuery.extend(true, {}, this.frames[this.current_frame])) // deep copy the current frame
+		var saved_frame = this.frames[this.current_frame].print();
+		this.new_frame();
+		this.frames[this.current_frame].load(saved_frame,'blank');
+	};
 
 	/** Remove every frame after the current one. Analogous to 'remove following' in fumen.
 	*/
-	this.remove_following_frames = function(){
+	Diagram.prototype.remove_following_frames = function(){
 		//console.log('in');
 		this.frames.splice(this.current_frame+1);
 		this.frames[this.current_frame].draw();
@@ -1727,7 +1656,7 @@ function Diagram(painter){
 
 	/** Nukes everything !
 	*/
-	this.remove_all_playfields = function(){
+	Diagram.prototype.remove_all_playfields = function(){
 		this.current_frame = this.frames.length;
 		while(this.current_frame > 0)
 		{
@@ -1739,7 +1668,7 @@ function Diagram(painter){
 	};
 
 	// DEPRECATED, keep this in case I brake something hard (the other design let me use removePreviewTable)(and no, no destructor in javascript)
-	this.remove_all_playfields2 = function(){
+	Diagram.prototype.remove_all_playfields2 = function(){
 		this.frames.splice(1);
 		this.frames[0].clear('all');
 		this.current_frame = 0;
@@ -1755,7 +1684,7 @@ function Diagram(painter){
 
 		@param {number} frame_number Indicate
 	*/
-	this.goto_frame = function(frame_number){
+	Diagram.prototype.goto_frame = function(frame_number){
 		this.painter.eraseLayer('all');
 		this.current_frame = frame_number;
 		if(frame_number == 0) // assumption: only the first frame hold the border information
@@ -1773,7 +1702,7 @@ function Diagram(painter){
 
 	/** Switches the current frame to the first one, displays it.
 	*/
-	this.first_frame = function(){
+	Diagram.prototype.first_frame = function(){
 		this.painter.eraseLayer('all');
 		this.current_frame = 0;
 		this.frames[this.current_frame].draw();
@@ -1782,7 +1711,7 @@ function Diagram(painter){
 
 	/** Switches the previous frame to the previous one, displays it.
 	*/
-	this.previous_frame = function(){
+	Diagram.prototype.previous_frame = function(){
 		if(this.current_frame > 0)
 		{
 			this.painter.eraseLayer('all');
@@ -1794,7 +1723,7 @@ function Diagram(painter){
 
 	/** Switches the current frame to the next one, displays it.
 	*/
-	this.next_frame = function(){
+	Diagram.prototype.next_frame = function(){
 		this.painter.eraseLayer('all');
 		this.current_frame++,
 		this.frames[this.current_frame].draw();
@@ -1803,7 +1732,7 @@ function Diagram(painter){
 
 	/** Switches the current frame to the last one, displays it.
 	*/
-	this.last_frame = function(){
+	Diagram.prototype.last_frame = function(){
 		this.painter.eraseLayer('all');
 		this.current_frame = parseInt(this.frames.length-1,0); // http://nicolaasmatthijs.blogspot.com/2009/05/missing-radix-parameter.html
 		this.frames[this.current_frame].draw();
@@ -1812,7 +1741,7 @@ function Diagram(painter){
 
 	/** Update the displayed frame index.
 	*/
-	this.update_framecount = function(){
+	Diagram.prototype.update_framecount = function(){
 		this.painter.frameCount(this.current_frame+1, this.frames.length);
 		this.painter.drawProgressbar(this.current_frame+1,this.frames.length);
 	};
@@ -1824,7 +1753,7 @@ function Diagram(painter){
 	/** Print the diagram
 
 		@return {string} A string encoded in TeDiGe format*/
-	this.print = function(){
+	Diagram.prototype.print = function(){
 		var output = '';
 		output += this.frames[0].print();
 		if (this.frames.length) {
@@ -1845,7 +1774,7 @@ function Diagram(painter){
 
 		@return {string} A string encoded in TeDiGe format
 	*/
-	this.print_differences = function(final_frame,reference_frame){
+	Diagram.prototype.print_differences = function(final_frame,reference_frame){
 		var output = '';
 		var tmp ='';
 
@@ -2186,7 +2115,7 @@ function Diagram(painter){
 		@param {string} str A string encoded with the format described below
 	*/
 
-	this.load = function(str){
+	Diagram.prototype.load = function(str){
 		if(!str){return;} // check if there's nothing
 		this.remove_all_playfields();
 		this.current_frame = 0;
@@ -2202,7 +2131,7 @@ function Diagram(painter){
 		this.update_framecount();
 	};
 
-} // end Diagram -------------------------------------------------------------------------------
+// end Diagram -------------------------------------------------------------------------------
 
 /** Global counter, used to give and unique ID the the frames*/
 var GLOBAL_FRAME_COUNTER = 0;
@@ -2305,6 +2234,27 @@ function Frame(painter){
 				}
 			}
 
+
+}
+	/** Modify a block in the inactive layer.
+
+		Also exists in tedige-editor.js
+
+		@param {number} x Horizontal coordinate
+		@param {number} y Vertical coordinate
+		@param {string} type Piece type. Possible value: SZLJTOIG and E (empty)
+	*/
+	Frame.prototype.modify = function(x,y,type){
+		if (type == 'E')
+		{
+			this.playfield[x][y][0] = '';
+		}
+		else
+		{
+			this.playfield[x][y][0] = type;
+		}
+
+	};	
 	/* ------------- */
 	/* -- Utility -- */
 	/* ------------- */
@@ -2316,7 +2266,7 @@ function Frame(painter){
 
 		@return {bolean} Return a boolean that tells if the coordinate is in the playfield (true) or not (false)
 	*/
-	this.is_in = function(x,y){
+	Frame.prototype.is_in = function(x,y){
 		if(x < 0 ||y < 0 || x>=this.width || y>=this.height)
 			{return false;}
 		return true;
@@ -2329,7 +2279,7 @@ function Frame(painter){
 
 		@return {string} Block type at the designated coordinate
 	*/
-	this.lookup = function(x,y){
+	Frame.prototype.lookup = function(x,y){
 		return this.playfield[x][y][0];
 	};
 
@@ -2343,7 +2293,7 @@ function Frame(painter){
 
 		@return {boolean}
 	*/
-	this.piece_is_in = function(x,y,type,orientation){
+	Frame.prototype.piece_is_in = function(x,y,type,orientation){
 		var matrix = getMatrix(type, orientation, this.RS);
 		if(orientation == 'singleton' && this.is_in(parseInt(x,10),parseInt(y,10)))
 		{
@@ -2374,7 +2324,7 @@ function Frame(painter){
 
 		@param {string} exception An object containing a list of thing to be force-redrawed (because normally it shouldn't be) (todo:  ?? NOT IMPLEMENTED YET)
 	*/
-	this.draw = function(exception){
+	Frame.prototype.draw = function(exception){
 		for(var i = 0, istop = this.width; i < istop; i++) {
 			for(var j = 0, jstop = this.height; j < jstop; j++) {
 				if (this.playfield[i][j][0]) {
@@ -2443,7 +2393,7 @@ function Frame(painter){
 
 		@param {string} exception An object containing a list of things of facultative or over-repetitive element (like RS)(todo:  ?? NOT IMPLEMENTED YET)
 	*/
-	this.print = function(){
+	Frame.prototype.print = function(){
 		var output= '';
 		var tmp ='';
 
@@ -2718,7 +2668,7 @@ function Frame(painter){
 		@param {string} str The descriptive string
 		@param {strong} format Possible value: '' or 'differences'
 	*/
-	this.load = function(str, format){
+	Frame.prototype.load = function(str, format){
 		if(format != 'differences')
 		{
 			this.clear('all'); // first erase everything
@@ -2943,7 +2893,7 @@ function Frame(painter){
 	/** Erase and delete one layer.
 	
 		@param {string} mode Define which layer will be cleared. Possible value: 'inactive','active' or 'all'*/
-	this.clear = function(mode){
+	Frame.prototype.clear = function(mode){
 		switch(mode)
 		{
 			case 'inactive':
@@ -2996,7 +2946,7 @@ function Frame(painter){
 		@param {string} orientation Orientation of the tetramino; Possible values: 'i', 'cw', 'ccw' or 'u'
 	*/
 
-	this.is_piece_colliding = function(x,y,type,orientation){
+	Frame.prototype.is_piece_colliding = function(x,y,type,orientation){
 		var matrix = getMatrix(type, orientation, this.RS);
 		var tmp = "", tmp2 = "";
 		
@@ -3038,7 +2988,7 @@ function Frame(painter){
 		@param {boolean}} drop Is the method is in drop mode ?
 	*/
 	
-	this.addPiece = function(x,y,type,orientation,mode,drop){
+	Frame.prototype.addPiece = function(x,y,type,orientation,mode,drop){
 		var matrix = getMatrix(type, orientation, this.RS);
 		var still_droping = true;
 		var counter = 0;
@@ -3066,7 +3016,7 @@ function Frame(painter){
 			this.activePiecePositionX = x;
 			this.activePiecePositionY = y;
 			this.painter.CanvasActive.attr('width',this.painter.CanvasPreview.width()); //erase the active layer
-			this.painter.drawBrowserBlock(parseInt(x,10),parseInt(y,10),type,this.RS,this.id,'resetactive'); // TODO: potential bug ? (used erroneously parseInt(x+i) and parseInt(y+j) before...)
+			//this.painter.drawBrowserBlock(parseInt(x,10),parseInt(y,10),type,this.RS,this.id,'resetactive'); // TODO: potential bug ? (used erroneously parseInt(x+i) and parseInt(y+j) before...)
 		}
 	
 		if (mode == 'decoration-preview')
@@ -3113,12 +3063,12 @@ function Frame(painter){
 							case 'active':
 								this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,'active');
 								this.painter.highlight(x-1+j,y-1+i);
-								this.painter.drawBrowserBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,this.id,'active'); // erase this line to disable the browser thing
+								//this.painter.drawBrowserBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.RS,this.id,'active'); // erase this line to disable the browser thing
 							break;
 							case 'erase':
 								this.removeBlock(parseInt(x-1+j,10),parseInt(y-1+i,10));
 								this.painter.highlight(x-1+j,y-1+i);
-								this.painter.drawBrowserBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),'E',this.RS,this.id,'inactive'); // erase this line to disable the browser thing
+								//this.painter.drawBrowserBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),'E',this.RS,this.id,'inactive'); // erase this line to disable the browser thing
 							break;
 							case 'preview-eraser':
 								this.painter.drawBlock(parseInt(x-1+j,10),parseInt(y-1+i,10),'G',this.RS,'preview');
@@ -3132,23 +3082,7 @@ function Frame(painter){
 	}; //end drawpiece
 	
 
-	/** Modify a block in the inactive layer.
 
-		@param {number} x Horizontal coordinate
-		@param {number} y Vertical coordinate
-		@param {string} type Piece type. Possible value: SZLJTOIG and E (empty)
-	*/
-	this.modify = function(x,y,type){
-		if (type == 'E')
-		{
-			this.playfield[x][y][0] = '';
-		}
-		else
-		{
-			this.playfield[x][y][0] = type;
-		}
-			//this.painter.drawBrowserBlock(x,y,type,this.RS,this.id,'inactive'); // I hope putting this here won't have any nasty side-effect
-	};	
 	
 	/** Modify the decoration layer.
 	
@@ -3165,7 +3099,7 @@ function Frame(painter){
 		@param {string} direction Define in which position the joystick is. Possible value: 'all', 'u', 'r', 'l', 'd', 'ul', 'ur', 'dl', 'dr'
 		@param {string} state Define which color to draw. Possible value: 'rest', 'pressed' or 'holded'
 	*/
-	this.modify_control = function(direction,state){
+	Frame.prototype.modify_control = function(direction,state){
 		this.joystick_state = state;
 		this.joystick_direction = direction;
 	};
@@ -3175,7 +3109,7 @@ function Frame(painter){
 		@param {string} button Define which button to draw. Possible value: 'A', 'B', 'C', 'D' for now.
 		@param {string} state Define in which color the button is drawn. Possible value: 'rest', 'pressed' or 'holded'.
 	*/
-	this.modify_button = function(button,state){
+	Frame.prototype.modify_button = function(button,state){
 		var index = '';
 		switch(button)
 		{
@@ -3188,7 +3122,7 @@ function Frame(painter){
 		}
 		this.button_state[index] = state;
 	};	
-}//end frame
+//end frame--------------------------------------------
 
 /* Rotation definition*/
 
