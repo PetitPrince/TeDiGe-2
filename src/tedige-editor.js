@@ -606,6 +606,11 @@ var old_diagram_new_copy_frame = Diagram.prototype.new_copy_frame;
 Diagram.prototype.new_copy_frame = function(){
 	$('#thumbnail-'+parseInt(this.frames[this.current_frame].id)).toggleClass('selected');
 	old_diagram_new_copy_frame.apply(this);
+	this.frames[this.current_frame].loadActiveHook(
+		this.frames[this.current_frame].activePiecePositionX,
+		this.frames[this.current_frame].activePiecePositionY,
+		this.frames[this.current_frame].activePieceType,
+		this.frames[this.current_frame].activePieceOrientation);
 	$('#thumbnail-'+parseInt(this.frames[this.current_frame].id)).toggleClass('selected');
 }
 
@@ -2407,6 +2412,7 @@ $(document).ready(function(){
 	});
 	$('#pf-cmd_clone').click(function(){
 		aDiag.new_copy_frame();
+		aDiag.frames[aDiag.current_frame].draw();
 	});
 	$('#pf-cmd_del').click(function(){
 		aDiag.remove_current_frame();
@@ -3372,11 +3378,11 @@ var $highlightdeco = $('#checkbox-highlight-decoration');
 
 	KeyboardJS.on('shift + s', function() {
 		if (KEYBOARD_MODE && aDiag.frames[aDiag.current_frame].activePieceType) {
-			$('#cmd_drop').mousedown();
-			$('#pf-cmd_clone').mousedown();
-			$('#cmd_opacity_flash').mousedown();
-			$('#pf-cmd_clone').mousedown();
-			$('#cmd_lock').mousedown();
+			$('#cmd_drop').click();
+			$('#pf-cmd_clone').click();
+			$('#cmd_opacity_flash').click();
+			$('#pf-cmd_clone').click();
+			$('#cmd_lock').click();
 		};
 	});
 
