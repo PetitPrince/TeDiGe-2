@@ -1,4 +1,13 @@
 ﻿/** @preserve TeDiGe-2 - Editor code, used in the editor page - https://github.com/PetitPrince/TeDiGe-2/  */
+
+
+/*KeyboardJS by Robert Hurst
+https://github.com/RobertWHurst/KeyboardJS*/
+(function(context,factory){[].indexOf||(Array.prototype.indexOf=function(a,b,c){for(c=this.length,b=(c+~~b)%c;b<c&&(!(b in this)||this[b]!==a);b++);return b^c?b:-1});if(typeof define==="function"&&define.amd){define(constructAMD)}else{constructGlobal()}function constructAMD(){return init();function init(){var library;library=factory("amd");library.fork=init;return library}}function constructGlobal(){var library;library=init();library.noConflict("KeyboardJS","k");function init(){var library,namespaces=[],previousValues={};library=factory("global");library.fork=init;library.noConflict=noConflict;return library;function noConflict(){var args,nI,newNamespaces;newNamespaces=Array.prototype.slice.apply(arguments);for(nI=0;nI<namespaces.length;nI+=1){if(typeof previousValues[namespaces[nI]]==="undefined"){delete context[namespaces[nI]]}else{context[namespaces[nI]]=previousValues[namespaces[nI]]}}previousValues={};for(nI=0;nI<newNamespaces.length;nI+=1){if(typeof newNamespaces[nI]!=="string"){throw new Error("Cannot replace namespaces. All new namespaces must be strings.")}previousValues[newNamespaces[nI]]=context[newNamespaces[nI]];context[newNamespaces[nI]]=library}namespaces=newNamespaces;return namespaces}}}})(this,function(env){var KeyboardJS={},locales={},locale,map,macros,activeKeys=[],bindings=[],activeBindings=[],activeMacros=[],aI,usLocale;usLocale={map:{3:["cancel"],8:["backspace"],9:["tab"],12:["clear"],13:["enter"],16:["shift"],17:["ctrl"],18:["alt","menu"],19:["pause","break"],20:["capslock"],27:["escape","esc"],32:["space","spacebar"],33:["pageup"],34:["pagedown"],35:["end"],36:["home"],37:["left"],38:["up"],39:["right"],40:["down"],41:["select"],42:["printscreen"],43:["execute"],44:["snapshot"],45:["insert","ins"],46:["delete","del"],47:["help"],91:["command","windows","win","super","leftcommand","leftwindows","leftwin","leftsuper"],92:["command","windows","win","super","rightcommand","rightwindows","rightwin","rightsuper"],145:["scrolllock","scroll"],186:["semicolon",";"],187:["equal","equalsign","="],188:["comma",","],189:["dash","-"],190:["period","."],191:["slash","forwardslash","/"],192:["graveaccent","`"],219:["openbracket","["],220:["backslash","\\"],221:["closebracket","]"],222:["apostrophe","'"],48:["zero","0"],49:["one","1"],50:["two","2"],51:["three","3"],52:["four","4"],53:["five","5"],54:["six","6"],55:["seven","7"],56:["eight","8"],57:["nine","9"],96:["numzero","num0"],97:["numone","num1"],98:["numtwo","num2"],99:["numthree","num3"],100:["numfour","num4"],101:["numfive","num5"],102:["numsix","num6"],103:["numseven","num7"],104:["numeight","num8"],105:["numnine","num9"],106:["nummultiply","num*"],107:["numadd","num+"],108:["numenter"],109:["numsubtract","num-"],110:["numdecimal","num."],111:["numdevide","num/"],144:["numlock","num"],112:["f1"],113:["f2"],114:["f3"],115:["f4"],116:["f5"],117:["f6"],118:["f7"],119:["f8"],120:["f9"],121:["f10"],122:["f11"],123:["f12"]},macros:[["shift + `",["tilde","~"]],["shift + 1",["exclamation","exclamationpoint","!"]],["shift + 2",["at","@"]],["shift + 3",["number","#"]],["shift + 4",["dollar","dollars","dollarsign","$"]],["shift + 5",["percent","%"]],["shift + 6",["caret","^"]],["shift + 7",["ampersand","and","&"]],["shift + 8",["asterisk","*"]],["shift + 9",["openparen","("]],["shift + 0",["closeparen",")"]],["shift + -",["underscore","_"]],["shift + =",["plus","+"]],["shift + (",["opencurlybrace","opencurlybracket","{"]],["shift + )",["closecurlybrace","closecurlybracket","}"]],["shift + \\",["verticalbar","|"]],["shift + ;",["colon",":"]],["shift + '",["quotationmark",'"']],["shift + !,",["openanglebracket","<"]],["shift + .",["closeanglebracket",">"]],["shift + /",["questionmark","?"]]]};for(aI=65;aI<=90;aI+=1){usLocale.map[aI]=String.fromCharCode(aI+32);usLocale.macros.push(["shift + "+String.fromCharCode(aI+32)+", capslock + "+String.fromCharCode(aI+32),[String.fromCharCode(aI)]])}registerLocale("us",usLocale);getSetLocale("us");enable();KeyboardJS.enable=enable;KeyboardJS.disable=disable;KeyboardJS.activeKeys=getActiveKeys;KeyboardJS.on=createBinding;KeyboardJS.clear=removeBindingByKeyCombo;KeyboardJS.clear.key=removeBindingByKeyName;KeyboardJS.locale=getSetLocale;KeyboardJS.locale.register=registerLocale;KeyboardJS.macro=createMacro;KeyboardJS.macro.remove=removeMacro;KeyboardJS.key={};KeyboardJS.key.name=getKeyName;KeyboardJS.key.code=getKeyCode;KeyboardJS.combo={};KeyboardJS.combo.active=isSatisfiedCombo;KeyboardJS.combo.parse=parseKeyCombo;KeyboardJS.combo.stringify=stringifyKeyCombo;return KeyboardJS;function enable(){if(window.addEventListener){document.addEventListener("keydown",keydown,false);document.addEventListener("keyup",keyup,false);window.addEventListener("blur",reset,false);window.addEventListener("webkitfullscreenchange",reset,false);window.addEventListener("mozfullscreenchange",reset,false)}else if(window.attachEvent){document.attachEvent("onkeydown",keydown);document.attachEvent("onkeyup",keyup);window.attachEvent("onblur",reset)}}function disable(){reset();if(window.removeEventListener){document.removeEventListener("keydown",keydown,false);document.removeEventListener("keyup",keyup,false);window.removeEventListener("blur",reset,false);window.removeEventListener("webkitfullscreenchange",reset,false);window.removeEventListener("mozfullscreenchange",reset,false)}else if(window.detachEvent){document.detachEvent("onkeydown",keydown);document.detachEvent("onkeyup",keyup);window.detachEvent("onblur",reset)}}function reset(event){activeKeys=[];pruneMacros();pruneBindings(event)}function keydown(event){var keyNames,keyName,kI;keyNames=getKeyName(event.keyCode);if(keyNames.length<1){return}event.isRepeat=false;for(kI=0;kI<keyNames.length;kI+=1){keyName=keyNames[kI];if(getActiveKeys().indexOf(keyName)!=-1)event.isRepeat=true;addActiveKey(keyName)}executeMacros();executeBindings(event)}function keyup(event){var keyNames,kI;keyNames=getKeyName(event.keyCode);if(keyNames.length<1){return}for(kI=0;kI<keyNames.length;kI+=1){removeActiveKey(keyNames[kI])}pruneMacros();pruneBindings(event)}function getKeyName(keyCode){return map[keyCode]||[]}function getKeyCode(keyName){var keyCode;for(keyCode in map){if(!map.hasOwnProperty(keyCode)){continue}if(map[keyCode].indexOf(keyName)>-1){return keyCode}}return false}function createMacro(combo,injectedKeys){if(typeof combo!=="string"&&(typeof combo!=="object"||typeof combo.push!=="function")){throw new Error("Cannot create macro. The combo must be a string or array.")}if(typeof injectedKeys!=="object"||typeof injectedKeys.push!=="function"){throw new Error("Cannot create macro. The injectedKeys must be an array.")}macros.push([combo,injectedKeys])}function removeMacro(combo){var macro;if(typeof combo!=="string"&&(typeof combo!=="object"||typeof combo.push!=="function")){throw new Error("Cannot remove macro. The combo must be a string or array.")}for(mI=0;mI<macros.length;mI+=1){macro=macros[mI];if(compareCombos(combo,macro[0])){removeActiveKey(macro[1]);macros.splice(mI,1);break}}}function executeMacros(){var mI,combo,kI;for(mI=0;mI<macros.length;mI+=1){combo=parseKeyCombo(macros[mI][0]);if(activeMacros.indexOf(macros[mI])===-1&&isSatisfiedCombo(combo)){activeMacros.push(macros[mI]);for(kI=0;kI<macros[mI][1].length;kI+=1){addActiveKey(macros[mI][1][kI])}}}}function pruneMacros(){var mI,combo,kI;for(mI=0;mI<activeMacros.length;mI+=1){combo=parseKeyCombo(activeMacros[mI][0]);if(isSatisfiedCombo(combo)===false){for(kI=0;kI<activeMacros[mI][1].length;kI+=1){removeActiveKey(activeMacros[mI][1][kI])}activeMacros.splice(mI,1);mI-=1}}}function createBinding(keyCombo,keyDownCallback,keyUpCallback){var api={},binding,subBindings=[],bindingApi={},kI,subCombo;if(typeof keyCombo==="string"){keyCombo=parseKeyCombo(keyCombo)}for(kI=0;kI<keyCombo.length;kI+=1){binding={};subCombo=stringifyKeyCombo([keyCombo[kI]]);if(typeof subCombo!=="string"){throw new Error("Failed to bind key combo. The key combo must be string.")}binding.keyCombo=subCombo;binding.keyDownCallback=[];binding.keyUpCallback=[];if(keyDownCallback){binding.keyDownCallback.push(keyDownCallback)}if(keyUpCallback){binding.keyUpCallback.push(keyUpCallback)}bindings.push(binding);subBindings.push(binding)}api.clear=clear;api.on=on;return api;function clear(){var bI;for(bI=0;bI<subBindings.length;bI+=1){bindings.splice(bindings.indexOf(subBindings[bI]),1)}}function on(eventName){var api={},callbacks,cI,bI;if(typeof eventName!=="string"){throw new Error("Cannot bind callback. The event name must be a string.")}if(eventName!=="keyup"&&eventName!=="keydown"){throw new Error('Cannot bind callback. The event name must be a "keyup" or "keydown".')}callbacks=Array.prototype.slice.apply(arguments,[1]);for(cI=0;cI<callbacks.length;cI+=1){if(typeof callbacks[cI]==="function"){if(eventName==="keyup"){for(bI=0;bI<subBindings.length;bI+=1){subBindings[bI].keyUpCallback.push(callbacks[cI])}}else if(eventName==="keydown"){for(bI=0;bI<subBindings.length;bI+=1){subBindings[bI].keyDownCallback.push(callbacks[cI])}}}}api.clear=clear;return api;function clear(){var cI,bI;for(cI=0;cI<callbacks.length;cI+=1){if(typeof callbacks[cI]==="function"){if(eventName==="keyup"){for(bI=0;bI<subBindings.length;bI+=1){subBindings[bI].keyUpCallback.splice(subBindings[bI].keyUpCallback.indexOf(callbacks[cI]),1)}}else{for(bI=0;bI<subBindings.length;bI+=1){subBindings[bI].keyDownCallback.splice(subBindings[bI].keyDownCallback.indexOf(callbacks[cI]),1)}}}}}}}function removeBindingByKeyCombo(keyCombo){var bI,binding,keyName;for(bI=0;bI<bindings.length;bI+=1){binding=bindings[bI];if(compareCombos(keyCombo,binding.keyCombo)){bindings.splice(bI,1);bI-=1}}}function removeBindingByKeyName(keyName){var bI,kI,binding;if(keyName){for(bI=0;bI<bindings.length;bI+=1){binding=bindings[bI];for(kI=0;kI<binding.keyCombo.length;kI+=1){if(binding.keyCombo[kI].indexOf(keyName)>-1){bindings.splice(bI,1);bI-=1;break}}}}else{bindings=[]}}function executeBindings(event){var bI,sBI,binding,bindingKeys,remainingKeys,cI,killEventBubble,kI,bindingKeysSatisfied,index,sortedBindings=[],bindingWeight;remainingKeys=[].concat(activeKeys);for(bI=0;bI<bindings.length;bI+=1){bindingWeight=extractComboKeys(bindings[bI].keyCombo).length;if(!sortedBindings[bindingWeight]){sortedBindings[bindingWeight]=[]}sortedBindings[bindingWeight].push(bindings[bI])}for(sBI=sortedBindings.length-1;sBI>=0;sBI-=1){if(!sortedBindings[sBI]){continue}for(bI=0;bI<sortedBindings[sBI].length;bI+=1){binding=sortedBindings[sBI][bI];bindingKeys=extractComboKeys(binding.keyCombo);bindingKeysSatisfied=true;for(kI=0;kI<bindingKeys.length;kI+=1){if(remainingKeys.indexOf(bindingKeys[kI])===-1){bindingKeysSatisfied=false;break}}if(bindingKeysSatisfied&&isSatisfiedCombo(binding.keyCombo)){activeBindings.push(binding);for(kI=0;kI<bindingKeys.length;kI+=1){index=remainingKeys.indexOf(bindingKeys[kI]);if(index>-1){remainingKeys.splice(index,1);kI-=1}}for(cI=0;cI<binding.keyDownCallback.length;cI+=1){if(binding.keyDownCallback[cI](event,getActiveKeys(),binding.keyCombo)===false){killEventBubble=true}}if(killEventBubble===true){event.preventDefault();event.stopPropagation()}}}}}function pruneBindings(event){var bI,cI,binding,killEventBubble;for(bI=0;bI<activeBindings.length;bI+=1){binding=activeBindings[bI];if(isSatisfiedCombo(binding.keyCombo)===false){for(cI=0;cI<binding.keyUpCallback.length;cI+=1){if(binding.keyUpCallback[cI](event,getActiveKeys(),binding.keyCombo)===false){killEventBubble=true}}if(killEventBubble===true){event.preventDefault();event.stopPropagation()}activeBindings.splice(bI,1);bI-=1}}}function compareCombos(keyComboArrayA,keyComboArrayB){var cI,sI,kI;keyComboArrayA=parseKeyCombo(keyComboArrayA);keyComboArrayB=parseKeyCombo(keyComboArrayB);if(keyComboArrayA.length!==keyComboArrayB.length){return false}for(cI=0;cI<keyComboArrayA.length;cI+=1){if(keyComboArrayA[cI].length!==keyComboArrayB[cI].length){return false}for(sI=0;sI<keyComboArrayA[cI].length;sI+=1){if(keyComboArrayA[cI][sI].length!==keyComboArrayB[cI][sI].length){return false}for(kI=0;kI<keyComboArrayA[cI][sI].length;kI+=1){if(keyComboArrayB[cI][sI].indexOf(keyComboArrayA[cI][sI][kI])===-1){return false}}}}return true}function isSatisfiedCombo(keyCombo){var cI,sI,stage,kI,stageOffset=0,index,comboMatches;keyCombo=parseKeyCombo(keyCombo);for(cI=0;cI<keyCombo.length;cI+=1){comboMatches=true;stageOffset=0;for(sI=0;sI<keyCombo[cI].length;sI+=1){stage=[].concat(keyCombo[cI][sI]);for(kI=stageOffset;kI<activeKeys.length;kI+=1){index=stage.indexOf(activeKeys[kI]);if(index>-1){stage.splice(index,1);stageOffset=kI}}if(stage.length!==0){comboMatches=false;break}}if(comboMatches){return true}}return false}function extractComboKeys(keyCombo){var cI,sI,kI,keys=[];keyCombo=parseKeyCombo(keyCombo);for(cI=0;cI<keyCombo.length;cI+=1){for(sI=0;sI<keyCombo[cI].length;sI+=1){keys=keys.concat(keyCombo[cI][sI])}}return keys}function parseKeyCombo(keyCombo){var s=keyCombo,i=0,op=0,ws=false,nc=false,combos=[],combo=[],stage=[],key="";if(typeof keyCombo==="object"&&typeof keyCombo.push==="function"){return keyCombo}if(typeof keyCombo!=="string"){throw new Error('Cannot parse "keyCombo" because its type is "'+typeof keyCombo+'". It must be a "string".')}while(s.charAt(i)===" "){i+=1}while(true){if(s.charAt(i)===" "){while(s.charAt(i)===" "){i+=1}ws=true}else if(s.charAt(i)===","){if(op||nc){throw new Error("Failed to parse key combo. Unexpected , at character index "+i+".")}nc=true;i+=1}else if(s.charAt(i)==="+"){if(key.length){stage.push(key);key=""}if(op||nc){throw new Error("Failed to parse key combo. Unexpected + at character index "+i+".")}op=true;i+=1}else if(s.charAt(i)===">"){if(key.length){stage.push(key);key=""}if(stage.length){combo.push(stage);stage=[]}if(op||nc){throw new Error("Failed to parse key combo. Unexpected > at character index "+i+".")}op=true;i+=1}else if(i<s.length-1&&s.charAt(i)==="!"&&(s.charAt(i+1)===">"||s.charAt(i+1)===","||s.charAt(i+1)==="+")){key+=s.charAt(i+1);op=false;ws=false;nc=false;i+=2}else if(i<s.length&&s.charAt(i)!=="+"&&s.charAt(i)!==">"&&s.charAt(i)!==","&&s.charAt(i)!==" "){if(op===false&&ws===true||nc===true){if(key.length){stage.push(key);key=""}if(stage.length){combo.push(stage);stage=[]}if(combo.length){combos.push(combo);combo=[]}}op=false;ws=false;nc=false;while(i<s.length&&s.charAt(i)!=="+"&&s.charAt(i)!==">"&&s.charAt(i)!==","&&s.charAt(i)!==" "){key+=s.charAt(i);i+=1}}else{i+=1;continue}if(i>=s.length){if(key.length){stage.push(key);key=""}if(stage.length){combo.push(stage);stage=[]}if(combo.length){combos.push(combo);combo=[]}break}}return combos}function stringifyKeyCombo(keyComboArray){var cI,ccI,output=[];if(typeof keyComboArray==="string"){return keyComboArray}if(typeof keyComboArray!=="object"||typeof keyComboArray.push!=="function"){throw new Error("Cannot stringify key combo.")}for(cI=0;cI<keyComboArray.length;cI+=1){output[cI]=[];for(ccI=0;ccI<keyComboArray[cI].length;ccI+=1){output[cI][ccI]=keyComboArray[cI][ccI].join(" + ")}output[cI]=output[cI].join(" > ")}return output.join(" ")}function getActiveKeys(){return[].concat(activeKeys)}function addActiveKey(keyName){if(keyName.match(/\s/)){throw new Error("Cannot add key name "+keyName+" to active keys because it contains whitespace.")}if(activeKeys.indexOf(keyName)>-1){return}activeKeys.push(keyName)}function removeActiveKey(keyName){var keyCode=getKeyCode(keyName);if(keyCode==="91"||keyCode==="92"){activeKeys=[]}else{activeKeys.splice(activeKeys.indexOf(keyName),1)}}function registerLocale(localeName,localeMap){if(typeof localeName!=="string"){throw new Error("Cannot register new locale. The locale name must be a string.")}if(typeof localeMap!=="object"){throw new Error("Cannot register "+localeName+" locale. The locale map must be an object.")}if(typeof localeMap.map!=="object"){throw new Error("Cannot register "+localeName+" locale. The locale map is invalid.")}if(!localeMap.macros){localeMap.macros=[]}locales[localeName]=localeMap}function getSetLocale(localeName){if(localeName){if(typeof localeName!=="string"){throw new Error("Cannot set locale. The locale name must be a string.")}if(!locales[localeName]){throw new Error("Cannot set locale to "+localeName+" because it does not exist. If you would like to submit a "+localeName+" locale map for KeyboardJS please submit it at https://github.com/RobertWHurst/KeyboardJS/issues.")}map=locales[localeName].map;macros=locales[localeName].macros;locale=localeName}return locale}});
+
+
+/* --- Palette related code --- */
+
 /** Draw a single palette decoration
 
 	@function
@@ -7,7 +16,6 @@
 	@param sprite Sprite object
 */
 function drawPaletteDecoCell(kind,blockSize,sprite){
-
 	var Canvas = $('#editor-palette-deco-'+kind);
 	var ctx = Canvas[0].getContext('2d');
 
@@ -72,7 +80,6 @@ function drawPaletteDecoCell(kind,blockSize,sprite){
 				  w,h, // size of the rectangle to will be cut
 				  nx,ny, // destination coordinate
 				  w,h); // destination size
-
 }
 
 /** Draw a single palette piece
@@ -255,57 +262,380 @@ function drawPaletteDeco(blockSize,sprite){
 	}
 }
 
+/* === Class Extension --- */
 
-	/** Get the jQuery object of the export canvas.*/
-	Painter.prototype.CanvasExport;
-	/** Get the 2d context of the related canvas*/
-	Painter.prototype.ContextExport;
+/* --- Painter ---*/
 
-		/** Export the current frame into a png image. TODO: move this to tedige-editor.js
+/** Get the jQuery object of the export canvas.*/
+Painter.prototype.CanvasExport;
+/** Get the 2d context of the related canvas*/
+Painter.prototype.ContextExport;
+
+/** Export the current frame into a png image.
+	@param {number} mode Expects "play" or something else. If play is passed, a huge "play" sign is drawn on the image.
+*/
+Painter.prototype.exportImage = function(mode){
+	this.ContextExport.clearRect(0,0,this.CanvasWidth,this.CanvasHeight);
+	this.CanvasExport.attr('width',this.CanvasExport.width());
+	var buffer = document.createElement('canvas');
+	buffer.width = this.CanvasWidth;
+	buffer.height = this.CanvasHeight+this.CanvasControl.height();
+
+	this.ContextExport.drawImage(this.CanvasNextHold[0],0,0); // draw nexthold
+
+	if (mode !='gif') //legacy "if" when the gif quantizer was fubar
+	{
+		this.ContextExport.drawImage(this.CanvasBorder[0],0,32);
+		this.ContextExport.drawImage(this.CanvasBackground[0],0,32);
+	}
+	var imgData_PF = this.ContextPF.getImageData(0,0,this.CanvasWidth,this.CanvasHeight);
+	var tmp = 0;
+	for(var i=0, istop = imgData_PF.data.length ; i<istop ; i+=4) // loop to get inactive layer darker/less opaque
+	{
+		imgData_PF.data[i+3]=parseInt(255*0.65,10); // get 0.65 opacity,
+		tmp = imgData_PF.data[i] + imgData_PF.data[i+1] + imgData_PF.data[i+2];
+
+		if(!tmp)
+		{
+			imgData_PF.data[i+3]= 0; // if black pixel -> transparent
+		}
+		tmp = 0;
+
+	}
+	buffer.getContext('2d').putImageData(imgData_PF,0,0);
+	this.ContextExport.drawImage(buffer,0,32);
+	this.ContextExport.drawImage(this.CanvasActive[0],0,32);
+	this.ContextExport.drawImage(this.CanvasWhiteborder[0],0,32);
+	this.ContextExport.drawImage(this.CanvasDeco[0],0,32);
+	this.ContextExport.drawImage(this.CanvasControl[0],0,this.CanvasHeight+32);
+
+	if(mode == 'play') // draw a huge "play" sign
+	{
+		this.ContextExport.beginPath();
+		this.ContextExport.moveTo(32,60);
+		this.ContextExport.lineTo(75,84);
+		this.ContextExport.lineTo(32,110);
+		this.ContextExport.fillStyle = "rgba(255,255,255,0.66)";
+		this.ContextExport.closePath();
+		this.ContextExport.fill();
+	}	
+};
+
+/* --- Here is where I dabble with the thumbnails stuff ---*/
+
+/** Append a thumbnail at the designated position (starts at 1)
+	@param {number} id Unique id of the thumbnail
+	@param {number} position Where in the timeline the thumbnail should be inserted. Start at 1.
+*/
+Painter.prototype.appendThumbnail = function(id,position) {
+	/*
+
+	.thumbnail-container{
+		width: 40px;
+		height: 80px;
+	}
+	.thumbnail-container canvas{
+	position: absolute;
+	left:0;
+	top:0;
+	}
 	*/
-	Painter.prototype.exportImage = function(mode){
-		this.ContextExport.clearRect(0,0,this.CanvasWidth,this.CanvasHeight);
-		this.CanvasExport.attr('width',this.CanvasExport.width());
-		var buffer = document.createElement('canvas');
-		buffer.width = this.CanvasWidth;
-		buffer.height = this.CanvasHeight;
-		if (mode !='gif') 
-		{
-			this.ContextExport.drawImage(this.CanvasBorder[0],0,0);
-			this.ContextExport.drawImage(this.CanvasBackground[0],0,0);
-		}
-		var imgData_PF = this.ContextPF.getImageData(0,0,this.CanvasWidth,this.CanvasHeight);
-		var tmp = 0;
-		for(var i=0, istop = imgData_PF.data.length ; i<istop ; i+=4)
-		{
-			imgData_PF.data[i+3]=parseInt(255*0.65,10); // get 0.65 opacity,
-			tmp = imgData_PF.data[i] + imgData_PF.data[i+1] + imgData_PF.data[i+2];
+	var output = '<div id="thumbnail-'+id+'" class="thumbnail"> <canvas class="active" id="thumbnail-'+id+'-active" height="80" width="40"></canvas><canvas class="inactive" id="thumbnail-'+id+'-inactive" height="80" width="40"></canvas><canvas class="deco" id="thumbnail-'+id+'-deco" height="80" width="40"></canvas></div>';
+	// height and size definition are necessary
+	$('#thumbnails > .thumbnail:nth-child('+position+')').after(output);	
+};
 
-			if(!tmp)
+/** Erase a layer in the thumbnail
+	@param {number} id Unique id of the thumbnail
+	@param {number} mode Expect "inactive", "active" or "deco"
+*/
+
+Painter.prototype.clearThumbnail = function(id,mode) {
+	var canvas;
+	switch(mode){
+		case 'inactive':
+			canvas = $('#thumbnail-' + id +'-inactive');
+		break;
+		case 'active':
+			canvas = $('#thumbnail-' + id +'-active');
+		break;
+		case 'deco':
+			canvas = $('#thumbnail-' + id +'-deco');
+		break;
+	}	
+	var ctx = canvas[0].getContext('2d');
+	ctx.clearRect(0,0,canvas[0].width,canvas[0].height);
+}
+
+/*Those are 3 objects that serves as cache for the jquery object while messing with thumbnails http://stackoverflow.com/questions/8002181/jquery-global-selection-cache*/
+var thumbnail_registry_inactive = {};
+var thumbnail_registry_active = {};
+var thumbnail_registry_demo = {};
+
+/** Modify the related thumbnail in the same way frame.modify does
+		@param {number} x Horizontal coordinate
+		@param {number} y Vertical coordinate
+		@param {string} type Piece type. Possible value: SZLJTOIG and E (empty)
+		@param {string} id Unique id of the frame
+		@param {string} mode Define which layer to modify. Possible value: inactive, active, deco
+*/
+Painter.prototype.modifyThumbnail = function(x,y,type,id,mode) {
+
+	if (mode == "inactive") {
+		//console.log(10);
+		if (thumbnail_registry_inactive[id]) 
 			{
-				imgData_PF.data[i+3]= 0; // if black pixel -> transparent
+		//console.log(11);
+				var canvas = thumbnail_registry_inactive[id];
 			}
-			tmp = 0;
-
-		}
-		buffer.getContext('2d').putImageData(imgData_PF,0,0);
-		this.ContextExport.drawImage(buffer,0,0);
-		this.ContextExport.drawImage(this.CanvasActive[0],0,0);
-		this.ContextExport.drawImage(this.CanvasWhiteborder[0],0,0);
-		this.ContextExport.drawImage(this.CanvasDeco[0],0,0);
-
-		if(mode == 'play')
-		{
-			this.ContextExport.beginPath();
-			this.ContextExport.moveTo(32,60);
-			this.ContextExport.lineTo(75,84);
-			this.ContextExport.lineTo(32,110);
-			this.ContextExport.fillStyle = "rgba(255,255,255,0.66)";
-			this.ContextExport.closePath();
-			this.ContextExport.fill();
-		}
-		
+		else
+			{
+		//console.log(12);
+		//console.log(id);
+				thumbnail_registry_inactive[id] = $('#thumbnail-' + id +'-inactive');
+				var canvas = thumbnail_registry_inactive[id];
+				//console.log(canvas);
+			}
 	};
+	if (mode == "active") {
+
+		if (thumbnail_registry_active[id]) 
+		{
+		//console.log(21);
+			var canvas = thumbnail_registry_active[id];
+		}
+		else
+		{
+		//console.log(22);
+			thumbnail_registry_active[id] = $('#thumbnail-' + id +'-active');
+			var canvas = thumbnail_registry_active[id];
+		}
+	};
+	var ctx = canvas[0].getContext('2d'),
+		color,
+		blockSize = 4;
+		switch(type){
+				case 'I':
+					color = ARS.I.color;
+					break;
+				case 'T':
+					color = ARS.T.color;
+					break;
+				case 'L':
+					color = ARS.L.color;
+					break;
+				case 'J':
+					color = ARS.J.color;
+					break;
+				case 'S':
+					color = ARS.S.color;
+					break;
+				case 'Z':
+					color = ARS.Z.color;
+					break;
+				case 'O':
+					color = ARS.O.color;
+					break;
+				case 'G':
+					color = ARS.G.color;
+					break;
+		}
+		if (type == 'E') {
+			ctx.clearRect(x*blockSize,y*blockSize,blockSize,blockSize); // blockSize == blockSize
+
+		}else{
+			if (mode == "inactive") {
+				ctx.beginPath();
+				ctx.rect(x*blockSize,y*blockSize,blockSize,blockSize); // blockSize == blockSize
+				ctx.fillStyle = color;			
+				ctx.fill();
+				ctx.closePath();
+			}
+			if (mode =="active"){
+				ctx.beginPath();
+				ctx.strokeStyle = color;
+				ctx.lineWidth = 1;			
+				ctx.strokeRect(x*blockSize,y*blockSize,blockSize,blockSize); // blockSize == blockSize
+				ctx.closePath();
+			}
+		};
+			// ctx.fillStyle = "rgb("+
+			// Math.floor(Math.random()*256)+","+
+			// Math.floor(Math.random()*256)+","+
+			// Math.floor(Math.random()*256)+")";
+ }
+
+// dirty function extension: http://stackoverflow.com/questions/4578424/javascript-extend-a-function/4578464
+var old_frame_modify = Frame.prototype.modify;
+
+Frame.prototype.modify = function(x,y,type){
+	old_frame_modify.apply(this,arguments);
+	this.painter.modifyThumbnail(x,y,type,this.id,"inactive");
+};	
+/*
+var old_painter_drawblock = Painter.prototype.drawBlock;
+
+Painter.prototype.drawBlock = function(x,y,type,RS,context,highlight){
+	old_painter_drawblock.apply(this,arguments);
+	if (context == "inactive" || context == "garbage") {
+			this.modifyThumbnail(x,y,type,this.id,"inactive");
+	}
+	if (context == "active"){
+		this.modifyThumbnail(x,y,type,this.id,"active");
+	}
+};*/
+
+var old_frame_addPiece = Frame.prototype.addPiece;
+Frame.prototype.addPiece = function(x,y,type,orientation,mode,drop){
+	old_frame_addPiece.apply(this,arguments);
+	var matrix = getMatrix(type, orientation, this.RS);
+	if (mode == "active") {
+		this.painter.clearThumbnail(this.id,'active');
+	};
+	for(var i = 0; i < 4; i++) {
+		for(var j = 0; j < 4; j++) {
+			if(matrix[i][j])
+			{
+				if (mode == "inactive" || mode == "garbage") {
+					//this.painter.modifyThumbnail(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.id,"inactive");
+				};
+
+				if (mode == "active") {
+					this.painter.modifyThumbnail(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.id,'active');
+				};
+			};
+		}
+	}
+
+}
+
+	Frame.prototype.loadActiveHook = function(x,y,type,orientation){	
+	this.painter.clearThumbnail(this.id,'active');
+	
+	if (type != "E") {
+		var matrix = getMatrix(type, orientation, this.RS);
+		for(var i = 0; i < 4; i++) {
+			for(var j = 0; j < 4; j++) {
+				if(matrix[i][j])
+				{
+					this.painter.modifyThumbnail(parseInt(x-1+j,10),parseInt(y-1+i,10),type,this.id,'active');
+				};
+			}
+		}
+
+	};		
+	}
+
+
+var old_diagram_new_frame = Diagram.prototype.new_frame;
+
+Diagram.prototype.new_frame = function(){
+	old_diagram_new_frame.apply(this,arguments);
+	this.painter.appendThumbnail(this.frames[this.current_frame].id,this.current_frame)
+};
+
+var old_diagram_remove_current_frame = Diagram.prototype.remove_current_frame;
+
+Diagram.prototype.remove_current_frame = function(){
+	if (this.frames.length == 1) {
+		$('#thumbnail-'+this.frames[0].id).toggleClass('selected');
+	};
+	this.painter.deleteThumbnail(this.current_frame);
+	old_diagram_remove_current_frame.apply(this);
+	$('#thumbnail-'+parseInt(this.frames[this.current_frame].id)).toggleClass('selected');
+};
+
+
+var old_diagram_remove_following_frames = Diagram.prototype.remove_following_frames;
+
+Diagram.prototype.remove_following_frames = function(){
+	for (var i = this.frames.length ; i >= this.current_frame+1 ; i--) {
+			this.painter.deleteThumbnail(i);
+	};
+	old_diagram_remove_following_frames.apply(this);
+};
+
+/** Append a thumbnail at the designated position (starts at 1)
+*/
+Painter.prototype.deleteThumbnail = function(position) {
+	if ($('#thumbnails > .thumbnail').size() == 1) {
+		this.clearThumbnail(1,'active');
+		this.clearThumbnail(1,'inactive');		
+		//$('#thumbnails > canvas')[0].getContext('2d').clearRect(0,0,$('#thumbnails canvas')[0].width,$('#thumbnails canvas')[0].height);
+	}else{
+	$('#thumbnails > .thumbnail:nth-child('+parseInt(position+1)+')').remove();	
+
+	}
+
+};
+
+var old_diagram_first_frame = Diagram.prototype.first_frame;
+
+Diagram.prototype.first_frame = function(){
+	$('#thumbnail-'+parseInt(this.frames[this.current_frame].id)).toggleClass('selected');
+	old_diagram_first_frame.apply(this);
+	$('#thumbnail-'+parseInt(this.frames[this.current_frame].id)).toggleClass('selected');
+};
+
+var old_diagram_previous_frame = Diagram.prototype.previous_frame;
+
+// todo 02.11.13: next & previous highlight are broken
+Diagram.prototype.previous_frame = function(){
+	$('#thumbnail-'+parseInt(this.frames[this.current_frame].id)).toggleClass('selected');
+	old_diagram_previous_frame.apply(this);
+	$('#thumbnail-'+parseInt(this.frames[this.current_frame].id)).toggleClass('selected');
+};
+
+var old_diagram_next_frame = Diagram.prototype.next_frame;
+
+Diagram.prototype.next_frame = function(){
+	$('#thumbnail-'+parseInt(this.frames[this.current_frame].id)).toggleClass('selected');
+	old_diagram_next_frame.apply(this);
+	$('#thumbnail-'+parseInt(this.frames[this.current_frame].id)).toggleClass('selected');
+};
+
+var old_diagram_last_frame = Diagram.prototype.last_frame;
+
+Diagram.prototype.last_frame = function(){
+	$('#thumbnail-'+parseInt(this.frames[this.current_frame].id)).toggleClass('selected');
+	old_diagram_last_frame.apply(this);
+	$('#thumbnail-'+parseInt(this.frames[this.current_frame].id)).toggleClass('selected');
+};
+
+var old_diagram_new_copy_frame = Diagram.prototype.new_copy_frame;
+Diagram.prototype.new_copy_frame = function(){
+	$('#thumbnail-'+parseInt(this.frames[this.current_frame].id)).toggleClass('selected');
+	old_diagram_new_copy_frame.apply(this);
+	$('#thumbnail-'+parseInt(this.frames[this.current_frame].id)).toggleClass('selected');
+}
+
+var old_diagram_goto_frame = Diagram.prototype.goto_frame;
+Diagram.prototype.goto_frame = function(frame_number){
+	$('#thumbnail-'+parseInt(this.frames[this.current_frame].id)).toggleClass('selected');
+	old_diagram_goto_frame.apply(this,arguments);
+	$('#thumbnail-'+parseInt(this.frames[this.current_frame].id)).toggleClass('selected');
+	$('#thumbnails-container').scrollLeft(0); // scrollLeft give a coordinate
+	$('#thumbnails-container').scrollLeft($('#thumbnail-'+parseInt(this.frames[this.current_frame].id)).position().left-180);
+}
+
+Diagram.prototype.remove_frame = function(frame_number){ // todo: is this working ?
+	if (frame_number == this.current_frame) {
+		this.remove_current_frame();
+	}
+
+	else if(this.frames.length > 1 )
+		{
+			this.frames.splice(frame_number+1,1);
+		}
+	else{
+			this.current_frame = 0;
+			this.frames[this.current_frame].clear('all');
+	};
+
+}
+
+/* --- End thumbnails ---*/
+
 
 /* ------------------------------------------- */
 /* -- Frame:: Frames-wide properties change -- */
@@ -383,7 +713,7 @@ Diagram.prototype.getGIF = function(){
 	var encoder = new GIFEncoder();
 	encoder.setRepeat(0); // sets an infinite loop
 	encoder.start();
-	encoder.setQuality(1); // 1: best; 10: default (okay but faster); over 20: meh
+	encoder.setQuality(1); // 1: best; 10: default (okay but faster); over 20: meh; todo: quality set by user ?
 	for(var i=0, istop = this.frames.length ; i<istop ;i++)
 	{
 		this.goto_frame(i);
@@ -395,27 +725,10 @@ Diagram.prototype.getGIF = function(){
 	var binary_gif = encoder.stream().getData();
 	document.getElementById('export-gif').src = 'data:image/gif;base64,'+$.base64.encode(encoder.stream().getData());
 };
-Diagram.prototype.getGIForig = function(){
-	var encoder = new GIFEncoder();
-	encoder.setRepeat(0); // sets an infinite loop
-	encoder.setDelay(500); // frame rate in ms... maybe I should try to patch this and get a variable rate ?
-	encoder.start();
-	encoder.setQuality(50);
-	for(var i=0, istop = this.frames.length ; i<istop ;i++)
-	{
-		this.goto_frame(i);
-		this.painter.exportImage();
-		encoder.addFrame(this.painter.ContextExport);
-	}
-	encoder.finish();
-	var binary_gif = encoder.stream().getData();
-	document.getElementById('export-gif').src = 'data:image/gif;base64,'+$.base64.encode(encoder.stream().getData());
-};
 
 /* --------------------------- */
 /* -- Modifications (basic) -- */
 /* --------------------------- */
-
 /** Remove a block at the given coordinate.
 
 	@param {number} x Horizontal coordinate
@@ -424,7 +737,7 @@ Diagram.prototype.getGIForig = function(){
 Frame.prototype.removeBlock = function(x,y){
 	this.playfield[x][y][0] = '';
 	this.painter.eraseBlock(x,y);
-	//this.painter.drawBrowserBlock(x,y,'E',this.RS,this.id); // I hope putting this here won't have any nasty side-effect
+	this.painter.modifyThumbnail(x,y,'E',this.id,"inactive");
 	if (this.whiteborder)
 	{
 		this.painter.drawLocalWhiteBorder(this.playfield,x,y,'inactive');
@@ -970,7 +1283,6 @@ Frame.prototype.rotateActivePiece = function(direction){
 							break;
 			
 							case "T":
-							console.log('in t');
 								if(this.activePieceOrientation == 'u' || this.activePieceOrientation == 'i')
 								{
 									if(this.playfield[parseInt(this.activePiecePositionX-1+1,10)][parseInt(this.activePiecePositionY-1+0,10)])
@@ -1563,12 +1875,28 @@ $(document).ready(function(){
 	});
 
 	/*--- Active piece buttons ---*/
+	function sync_joy(direction){
+		console.log("test");
+		aDiag.painter.resetJoystick();
+		aDiag.frames[aDiag.current_frame].modify_control(direction,'pressed');
+		aPainter.drawJoystick(direction,'pressed');
+	}
 
+	function sync_button(button){
+		aDiag.frames[aDiag.current_frame].modify_button(button,'pressed');
+		aPainter.drawButton(button,'pressed');
+	}
 	$('#cmd_move_up').mousedown(function(){
 		if($('#pf-auto-action-frame-increment:checked').val())
 		{
 			$('#pf-cmd_clone').click();
 		}
+
+		if($('#sync-movement:checked').val())
+		{
+			sync_joy("u");
+		}
+
 		aDiag.frames[aDiag.current_frame].moveActivePiece('up');
 		
 	});
@@ -1577,6 +1905,10 @@ $(document).ready(function(){
 		{
 			$('#pf-cmd_clone').click();
 		}
+		if($('#sync-movement:checked').val())
+		{
+			sync_joy("d");
+		}
 		aDiag.frames[aDiag.current_frame].moveActivePiece('down');
 	});
 	$('#cmd_move_left').mousedown(function(){
@@ -1584,12 +1916,20 @@ $(document).ready(function(){
 		{
 			$('#pf-cmd_clone').click();
 		}
+		if($('#sync-movement:checked').val())
+		{
+			sync_joy("l");
+		}
 		aDiag.frames[aDiag.current_frame].moveActivePiece('left');
 	});
 	$('#cmd_move_right').mousedown(function(){
 		if($('#pf-auto-action-frame-increment:checked').val())
 		{
 			$('#pf-cmd_clone').click();
+		}
+		if($('#sync-movement:checked').val())
+		{
+			sync_joy("r");
 		}
 		aDiag.frames[aDiag.current_frame].moveActivePiece('right');
 	});
@@ -1599,12 +1939,20 @@ $(document).ready(function(){
 		{
 			$('#pf-cmd_clone').click();
 		}
+		if($('#sync-movement:checked').val())
+		{
+			sync_button("A");
+		}
 		aDiag.frames[aDiag.current_frame].rotateActivePiece('ccw');
 	});
 	$('#cmd_cw').mousedown(function(){
 		if($('#pf-auto-action-frame-increment:checked').val())
 		{
 			$('#pf-cmd_clone').click();
+		}
+		if($('#sync-movement:checked').val())
+		{
+			sync_button("B");
 		}
 		aDiag.frames[aDiag.current_frame].rotateActivePiece('cw');
 	});
@@ -2058,12 +2406,30 @@ $(document).ready(function(){
 		aDiag.frames[aDiag.current_frame].draw();
 	});
 	$('#pf-cmd_clone').click(function(){
-		aDiag.new_copy_frame();
-		aDiag.frames[aDiag.current_frame].draw();
-		if(IS_TIMING)
-		{
-			timer_tick();
+
+		var dur_orig = aDiag.frames[aDiag.current_frame].duration;
+		var dur = $('input[type=radio][name="auto-are"]:checked').val();
+		if (dur) {
+			aDiag.new_copy_frame();
+			aDiag.frames[aDiag.current_frame].duration = dur;
+			aDiag.new_copy_frame();
+			if(IS_TIMING)
+			{
+				timer_tick();
+			}
 		}
+		else
+		{
+			aDiag.new_copy_frame();
+			aDiag.frames[aDiag.current_frame].draw();
+
+			if(IS_TIMING)
+			{
+				timer_tick();
+			}
+
+		}
+
 	});
 	$('#pf-cmd_del').click(function(){
 		aDiag.remove_current_frame();
@@ -2262,7 +2628,7 @@ $(document).ready(function(){
 				
 				aDiag.frames[z].activePiecePositionX = parseInt(parseInt(activePositions[0])+parseInt(fumenoffsetx(aDiag.frames[z].activePieceType,aDiag.frames[z].activePieceOrientation,aDiag.frames[z].RS)));				
 				aDiag.frames[z].activePiecePositionY = parseInt(parseInt(activePositions[1])+parseInt(fumenoffsety(aDiag.frames[z].activePieceType,aDiag.frames[z].activePieceOrientation,aDiag.frames[z].RS)));
-				console.log(aDiag.frames[z].activePiecePositionX);
+				//console.log(aDiag.frames[z].activePiecePositionX);
 				}
 
 		// comments
@@ -2756,6 +3122,35 @@ var $highlightdeco = $('#checkbox-highlight-decoration');
 	});
 
 
+	$('#thumbnail-mode').click(function(){
+		$('#thumbnails-container').toggleClass('timeline table');
+	});
+
+	$('#thumbnails').on("click",".thumbnail",function(){
+		//console.log("thumbnclik");
+		if (aDiag.current_frame+1 == aDiag.frames.length) {
+			$('#thumbnail-'+parseInt(aDiag.current_frame+1)).toggleClass('selected');
+			old_diagram_goto_frame.call(aDiag,$(this).attr('id').split('-')[1]-1);
+			$('#thumbnail-'+parseInt(aDiag.frames[aDiag.current_frame].id)).toggleClass('selected');
+		}
+		else
+		{
+			$('#thumbnail-'+parseInt(aDiag.frames[aDiag.current_frame].id)).toggleClass('selected');
+			old_diagram_goto_frame.call(aDiag,$(this).attr('id').split('-')[1]-1);
+			$('#thumbnail-'+parseInt(aDiag.frames[aDiag.current_frame].id)).toggleClass('selected');
+
+		}
+
+		
+			//$('#thumbnail-'+parseInt(aDiag.frames[aDiag.current_frame+1].id)).toggleClass('selected');
+
+		//aDiag.goto_frame($(this).attr('id').split('-')[1]-1,10);
+	});
+
+	/*$('.thumbnail').click(function(){
+		/* */
+	//});*/
+
 	/* ---------------------------------------------------------------------------- */
 	/* --------------------------- SAVE/LOAD MANAGEMENT  -------------------------- */
 	/* ---------------------------------------------------------------------------- */
@@ -2902,12 +3297,281 @@ var $highlightdeco = $('#checkbox-highlight-decoration');
 	*/
 
 	
-	$(window).keydown(function(event){
-		if(event.keyCode == 37) // left arrow
-			{$('#pf-cmd_prev').click();}
-		if(event.keyCode == 39) // right arrow
-			{$('#pf-cmd_next').click();}
+
+
+	var KEYBOARD_MODE = true;
+
+	$('#keyboard-control').click(function(){
+		if ($('#keyboard-control').attr('checked')) {
+			KEYBOARD_MODE = true;
+			$('#keyboard-control-list').slideDown();
+		}
+		else
+			{
+				KEYBOARD_MODE = false
+				$('#keyboard-control-list').slideUp();
+			}
 	});
+
+	KeyboardJS.on('left', function() {
+		if (KEYBOARD_MODE) {
+			$('#pf-cmd_prev').click();			
+		};
+	});
+	KeyboardJS.on('shift + a', function() {
+		if (KEYBOARD_MODE) {
+			$('#pf-cmd_prev').click();
+		};
+	});
+	KeyboardJS.on('right', function() {
+		if (KEYBOARD_MODE) {
+			$('#pf-cmd_next').click();
+		};
+	});
+	KeyboardJS.on('shift + d', function() {
+		if (KEYBOARD_MODE) {
+			$('#pf-cmd_next').click();
+		};
+	});
+	KeyboardJS.on('w', function() {
+		if (KEYBOARD_MODE) {
+			$('#cmd_move_up').mousedown();
+		};
+	});
+
+	KeyboardJS.on('a', function() {
+		if (KEYBOARD_MODE) {
+			$('#cmd_move_left').mousedown();
+		};
+	});
+
+	KeyboardJS.on('s', function() {
+		if (KEYBOARD_MODE) {
+			$('#cmd_move_down').mousedown();
+		};
+	});
+
+	KeyboardJS.on('d', function() {
+		if (KEYBOARD_MODE) {
+			$('#cmd_move_right').mousedown();
+		};
+	});
+
+	KeyboardJS.on('h', function() {
+		if (KEYBOARD_MODE) {
+			$('#cmd_ccw').mousedown();
+		};
+	});
+
+	KeyboardJS.on('j', function() {
+		if (KEYBOARD_MODE) {
+			$('#cmd_cw').mousedown();
+		};
+	});
+
+	KeyboardJS.on('k', function() {
+		if (KEYBOARD_MODE) {
+			$('#cmd_paint').mousedown();
+		};
+	});
+
+	KeyboardJS.on('l', function() {
+		if (KEYBOARD_MODE) {
+			$('#cmd_lock').mousedown();
+		};
+	});
+
+	KeyboardJS.on('shift + w', function() {
+		if (KEYBOARD_MODE) {
+			$('#cmd_drop').mousedown();
+		};
+	});
+
+	KeyboardJS.on('shift + s', function() {
+		if (KEYBOARD_MODE && aDiag.frames[aDiag.current_frame].activePieceType) {
+			$('#cmd_drop').mousedown();
+			$('#pf-cmd_clone').mousedown();
+			$('#cmd_opacity_flash').mousedown();
+			$('#pf-cmd_clone').mousedown();
+			$('#cmd_lock').mousedown();
+		};
+	});
+
+	KeyboardJS.on('shift + h', function() {
+		if (KEYBOARD_MODE) {
+			cyclePalette("up");
+		};
+	});
+
+	KeyboardJS.on('shift + J', function() {
+		if (KEYBOARD_MODE) {
+			cyclePalette("down");
+		};
+	});
+
+	function cyclePalette(order)
+	{
+		var extract = $('input[type=radio][name="select"]:checked').attr('value'),
+			piecePresent = false;
+		$('#'+extract+'-cell').toggleClass('pressed');
+		if (aDiag.frames[aDiag.current_frame].activePieceType) {piecePresent = true;}
+		else
+			{aDiag.frames[aDiag.current_frame].activePieceOrientation = "i"};
+		if (order == "down") {
+			switch(extract.charAt(0))
+			{
+				case 'Z':
+					$('#O'+aDiag.frames[aDiag.current_frame].activePieceOrientation+'-cell').toggleClass('pressed');
+					$('#O'+aDiag.frames[aDiag.current_frame].activePieceOrientation+'').attr("checked","checked");
+					if (piecePresent) {aDiag.frames[aDiag.current_frame].addPiece(aDiag.frames[aDiag.current_frame].activePiecePositionX,
+																				  aDiag.frames[aDiag.current_frame].activePiecePositionY,
+																				  "O",
+																				  aDiag.frames[aDiag.current_frame].activePieceOrientation,
+																				  "active",
+																				  false);};
+					break;
+				case 'O':
+					$('#I'+aDiag.frames[aDiag.current_frame].activePieceOrientation+'-cell').toggleClass('pressed');
+					$('#I'+aDiag.frames[aDiag.current_frame].activePieceOrientation+'').attr("checked","checked");
+					if (piecePresent) {aDiag.frames[aDiag.current_frame].addPiece(aDiag.frames[aDiag.current_frame].activePiecePositionX,
+																				  aDiag.frames[aDiag.current_frame].activePiecePositionY,
+																				  "I",
+																				  aDiag.frames[aDiag.current_frame].activePieceOrientation,
+																				  "active",
+																				  false);};
+					break;
+				case 'I':
+					$('#T'+aDiag.frames[aDiag.current_frame].activePieceOrientation+'-cell').toggleClass('pressed');
+					$('#T'+aDiag.frames[aDiag.current_frame].activePieceOrientation+'').attr("checked","checked");
+					if (piecePresent) {aDiag.frames[aDiag.current_frame].addPiece(aDiag.frames[aDiag.current_frame].activePiecePositionX,
+																				  aDiag.frames[aDiag.current_frame].activePiecePositionY,
+																				  "T",
+																				  aDiag.frames[aDiag.current_frame].activePieceOrientation,
+																				  "active",
+																				  false);};
+					break;
+				case 'T':
+					$('#L'+aDiag.frames[aDiag.current_frame].activePieceOrientation+'-cell').toggleClass('pressed');
+					$('#L'+aDiag.frames[aDiag.current_frame].activePieceOrientation+'').attr("checked","checked");
+					if (piecePresent) {aDiag.frames[aDiag.current_frame].addPiece(aDiag.frames[aDiag.current_frame].activePiecePositionX,
+																				  aDiag.frames[aDiag.current_frame].activePiecePositionY,
+																				  "L",
+																				  aDiag.frames[aDiag.current_frame].activePieceOrientation,
+																				  "active",
+																				  false);};
+					break;
+				case 'L':
+					$('#J'+aDiag.frames[aDiag.current_frame].activePieceOrientation+'-cell').toggleClass('pressed');
+					$('#J'+aDiag.frames[aDiag.current_frame].activePieceOrientation+'').attr("checked","checked");
+					if (piecePresent) {aDiag.frames[aDiag.current_frame].addPiece(aDiag.frames[aDiag.current_frame].activePiecePositionX,
+																				  aDiag.frames[aDiag.current_frame].activePiecePositionY,
+																				  "J",
+																				  aDiag.frames[aDiag.current_frame].activePieceOrientation,
+																				  "active",
+																				  false);};
+					break;
+				case 'J':
+					$('#S'+aDiag.frames[aDiag.current_frame].activePieceOrientation+'-cell').toggleClass('pressed');
+					$('#S'+aDiag.frames[aDiag.current_frame].activePieceOrientation+'').attr("checked","checked");
+					if (piecePresent) {aDiag.frames[aDiag.current_frame].addPiece(aDiag.frames[aDiag.current_frame].activePiecePositionX,
+																				  aDiag.frames[aDiag.current_frame].activePiecePositionY,
+																				  "S",
+																				  aDiag.frames[aDiag.current_frame].activePieceOrientation,
+																				  "active",
+																				  false);};
+					break;
+				case 'S':
+					$('#Z'+aDiag.frames[aDiag.current_frame].activePieceOrientation+'-cell').toggleClass('pressed');
+					$('#Z'+aDiag.frames[aDiag.current_frame].activePieceOrientation+'').attr("checked","checked");
+					break;
+					if (piecePresent) {aDiag.frames[aDiag.current_frame].addPiece(aDiag.frames[aDiag.current_frame].activePiecePositionX,
+																				  aDiag.frames[aDiag.current_frame].activePiecePositionY,
+																				  "Z",
+																				  aDiag.frames[aDiag.current_frame].activePieceOrientation,
+																				  "active",
+																				  false);};
+			};
+
+		};// end order down
+		if (order == "up") 
+			{
+				switch(extract.charAt(0))
+				{
+					case 'I':
+						$('#O'+aDiag.frames[aDiag.current_frame].activePieceOrientation+'-cell').toggleClass('pressed');
+						$('#O'+aDiag.frames[aDiag.current_frame].activePieceOrientation+'').attr("checked","checked");
+						if (piecePresent) {aDiag.frames[aDiag.current_frame].addPiece(aDiag.frames[aDiag.current_frame].activePiecePositionX,
+																					  aDiag.frames[aDiag.current_frame].activePiecePositionY,
+																					  "O",
+																					  aDiag.frames[aDiag.current_frame].activePieceOrientation,
+																					  "active",
+																					  false);};
+						break;
+					case 'T':
+						$('#I'+aDiag.frames[aDiag.current_frame].activePieceOrientation+'-cell').toggleClass('pressed');
+						$('#I'+aDiag.frames[aDiag.current_frame].activePieceOrientation+'').attr("checked","checked");
+						if (piecePresent) {aDiag.frames[aDiag.current_frame].addPiece(aDiag.frames[aDiag.current_frame].activePiecePositionX,
+																					  aDiag.frames[aDiag.current_frame].activePiecePositionY,
+																					  "I",
+																					  aDiag.frames[aDiag.current_frame].activePieceOrientation,
+																					  "active",
+																					  false);};
+						break;
+					case 'L':
+						$('#T'+aDiag.frames[aDiag.current_frame].activePieceOrientation+'-cell').toggleClass('pressed');
+						$('#T'+aDiag.frames[aDiag.current_frame].activePieceOrientation+'').attr("checked","checked");
+						if (piecePresent) {aDiag.frames[aDiag.current_frame].addPiece(aDiag.frames[aDiag.current_frame].activePiecePositionX,
+																					  aDiag.frames[aDiag.current_frame].activePiecePositionY,
+																					  "T",
+																					  aDiag.frames[aDiag.current_frame].activePieceOrientation,
+																					  "active",
+																					  false);};
+						break;
+					case 'J':
+						$('#L'+aDiag.frames[aDiag.current_frame].activePieceOrientation+'-cell').toggleClass('pressed');
+						$('#L'+aDiag.frames[aDiag.current_frame].activePieceOrientation+'').attr("checked","checked");
+						if (piecePresent) {aDiag.frames[aDiag.current_frame].addPiece(aDiag.frames[aDiag.current_frame].activePiecePositionX,
+																					  aDiag.frames[aDiag.current_frame].activePiecePositionY,
+																					  "L",
+																					  aDiag.frames[aDiag.current_frame].activePieceOrientation,
+																					  "active",
+																					  false);};
+						break;
+					case 'S':
+						$('#J'+aDiag.frames[aDiag.current_frame].activePieceOrientation+'-cell').toggleClass('pressed');
+						$('#J'+aDiag.frames[aDiag.current_frame].activePieceOrientation+'').attr("checked","checked");
+						if (piecePresent) {aDiag.frames[aDiag.current_frame].addPiece(aDiag.frames[aDiag.current_frame].activePiecePositionX,
+																					  aDiag.frames[aDiag.current_frame].activePiecePositionY,
+																					  "J",
+																					  aDiag.frames[aDiag.current_frame].activePieceOrientation,
+																					  "active",
+																					  false);};
+						break;
+					case 'Z':
+						$('#S'+aDiag.frames[aDiag.current_frame].activePieceOrientation+'-cell').toggleClass('pressed');
+						$('#S'+aDiag.frames[aDiag.current_frame].activePieceOrientation+'').attr("checked","checked");
+						if (piecePresent) {aDiag.frames[aDiag.current_frame].addPiece(aDiag.frames[aDiag.current_frame].activePiecePositionX,
+																					  aDiag.frames[aDiag.current_frame].activePiecePositionY,
+																					  "S",
+																					  aDiag.frames[aDiag.current_frame].activePieceOrientation,
+																					  "active",
+																					  false);};
+						break;
+					case 'O':
+						$('#Z'+aDiag.frames[aDiag.current_frame].activePieceOrientation+'-cell').toggleClass('pressed');
+						$('#Z'+aDiag.frames[aDiag.current_frame].activePieceOrientation+'').attr("checked","checked");
+						break;
+						if (piecePresent) {aDiag.frames[aDiag.current_frame].addPiece(aDiag.frames[aDiag.current_frame].activePiecePositionX,
+																					  aDiag.frames[aDiag.current_frame].activePiecePositionY,
+																					  "Z",
+																					  aDiag.frames[aDiag.current_frame].activePieceOrientation,
+																					  "active",
+																					  false);};
+				};
+			};//end order up
+			if (!piecePresent) {aDiag.frames[aDiag.current_frame].activePieceOrientation = ""};
+	}
+
 	$('#foobartest').click(function(){
 		console.log(aDiag);
 		console.log(aDiag.frames[aDiag.current_frame]);

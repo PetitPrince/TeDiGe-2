@@ -63,7 +63,7 @@ width: 100px;
 }
 canvas#pf-progressbar {
 border: 1px solid white;
-}
+} 
 #order-control{
      margin-top:5px;
      text-align:center;
@@ -86,6 +86,82 @@ padding: 3px
 #under textarea{
 width:200px; height: 50px; margin-top:3px; background-color: gray;
 }
+/*----------------------------------------------*/
+/*--------------- Thumbnail pane ---------------*/
+/*----------------------------------------------*/
+
+#thumbnails-container{
+    width: 400px;
+    padding: 10px 10px 40px 10px;
+    border-radius: 0.5em;
+    min-height: 115px;
+    background-color: rgb(51,51,51);
+    border: 0.25em solid rgb(128, 128, 128);
+    margin-top: 1em;
+}
+
+#thumbnails .thumbnail{
+    width: 40px;
+    height: 100px;
+    margin: 5px;
+    position: relative;
+    display: inline-block;
+    border: 1px solid gray;
+    counter-increment: thumb;}
+
+#thumbnails canvas{
+    width: 40px;
+    height: 80px;
+    position: absolute;
+    left:0;
+    top:0;
+}
+#thumbnails .active{
+    z-index:1;
+}
+#thumbnails .active{
+    z-index:0;
+}
+#thumbnails .thumbnail.selected{
+    outline: 3px solid red;
+}
+
+.thumbnail:after{
+    content: counter(thumb);
+    border-top: 1px solid gray;
+    position:absolute;
+    top: 82px;
+    width: 40px;
+    text-align:center;
+    font-size:12px;
+
+}
+.thumbnail-number{
+    display:none;
+    border-top: 1px solid gray;
+    position:absolute;
+    top: 82px;
+    width: 40px;
+    text-align:center;
+    font-size:12px;
+}
+
+.timeline{
+    white-space:nowrap;
+    overflow-x: scroll;   
+    height:115px;
+    transition: all 0.5s ease; 
+}
+.table{
+    transition: all 0.5s ease; 
+}
+#thumbnail-mode{
+    width: 400px;
+    position:relative;
+    top: -50px;
+    text-align: right;    
+}
+
 /*----------------------------------------------*/
 /*--------------- Palette pane ---------------*/
 /*----------------------------------------------*/
@@ -362,7 +438,7 @@ width:45%
      border: 0.25em solid #808080;
      padding: 10px;
      width: 550px;
-	 height: 330px;
+	 height: 450px;
      margin-top: 10px;
      background-color: #333;
 	 text-align:center;

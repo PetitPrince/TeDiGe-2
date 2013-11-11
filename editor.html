@@ -20,11 +20,13 @@
 
 	}
 	</style>
+
+	<link rel="shortcut icon" href="favicon.gif" />
 </head>
 
 <body>
 
-<!-- <div id="highlight" style="background-color: pink; width: 100px; height: 100px;">Blah</div> -->
+<!-- <div id="highlight" style="background-color: pink; ">Blah</div> -->
 
 	<div id="overall-wrapper">
 		<div id="playfield-wrapper">
@@ -303,7 +305,7 @@
 				<table>
 					<tr id="I-row">
 						<td id="Icw-cell">	<label for ="Icw">	<input id="Icw" type="radio" name="select" value="Icw">		<canvas id="editor-palette-Icw" width="32" height="32"></canvas><span>cw</span></label></td>
-						<td id="Ii-cell">	<label for ="Ii">	<input id="Ii" type="radio" name="select" value="Ii">		<canvas id="editor-palette-Ii" width="32" height="32"></canvas>	<span>i</span></label></td>
+						<td id="Ii-cell" class="pressed">	<label for ="Ii">	<input id="Ii" type="radio" name="select" value="Ii">		<canvas id="editor-palette-Ii" width="32" height="32"></canvas>	<span>i</span></label></td>
 						<td id="Iccw-cell">	<label for ="Iccw">	<input id="Iccw" type="radio" name="select" value="Iccw">	<canvas id="editor-palette-Iccw" width="32" height="32"></canvas><span>cw</span></label></td>
 						<td id="Iu-cell">	<label for ="Iu">	<input id="Iu" type="radio" name="select" value="Iu">		<canvas id="editor-palette-Iu" width="32" height="32"></canvas><span>i</span></label></td>
 					</tr>
@@ -385,15 +387,18 @@
 			<input type="button" id="cmd_paint" value="Paint">-->
 		<!--</div> -->
 	</div>
-	<!--
-	<div id="browser">
-		<table>
-		<tr id="preview-container">
-		<td class="preview-block" id="preview-plus"><input type="button" value="+" style="vertical-align: middle"></td>
-		</tr></table>
-	</div>
-	-->
 
+	<div class="timeline" id="thumbnails-container">
+		<div id="thumbnails"> 
+			<div id="thumbnail-1" class="thumbnail selected">
+				<canvas class="active" id="thumbnail-1-active" height="80" width="40"></canvas>
+				<canvas id="thumbnail-1-inactive" class="inactive" height="80" width="40"></canvas>
+				<canvas id="thumbnail-1-deco" class="deco" height="80" width="40"></canvas>
+			</div>
+		</div>
+		
+	</div>
+	<div id="thumbnail-mode">[⤡]</div>
 	<div id="secondary-utilites">
 			<div id="secondary-col1">
 			<h3>Active piece</h3>
@@ -458,6 +463,8 @@
 				</select>
 				<input type="button" value="Start timer" id="cmd_startstop_timer"  class="half-button" />
 				<input type="button" value="Reset" id="cmd_reset_timer" style="display:none"class="half-button"/>
+				<hr id="hr_tick" />
+				<input id="cmd_timer_tick" value="Manually tick the timer" type="button" class="full-button" style="display:none"/>
 			</div>
 			<div id="secondary-col2" class="actions">
 				<h3>Frame</h3>
@@ -494,7 +501,6 @@
 								</select>
 				<input type="button" id="change-all-rs" value="↳Apply to all" class="full-button">
 				<hr />
-
 				Duration:	
 				<input id="pf-duration" type="text" style="width: 5em" />
 				<br />
@@ -505,6 +511,14 @@
 				<input type="button" id="duration-remaining" value="Remaining">
 				<br />
 				<input type="button" id="change-all-duration" value="↳ Apply to all" class="full-button">
+				<br />
+				<h3>Auto-ARE</h3>
+				<input type="radio" checked="checked" name="auto-are" value="0"id="ARE-none"> None<br />
+				<input type="radio" name="auto-are" value="30" id="ARE-30"> 30f (TGM1)<br />
+				<input type="radio" name="auto-are" value="25" id="ARE-25"> 25f <input type="radio" value="6" name="auto-are"id="ARE-6"> 6f <br />
+				<input type="radio" name="auto-are" value="16" id="ARE-16"> 16f <input type="radio" value="5" name="auto-are"id="ARE-5"> 5f <br />
+				<input type="radio" name="auto-are" value="12" id="ARE-12"> 12f <input type="radio" value="4" name="auto-are"id="ARE-4"> 4f
+
 			</div>
 			<div id="secondary-col4">
 				<h3>Diagram</h3>
@@ -517,13 +531,22 @@
 				<input id="pf-cmd_remove_following" value="Delete following ⌦" type="button" class="full-button"/><br />
 				<hr />
 				<input id="cmd_nuke" value="Nuke ! ☢" type="button" class="full-button"/><br />
-				<hr id="hr_tick" />
-				<input id="cmd_timer_tick" value="Manually tick the timer" type="button" class="full-button" style="display:none"/><br />
+				Master ARE value<br />
+				0-700: 25f<br />
+				701-800: 16f<br />
+				801-999: 12f <br />
+				Death ARE value<br />
+				0-100: 16f<br />
+				101-300: 12f <br />
+				301-400: 6f<br />
+				401-499: 5f <br />
+				501-+99: 4f <br />
+
 			</div>
 	</div>
 	<div style="width: 580px">
 		<div id="image-export" style="float:right">
-			<canvas id="pf-export"		width="97" height="177" style="display:none"></canvas>
+			<canvas id="pf-export"		width="97" height="244" style="display:none"></canvas>
 			<img id="export-gif" src="" style="display:none" />
 		</div>	
 		
@@ -561,7 +584,42 @@
 		</div>
 	</div>
 </div>
+	<div>
 
+		<input id="keyboard-control" type="checkbox" checked="checked"/> Enable Keyboard Control | <input id="sync-movement" type="checkbox"/> Sync active piece movement with display
+		<dl id="keyboard-control-list">
+			<dt>Previous frame</dt>
+				<dd>← <em>or</em> Shift+A</dd>
+			<dt>Next/New frame</dt>
+				<dd>→ <em>or</em> Shift+D</dd>
+			<dt>Move left</dt>
+				<dd>A</dd>
+			<dt>Move right</dt>
+				<dd>D</dd>
+			<dt>Move up</dt>
+				<dd>W</dd>
+			<dt>Move down</dt>
+				<dd>S</dd>
+			<dt>Drop</dt>
+				<dd>Shift + S</dd>
+			<dt>Rotate left</dt>
+				<dd>H</dd>
+			<dt>Rotate right</dt>
+				<dd>J</dd>
+			<dt>Cycle palette up</dt>
+				<dd>Shift+J</dd>
+			<dt>Cycle palette down</dt>
+				<dd>Shift+K</dd>
+			<dt>Paint active piece</dt>
+				<dd>k</dd>
+			<dt>Lock active piece</dt>
+				<dd>l</dd>
+			<dt>Sonic Drop</dt>
+				<dd>Shift+W</dd>
+			<dt>Sonic Lock</dt>
+				<dd>Shift+S</dd>
+		</dl>
+	</div>
 <div id="links">
 	<p><a href="http://www.tetrisconcept.net" title="Tetrisconcept">Tetrisconcept</a> | <a href="http://www.harddrop.com" title="Harddrop">Harddrop</a> | <a href="https://github.com/PetitPrince/TeDiGe-2/">TeDiGe-2</a> is powered by <a href="http://jquery.com/">jQuery</a></p>
 </div>
