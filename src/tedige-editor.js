@@ -3164,7 +3164,7 @@ var $highlightdeco = $('#checkbox-highlight-decoration');
 			case 'export-custom-button':
 				var findtedige = /%TEDIGE%/; // find %TEDIGE%
 				var custom_tag = $('#export-custom-string').val();
-				custom_tag = custom_tag.replace(findtedige, 'v-01'+export_string);
+				custom_tag = custom_tag.replace(findtedige, 'v01-'+export_string);
 				$('#export').html(custom_tag).select();
 			break;
 			case 'export-editor-button':
