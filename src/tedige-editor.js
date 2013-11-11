@@ -2406,30 +2406,7 @@ $(document).ready(function(){
 		aDiag.frames[aDiag.current_frame].draw();
 	});
 	$('#pf-cmd_clone').click(function(){
-
-		var dur_orig = aDiag.frames[aDiag.current_frame].duration;
-		var dur = $('input[type=radio][name="auto-are"]:checked').val();
-		if (dur) {
-			aDiag.new_copy_frame();
-			aDiag.frames[aDiag.current_frame].duration = dur;
-			aDiag.new_copy_frame();
-			if(IS_TIMING)
-			{
-				timer_tick();
-			}
-		}
-		else
-		{
-			aDiag.new_copy_frame();
-			aDiag.frames[aDiag.current_frame].draw();
-
-			if(IS_TIMING)
-			{
-				timer_tick();
-			}
-
-		}
-
+		aDiag.new_copy_frame();
 	});
 	$('#pf-cmd_del').click(function(){
 		aDiag.remove_current_frame();
@@ -2453,6 +2430,12 @@ $(document).ready(function(){
 	$('#cmd_timer_tick').click(function(){
 		timer_tick();
 	});
+
+	$('input[name="auto-are"]').click(function(){
+		$('#pf-cmd_clone').click();
+		aDiag.frames[aDiag.current_frame].duration = $(this).val();
+		$('#pf-cmd_clone').click();
+	});	
 	/* -------------------------- */
 
 	$('#tetramino-panel table').click(function(){
