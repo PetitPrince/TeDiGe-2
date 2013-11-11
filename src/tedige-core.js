@@ -50,60 +50,60 @@ function Painter(CanvasIDString) {
 	/* ------------------------------- */
 
 	/** Get the jQuery object of the preview canvas, where things gets drawn on mouseover*/
-	this.CanvasPreview = $('#' + CanvasIDString + '-preview');
+	this.CanvasPreview = $('#' + this.IDString + '-preview');
 	/** Get the 2d context of the related canvas*/
 	this.ContextPreview = this.CanvasPreview[0].getContext('2d');
 
 	/** Get the jQuery object of the deco canvas, where things like arrows, line clear effects,
 	symbols... are displayed*/
-	this.CanvasDeco = $('#' + CanvasIDString + '-deco');
+	this.CanvasDeco = $('#' + this.IDString + '-deco');
 	/** Get the 2d context of the related canvas*/
 	this.ContextDeco = this.CanvasDeco[0].getContext('2d');
 
 	/** Get the jQuery object of the pf canvas where the inactive blocks are displayed */
-	this.CanvasPF = $('#' + CanvasIDString + '-inactive');
+	this.CanvasPF = $('#' + this.IDString + '-inactive');
 	/** Get the 2d context of the related canvas*/
 	this.ContextPF = this.CanvasPF[0].getContext('2d');
 
 	/** Get the jQuery object of the active canvas, where the active pieces are displayed*/
-	this.CanvasActive = $('#' + CanvasIDString + '-active');
+	this.CanvasActive = $('#' + this.IDString + '-active');
 	/** Get the 2d context of the related canvas*/
 	this.ContextActive = this.CanvasActive[0].getContext('2d'); // cPF: ContextPF
 
 	/** Get the jQuery object of the whiteborder canvas, where the TGM-ish white-border is drawn*/
-	this.CanvasWhiteborder = $('#' + CanvasIDString + '-whiteborder');
+	this.CanvasWhiteborder = $('#' + this.IDString + '-whiteborder');
 	/** Get the 2d context of the related canvas*/
 	this.ContextWhiteborder = this.CanvasWhiteborder[0].getContext('2d');
 
 	/** Get the jQuery object of the background canvas.*/
-	this.CanvasBackground = $('#' + CanvasIDString + '-background');
+	this.CanvasBackground = $('#' + this.IDString + '-background');
 	/** Get the 2d context of the related canvas*/
 	this.ContextBackground = this.CanvasBackground[0].getContext('2d');
 
 	/** Get the jQuery object of the border canvas.*/
-	this.CanvasBorder = $('#' + CanvasIDString + '-border');
+	this.CanvasBorder = $('#' + this.IDString + '-border');
 	/** Get the 2d context of the related canvas*/
 	this.ContextBorder = this.CanvasBorder[0].getContext('2d'); // cPF: ContextPF
 
 	/** Get the jQuery object of the decopin canvas, where the "pin" is drawn in editor mode*/ // TODO: move this to tedige-editor.js
-	this.CanvasDecoPin = $('#' + CanvasIDString + '-decoPin');
+	this.CanvasDecoPin = $('#' + this.IDString + '-decoPin');
 	/** Get the 2d context of the related canvas*/
 	this.ContextDecoPin = this.CanvasDecoPin[0].getContext('2d');
 
 	/* ---------------- */
 
 	/** Get the jQuery object of the NextHold canvas, where the next and holded piece are drawn*/
-	this.CanvasNextHold = $('#' + CanvasIDString + '-nexthold');
+	this.CanvasNextHold = $('#' + this.IDString + '-nexthold');
 	/** Get the 2d context of the related canvas*/
 	this.ContextNextHold = this.CanvasNextHold[0].getContext('2d');
 
 	/** Get the jQuery object of the progressbar canvas.*/
-	this.CanvasProgressbar = $('#' + CanvasIDString + '-progressbar');
+	this.CanvasProgressbar = $('#' + this.IDString + '-progressbar');
 	/** Get the 2d context of the related canvas*/
 	this.ContextProgressbar = this.CanvasProgressbar[0].getContext('2d');
 
 	/** Get the jQuery object of the control canvas, where the joystick is drawn*/
-	this.CanvasControl = $('#' + CanvasIDString + '-control');
+	this.CanvasControl = $('#' + this.IDString + '-control');
 	/** Get the 2d context of the related canvas*/
 	this.ContextControl = this.CanvasControl[0].getContext('2d');
 
@@ -133,6 +133,9 @@ function Painter(CanvasIDString) {
 	/** An image object that contains the decorations' sprite*/
 	this.spritedeco = '';
 
+	/** An image object that contains the joystick sprite*/
+	this.joypalette = '';
+	
 	/** A boolean that sets if the painter object is ready to be painter, i.e. if the sprites have loaded*/
 	this.ready = false;
 
@@ -147,9 +150,11 @@ function Painter(CanvasIDString) {
 		this.spritedeco = new Image();
 		this.sprite = new Image();
 		this.spritemini = new Image();
+		this.joypalette = new Image();
 		this.spritedeco.src = 'res/deco-8px.png';
 		this.sprite.src = 'res/palette-8px.png';
 		this.spritemini.src = 'res/palette-4px.png';
+		this.joypalette.src = 'res/control-palette.png';
 		this.sprite.onload = function () {
 			mymyself.ready = true;
 		};
@@ -1278,10 +1283,10 @@ function Painter(CanvasIDString) {
 
 	/** Draw the joystick in rest position
 	*/
-	Painter.prototype.resetJoystick = function(){
+	Painter.prototype.resetJoystick = function(){		
 		var height = this.CanvasControl.height();
 		this.ContextControl.clearRect(0,0,height,height);
-		this.drawJoystick('all','rest');
+		this.ContextControl.drawImage(this.joypalette,0,0,height,height,0,0,height,height);
 	};
 
 	/** Draw the joystick
@@ -1289,98 +1294,67 @@ function Painter(CanvasIDString) {
 		@param {string} direction Define which joystick position to draw. Possible value: 'all', 'u', 'r', 'l', 'd', 'ul', 'ur', 'dl', 'dr'
 		@param {string} state Define which color to draw. Possible value: 'rest', 'pressed' or 'holded'
 	*/
+
 	Painter.prototype.drawJoystick = function(direction,state){
-		if (direction == 'all')
-		{
-			this.myself.drawJoystick('u','rest');
-			this.myself.drawJoystick('r','rest');
-			this.myself.drawJoystick('l','rest');
-			this.myself.drawJoystick('d','rest');
-			this.myself.drawJoystick('ul','rest');
-			this.myself.drawJoystick('ur','rest');
-			this.myself.drawJoystick('dl','rest');
-			this.myself.drawJoystick('dr','rest');
-		}
-		else
-		{
-			switch(direction)
-			{
-				case 'u':
-					this.ContextControl.beginPath();
-					this.ContextControl.moveTo(this.CanvasControlheight/3, this.CanvasControlheight/3);
-					this.ContextControl.lineTo(2*this.CanvasControlheight/3,this.CanvasControlheight/3);
-					this.ContextControl.lineTo(this.CanvasControlheight/2,0);
-					this.ContextControl.closePath();
-					break;
-				case 'r':
-					this.ContextControl.beginPath();
-					this.ContextControl.moveTo(2*this.CanvasControlheight/3, this.CanvasControlheight/3);
-					this.ContextControl.lineTo(2*this.CanvasControlheight/3,2*this.CanvasControlheight/3);
-					this.ContextControl.lineTo(this.CanvasControlheight,this.CanvasControlheight/2);
-					this.ContextControl.closePath();
-					break;
-				case 'd':
-					this.ContextControl.beginPath();
-					this.ContextControl.moveTo(2*this.CanvasControlheight/3,2*this.CanvasControlheight/3);
-					this.ContextControl.lineTo(this.CanvasControlheight/3,2*this.CanvasControlheight/3);
-					this.ContextControl.lineTo(this.CanvasControlheight/2,this.CanvasControlheight);
-					this.ContextControl.closePath();
-					break;
-				case 'l':
-					this.ContextControl.beginPath();
-					this.ContextControl.moveTo(this.CanvasControlheight/3,2*this.CanvasControlheight/3);
-					this.ContextControl.lineTo(this.CanvasControlheight/3,this.CanvasControlheight/3);
-					this.ContextControl.lineTo(0,this.CanvasControlheight/2);
-					this.ContextControl.closePath();
-					break;
-				case 'ul':
-					this.ContextControl.beginPath();
-					this.ContextControl.moveTo(0+this.CanvasControlheight/8,0+this.CanvasControlheight/8);
-					this.ContextControl.lineTo(this.CanvasControlheight/4+this.CanvasControlheight/8,0+this.CanvasControlheight/8);
-					this.ContextControl.lineTo(0+this.CanvasControlheight/8,this.CanvasControlheight/4+this.CanvasControlheight/8);
-					this.ContextControl.closePath();
-					break;
-				case 'ur':
-					this.ContextControl.beginPath();
-					this.ContextControl.moveTo(this.CanvasControlheight-this.CanvasControlheight/8,this.CanvasControlheight/8);
-					this.ContextControl.lineTo(this.CanvasControlheight-this.CanvasControlheight/8,this.CanvasControlheight/4+this.CanvasControlheight/8);
-					this.ContextControl.lineTo(this.CanvasControlheight-this.CanvasControlheight/4-this.CanvasControlheight/8,0+this.CanvasControlheight/8);
-					this.ContextControl.closePath();
-					break;
-				case 'dr':
-					this.ContextControl.beginPath();
-					this.ContextControl.moveTo(this.CanvasControlheight-this.CanvasControlheight/8,this.CanvasControlheight-this.CanvasControlheight/8);
-					this.ContextControl.lineTo(this.CanvasControlheight-this.CanvasControlheight/8,this.CanvasControlheight-this.CanvasControlheight/4-this.CanvasControlheight/8);
-					this.ContextControl.lineTo(this.CanvasControlheight-this.CanvasControlheight/4-this.CanvasControlheight/8,this.CanvasControlheight-this.CanvasControlheight/8);
-					this.ContextControl.closePath();
-					break;
-				case 'dl':
-					this.ContextControl.beginPath();
-					this.ContextControl.moveTo(0+this.CanvasControlheight/8,this.CanvasControlheight-this.CanvasControlheight/8);
-					this.ContextControl.lineTo(0+this.CanvasControlheight/8,this.CanvasControlheight-this.CanvasControlheight/4-this.CanvasControlheight/8);
-					this.ContextControl.lineTo(this.CanvasControlheight/4+this.CanvasControlheight/8,this.CanvasControlheight-this.CanvasControlheight/8);
-					this.ContextControl.closePath();
-					break;
-			}
+		var state_modifier;
 
-			switch(state){
-				case 'rest':
-					this.ContextControl.fillStyle = '#808080';
-				break;
-				case 'pressed':
-					this.ContextControl.fillStyle = '#ff0000';
-				break;
-				case 'holded':
-					this.ContextControl.fillStyle = '#ffa600';
-				break;
-
-			}
-
-			this.ContextControl.fill();
-
-
+		switch(state){
+			case 'rest':
+				state_modifier = 0; 
+			break;
+			case 'pressed':
+				state_modifier = 35; // 35 ou 36 ?
+			break;
+			case 'holded':
+				state_modifier = 70; // 35 ou 36 ?
+			break;
 		}
 
+		switch(direction){
+			case 'all':
+				this.ContextControl.drawImage(this.joypalette,0,state_modifier,37,37,
+															  0,0,37,37);
+			break;
+
+			case 'u':
+				this.ContextControl.drawImage(this.joypalette,12,state_modifier,11,12,
+															  12,0,11,12);
+			break;
+
+			case 'd':
+				this.ContextControl.drawImage(this.joypalette,12,12+state_modifier,11,24,
+															  12,12,11,24);
+			break;
+
+			case 'l':
+				this.ContextControl.drawImage(this.joypalette,0,12+state_modifier,12,11,
+															  0,12,12,11);
+			break;
+
+			case 'r':
+				this.ContextControl.drawImage(this.joypalette,12,12+state_modifier,24,11,
+															  12,12,24,11);
+			break;
+
+			case 'ul':
+				this.ContextControl.drawImage(this.joypalette,3,3+state_modifier,9,9,
+															  3,3,9,9);
+			break;
+			case 'ur':
+				this.ContextControl.drawImage(this.joypalette,23,3+state_modifier,9,9,
+															  23,3,9,9);
+			break;
+
+			case 'dl':
+				this.ContextControl.drawImage(this.joypalette,3,23+state_modifier,9,9,
+															  3,23,9,9);
+			break;
+			case 'dr':
+				this.ContextControl.drawImage(this.joypalette,23,23+state_modifier,9,9,
+															  23,23,9,9);
+			break;
+
+		}
 	};
 
 	/** Draw all the button in a particular state
@@ -1404,7 +1378,45 @@ function Painter(CanvasIDString) {
 		@param {string} button Define which button to draw. Possible value: 'A', 'B', 'C', 'D' for now.
 		@param {string} state Define in which color the button is drawn. Possible value: 'rest', 'pressed' or 'holded'.
 	*/
+
 	Painter.prototype.drawButton = function(button,state){
+
+	var state_modifier;
+
+	switch(state){
+		case 'rest':
+			state_modifier = 0; 
+		break;
+		case 'pressed':
+			state_modifier = 35; // 35 ou 36 ?
+		break;
+		case 'holded':
+			state_modifier = 70; // 35 ou 36 ?
+		break;
+	}
+
+	switch(button){
+		case 'A':
+			this.ContextControl.drawImage(this.joypalette,37,1+state_modifier,14,15,
+														  37,1,14,15);
+		break;
+		case 'B':
+			this.ContextControl.drawImage(this.joypalette,53,1+state_modifier,14,15,
+														  53,1,14,15);
+		break;
+		case 'C':
+			this.ContextControl.drawImage(this.joypalette,69,1+state_modifier,14,15,
+														  69,1,14,15);
+		break;
+		case 'D':
+			this.ContextControl.drawImage(this.joypalette,37,16+state_modifier,14,18,
+														  37,16,14,18);
+		break;
+	}
+
+	};
+
+	Painter.prototype.drawButton_old = function(button,state){
 		var height = this.CanvasControl.height();
 		var radius = height/5;
 
@@ -1522,8 +1534,8 @@ function Painter(CanvasIDString) {
 	*/
 	Painter.prototype.frameCount = function(cur,tot){
 
-		$('#'+CanvasIDString+'-current-frame').attr('value',cur);
-		$('#'+CanvasIDString+'-total-frame').html(tot);
+		$('#'+this.IDString+'-current-frame').attr('value',cur);
+		$('#'+this.IDString+'-total-frame').html(tot);
 
 	};
 
@@ -1579,13 +1591,14 @@ function Diagram(painter){
 	Diagram.prototype.new_frame = function(){
 		this.current_frame++;
 		this.painter.eraseLayer('all');
-		this.frames.splice(this.current_frame,0,new Frame(this.painter)); //inject a new frame after the current frame (modify at position current_frame, remove nothing, add new frame)
+		var newFrame = new Frame(this.painter);
+		this.frames.splice(this.current_frame,0,newFrame); //inject a new frame after the current frame (modify at position current_frame, remove nothing, add new frame)
 		this.update_framecount();
 	};
 
 	/** Remove the current frame from existence
 	*/
-	Diagram.remove_current_frame = function(){
+	Diagram.prototype.remove_current_frame = function(){
 		if(this.frames.length > 1 )
 		{
 			if(this.current_frame-1 >= 0) // if the current frame is not the first one
@@ -1635,23 +1648,9 @@ function Diagram(painter){
 	/** Remove every frame after the current one. Analogous to 'remove following' in fumen.
 	*/
 	Diagram.prototype.remove_following_frames = function(){
-		//console.log('in');
+		console.log(this.current_frame+1);
 		this.frames.splice(this.current_frame+1);
 		this.frames[this.current_frame].draw();
-		//console.log('out');
-
-	/* TODO PRIORITY NOT FUNCTIONAL FOR NOW
-		var i = this.current_frame;
-		this.current_frame = this.frames.length;
-		while(this.current_frame > i)
-		{
-			this.remove_current_frame();
-		}
-		this.frames[this.current_frame].draw();
-		this.update_framecount();
-		//this.frames.splice(this.current_frame+1); // this... doesn't work well with the previews
-		this.update_framecount();
-	*/
 	};
 
 	/** Nukes everything !
@@ -1814,7 +1813,6 @@ function Diagram(painter){
 		var first_candidate_deco = true;
 		var newly_added_deco = false;
 
-
 		for(var i=0; i<10; i++){
 			for(var j=0; j<20; j++){
 				if(this.frames[final_frame].playfield[i][j][0] != this.frames[reference_frame].playfield[i][j][0])
@@ -1841,6 +1839,7 @@ function Diagram(painter){
 					{
 						for(var k=0, kstop = candidate_case.length; k<kstop; k++)
 						{
+							console.log(candidate_case);
 							if(this.frames[final_frame].playfield[i][j][0] == candidate_case[k].val) // does the case type exists in the candidate list ?
 							{
 								// yes
@@ -1848,6 +1847,8 @@ function Diagram(painter){
 								{
 									// yes, do nothing
 									newly_added = false;
+									candidate_case[k].push(alphanumconvert(i)+alphanumconvert(j));
+									console.log("ping")
 								}
 								else
 								{
@@ -1903,6 +1904,7 @@ function Diagram(painter){
 								{
 									// yes, do nothing
 									newly_added_deco = false;
+									candidate_case_deco[k].push(alphanumconvert(i)+alphanumconvert(j));
 								}
 								else
 								{
@@ -2253,7 +2255,6 @@ function Frame(painter){
 		{
 			this.playfield[x][y][0] = type;
 		}
-
 	};	
 	/* ------------- */
 	/* -- Utility -- */
